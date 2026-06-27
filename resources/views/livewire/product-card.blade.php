@@ -198,11 +198,11 @@
                                                     $item->size?->name,
                                                 ])->filter()->implode(' • ');
 
-                                                $variantTitle = $variantTitle ?: 'Standard Product';
+                                                $variantTitle = $variantTitle ?: $item->name;
                                             @endphp
 
                                             <button type="button" wire:click="selectVariant({{ $item->id }})" class="border rounded-xl overflow-hidden text-left transition bg-white
-                                                                                                            {{ $selectedVariant == $item->id
+                                                                                                                                {{ $selectedVariant == $item->id
                                 ? 'ring-2 ring-blue-500 border-blue-500 shadow-md'
                                 : 'border-gray-200 hover:border-blue-300 hover:shadow' }}">
 
@@ -266,7 +266,7 @@
                                 Cancel
                             </button>
                             <button wire:click="confirmVariant" type="button" @disabled(!$selectedVariant) class="flex-1 px-5 py-2.5 rounded-lg font-medium transition
-                                                        {{ $selectedVariant
+                                                            {{ $selectedVariant
             ? 'bg-blue-600 text-white hover:bg-indigo-700'
             : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}">
                                 {{ $buyNowAction ? 'Buy Now' : 'Add to Cart' }}

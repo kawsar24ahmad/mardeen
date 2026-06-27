@@ -55,7 +55,7 @@
                             @foreach($gallery as $image)
                                 <button wire:click="selectImage('{{ $image->image_path }}')"
                                     class="aspect-square rounded-lg overflow-hidden border-2 transition
-                                                                                                                                                                                                    {{ $selectedImage === $image->image_path ? 'border-blue-600' : 'border-gray-200 hover:border-indigo-400' }}">
+                                                                                                                                                                                                                                                    {{ $selectedImage === $image->image_path ? 'border-blue-600' : 'border-gray-200 hover:border-indigo-400' }}">
                                     <img src="{{ asset('storage/' . $image->image_path) }}" alt="{{ $product->name }}"
                                         class="w-full h-full object-cover">
                                 </button>
@@ -199,11 +199,11 @@
                                                             $item->color?->name,
                                                             $item->size?->name,
                                                         ])->filter()->implode(' • ');
-                                                        $variantTitle = $variantTitle ?: 'Standard Product';
+                                                        $variantTitle = $variantTitle ?: $item->name;
                                                     @endphp
 
                                                     <button type="button" wire:click="selectVariant({{ $item->id }})" class="group relative border rounded-xl overflow-hidden bg-white text-left transition-all duration-300 hover:shadow-lg hover:-translate-y-1
-                                                                                                                            {{ $selectedVariant == $item->id
+                                                                                                                                                                                                                                                                            {{ $selectedVariant == $item->id
                                     ? 'ring-2 ring-blue-500 border-blue-500 shadow-lg'
                                     : 'border-gray-200 hover:border-blue-300' }}">
 
@@ -230,7 +230,7 @@
                                                                 <div class="mb-2">
                                                                     <span
                                                                         class="inline-flex items-center px-2 py-1 rounded-md bg-blue-50 text-blue-700 text-xs">
-                                                                        Standard Product
+                                                                        {{ $item->name}}
                                                                     </span>
                                                                 </div>
                                                             @endif
