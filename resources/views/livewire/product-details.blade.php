@@ -34,19 +34,19 @@
                     </div>
 
                     @php
+                        $gallery = $product->images
+                            ->sortBy('sort_order')
+                            ->values();
+
                         $variantImagePath = $selectedVariant
                             ? $product->variants->find($selectedVariant)?->image_path
                             : null;
 
                         if ($variantImagePath) {
-                            // Convert Eloquent Collection to a base Collection so we can push a stdClass
-                            // without triggering Eloquent's getKey() duplicate detection.
-                            $gallery = $product->images->toBase()->push((object) [
+                            $gallery = $gallery->prepend((object) [
                                 'image_path' => $variantImagePath,
-                                'is_primary' => true,
+                                'sort_order' => -1,
                             ]);
-                        } else {
-                            $gallery = $product->images;
                         }
                     @endphp
 
@@ -55,7 +55,7 @@
                             @foreach($gallery as $image)
                                 <button wire:click="selectImage('{{ $image->image_path }}')"
                                     class="aspect-square rounded-lg overflow-hidden border-2 transition
-                                                                                                                                                                                    {{ $selectedImage === $image->image_path ? 'border-blue-600' : 'border-gray-200 hover:border-indigo-400' }}">
+                                                                                                                                                                                                    {{ $selectedImage === $image->image_path ? 'border-blue-600' : 'border-gray-200 hover:border-indigo-400' }}">
                                     <img src="{{ asset('storage/' . $image->image_path) }}" alt="{{ $product->name }}"
                                         class="w-full h-full object-cover">
                                 </button>
@@ -203,7 +203,7 @@
                                                     @endphp
 
                                                     <button type="button" wire:click="selectVariant({{ $item->id }})" class="group relative border rounded-xl overflow-hidden bg-white text-left transition-all duration-300 hover:shadow-lg hover:-translate-y-1
-                                                                            {{ $selectedVariant == $item->id
+                                                                                                                            {{ $selectedVariant == $item->id
                                     ? 'ring-2 ring-blue-500 border-blue-500 shadow-lg'
                                     : 'border-gray-200 hover:border-blue-300' }}">
 

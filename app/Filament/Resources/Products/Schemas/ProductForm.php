@@ -169,35 +169,113 @@ class ProductForm
                             ->icon(Heroicon::Photo)
                             ->schema([
                                 Section::make('Product Images')
-                                    ->description('Upload multiple images. the first image will be the primary image.')
+                                    ->description('Upload multiple images. The first image will be the primary image.')
                                     ->schema([
                                         FileUpload::make('images')
                                             ->label('Product Images')
                                             ->multiple()
                                             ->image()
-                                            ->directory('products')
                                             ->disk('public')
+                                            ->directory('products')
                                             ->imageEditor()
                                             ->maxSize(2048)
                                             ->reorderable()
                                             ->columnSpanFull()
-                                            ->helperText('You can drug and drop to reorder images.')
-                                            ->saveRelationshipsUsing(function ($component, $state, $record) {
-                                                $record->images()->delete();
-                                                // dd($state);
+                                            ->helperText('You can drag and drop to reorder images.')
 
-                                                if (is_array($state)) {
-                                                    foreach (array_values($state ?? []) as $index => $imagePath) {
-                                                        $record->images()->create([
-                                                            'image_path' => $imagePath,
-                                                            'sort_order' => $index,
-                                                        ]);
+                                            // Load existing images when editing
+                                            ->afterStateHydrated(function ($component, $state, $record) {
+                                                if ($record && blank($state)) {
+                                                    $component->state(
+                                                        $record->images()
+                                                            ->orderBy('sort_order')
+                                                            ->pluck('image_path')
+                                                            ->toArray()
+                                                    );
+                                                }
+                                            })
+
+                                            ->saveRelationshipsUsing(function ($component, $state, $record) {
+
+                                                if (! $record) {
+                                                    return;
+                                                }
+
+                                                /**
+                                                 * IMPORTANT
+                                                 * If this field wasn't changed while editing,
+                                                 * don't touch existing images.
+                                                 */
+                                                if ($state === null) {
+                                                    return;
+                                                }
+
+                                                $state = collect($state)
+                                                    ->filter()
+                                                    ->values()
+                                                    ->toArray();
+
+                                                /**
+                                                 * If editing another field (like title),
+                                                 * Filament may send an empty state.
+                                                 * Keep existing images.
+                                                 */
+                                                if (empty($state) && $record->images()->exists()) {
+                                                    return;
+                                                }
+
+                                                $existingImages = $record->images()
+                                                    ->get()
+                                                    ->keyBy('image_path');
+
+                                                /*
+                        |--------------------------------------------------------------------------
+                        | Delete Removed Images
+                        |--------------------------------------------------------------------------
+                        */
+
+                                                $incomingPaths = collect($state);
+
+                                                $imagesToDelete = $existingImages->reject(function ($image) use ($incomingPaths) {
+                                                    return $incomingPaths->contains($image->image_path);
+                                                });
+
+                                                foreach ($imagesToDelete as $image) {
+
+                                                    if (\Illuminate\Support\Facades\Storage::disk('public')->exists($image->image_path)) {
+                                                        \Illuminate\Support\Facades\Storage::disk('public')->delete($image->image_path);
                                                     }
 
-                                                    $record->images()
-                                                        ->orderBy('sort_order')
-                                                        ->first()
-                                                        ?->update(['is_primary' => true]);
+                                                    $image->delete();
+                                                }
+
+                                                /*
+                        |--------------------------------------------------------------------------
+                        | Reset Primary Image
+                        |--------------------------------------------------------------------------
+                        */
+
+                                                $record->images()->update([
+                                                    'is_primary' => false,
+                                                ]);
+
+                                                /*
+                        |--------------------------------------------------------------------------
+                        | Insert / Update Images
+                        |--------------------------------------------------------------------------
+                        */
+
+                                                foreach ($state as $index => $imagePath) {
+
+                                                    $record->images()->updateOrCreate(
+                                                        [
+                                                            'image_path' => $imagePath,
+                                                        ],
+                                                        [
+                                                            'sort_order' => $index,
+                                                            'is_primary' => $index === 0,
+                                                        ]
+                                                    );
                                                 }
                                             }),
                                     ]),
