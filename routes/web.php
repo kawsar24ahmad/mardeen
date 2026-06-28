@@ -1,11 +1,13 @@
 <?php
 
+use App\Models\Order;
 use Livewire\Volt\Volt;
 use App\Livewire\Orders;
 use App\Livewire\CartPage;
 use App\Livewire\Homepage;
 use App\Livewire\ThankYou;
 use App\Livewire\CheckoutPage;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Livewire\ProductDetails;
 use App\Livewire\ProductListing;
 use App\Livewire\Customer\Profile;
@@ -75,5 +77,18 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 });
 Route::get('/order/thank-you', ThankYou::class)->name('order.success');
+Route::get('/orders/{order}/invoice', function (Order $order) {
+    // 1. Load the view with the order data
+    $pdf = Pdf::loadView('pdf.order-invoice', [
+        'order' => $order,
+    ]);
+
+    // 2. Stream the download back to the user
+    return response()->streamDownload(
+        fn() => print($pdf->output()),
+        'order-' . $order->id . '.pdf'
+    );
+})
+    ->name('orders.invoice.download');
 
 require __DIR__ . '/auth.php';

@@ -240,31 +240,67 @@ class OrderInfolist
                                     ->schema([
                                         RepeatableEntry::make('items')
                                             ->hiddenLabel()
+                                            ->contained(false)
                                             ->schema([
-                                                Grid::make(6)
+
+                                                Grid::make(12)
                                                     ->schema([
 
-                                                        ImageEntry::make('product.primaryImage.image_path')
+                                                        ImageEntry::make('image')
+                                                            ->hiddenLabel()
                                                             ->disk('public')
-                                                            ->imageHeight(70)
-                                                            ->imageWidth(70)
-                                                            ->columnSpan(1),
+                                                            ->imageWidth(80)
+                                                            ->imageHeight(80)
+                                                            ->getStateUsing(
+                                                                fn($record) =>
+                                                                $record->variant?->image_path
+                                                                    ?? $record->product?->primaryImage?->image_path
+                                                            )
+                                                            ->columnSpan(2),
 
-                                                        TextEntry::make('product.name')
-                                                            ->weight(FontWeight::Bold)
-                                                            ->columnSpan(3),
+                                                        Grid::make(1)
+                                                            ->schema([
 
-                                                        TextEntry::make('quantity')
-                                                            ->badge()
-                                                            ->columnSpan(1),
+                                                                TextEntry::make('product_name')
+                                                                    ->hiddenLabel()
+                                                                    ->formatStateUsing(
+                                                                        fn($record) =>
+                                                                        $record->product->name .
+                                                                            ($record->variant
+                                                                                ? ' - ' . $record->variant->display_label
+                                                                                : '')
+                                                                    )
+                                                                    ->weight(FontWeight::Bold)
+                                                                    ->size('sm'),
 
-                                                        TextEntry::make('subtotal')
-                                                            ->money('BDT')
-                                                            ->columnSpan(1),
+                                                                TextEntry::make('product_sku')
+                                                                    ->label('SKU'),
+
+                                                                TextEntry::make('price')
+                                                                    ->money('BDT')
+                                                                    ->label('Unit Price'),
+
+                                                            ])
+                                                            ->columnSpan(6),
+
+                                                        Grid::make(1)
+                                                            ->schema([
+
+                                                                TextEntry::make('quantity')
+                                                                    ->badge(),
+
+                                                                TextEntry::make('subtotal')
+                                                                    ->money('BDT')
+                                                                    ->weight(FontWeight::Bold),
+
+                                                            ])
+                                                            ->columnSpan(4),
 
                                                     ]),
                                             ]),
                                     ]),
+
+
 
                                 Section::make('Shipping Address')
                                     ->icon('heroicon-o-map-pin')

@@ -27,6 +27,18 @@
                         class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800 capitalize">
                         Payment: {{ $order->payment_status }}
                     </span>
+                    <a href="{{ route('orders.invoice.download', $order->id) }}"
+                        class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-[#432dd7] text-white font-semibold text-sm rounded-xl shadow-sm shadow-indigo-600/10 transition-all duration-150 border border-indigo-700/10 group">
+
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                            stroke="currentColor"
+                            class="w-4 h-4 text-indigo-200 group-hover:text-white transition-colors">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                        </svg>
+
+                        Download Invoice PDF
+                    </a>
                 </div>
             </div>
 
@@ -35,6 +47,9 @@
                     <div class="py-6 flex items-start justify-between">
                         <div class="flex-1">
                             <h3 class="text-sm font-medium text-gray-900">{{ $item->product_name }}</h3>
+                            @if($item->variant->image_path)
+                                <img src="{{ asset('storage/' . $item->variant->image_path) }}" class="w-8 h-8" alt="">
+                            @endif
                             @if($item->variant_name)
                                 <p class="mt-1 text-xs text-gray-500">Variant: {{ $item->variant_name }}</p>
                             @endif

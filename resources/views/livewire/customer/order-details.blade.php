@@ -16,14 +16,27 @@
 
             <div class="flex items-center justify-between">
                 <h1 class="text-3xl font-bold text-gray-900">Order Details</h1>
-                <span class="px-4 py-2 rounded-lg text-sm font-semibold {{
-                    $order->status === 'delivered' ? 'bg-green-100 text-green-800' :
-                    ($order->status === 'cancelled' ? 'bg-red-100 text-red-800' :
-                    ($order->status === 'shipped' ? 'bg-blue-100 text-blue-800' :
-                    'bg-yellow-100 text-yellow-800'))
+                <div class="flex gap-2 items-center">
+                <a href="{{ route('orders.invoice.download', $order->id) }}"
+                    class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-[#432dd7] text-white font-semibold text-sm rounded-xl shadow-sm shadow-indigo-600/10 transition-all duration-150 border border-indigo-700/10 group">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                        class="w-4 h-4 text-indigo-200 group-hover:text-white transition-colors">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                    </svg>
+
+                    Download Invoice PDF
+                </a>
+                    <span class="px-4 py-2 rounded-lg text-sm font-semibold {{
+    $order->status === 'delivered' ? 'bg-green-100 text-green-800' :
+    ($order->status === 'cancelled' ? 'bg-red-100 text-red-800' :
+        ($order->status === 'shipped' ? 'bg-blue-100 text-blue-800' :
+            'bg-yellow-100 text-yellow-800'))
                 }}">
-                    {{ ucfirst($order->status) }}
-                </span>
+                        {{ ucfirst($order->status) }}
+                    </span>
+                </div>
             </div>
 
         </div>
@@ -50,8 +63,8 @@
                         <div>
                             <p class="text-sm text-gray-600">Payment Status</p>
                             <span class="inline-block px-2 py-1 text-sm rounded {{
-                                $order->payment_status === 'paid' ? 'bg-green-100 text-green-800' :
-                                'bg-yellow-100 text-yellow-800'
+    $order->payment_status === 'paid' ? 'bg-green-100 text-green-800' :
+    'bg-yellow-100 text-yellow-800'
                             }}">
                                 {{ ucfirst($order->payment_status) }}
                             </span>
@@ -78,7 +91,10 @@
                         @foreach($order->items as $item)
                             <div class="flex gap-4 pb-4 border-b last:border-b-0">
                                 <div class="w-20 h-20 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
-                                    @if($item->product && $item->product->primaryImage)
+                                    @if ($item->variant && $item->variant->image_path)
+                                        <img src="{{ asset('storage/' . $item->variant->image_path) }}" alt="{{ $item->product_name }}"
+                                            class="w-full h-full object-cover">
+                                    @elseif ($item->product && $item->product->primaryImage)
                                         <img src="{{ asset('storage/' . $item->product->primaryImage->image_path) }}"
                                              alt="{{ $item->product_name }}"
                                              class="w-full h-full object-cover">
