@@ -5,8 +5,18 @@
     <meta charset="utf-8">
     <title>Invoice #{{ $order->id }}</title>
     <style>
+        @font-face {
+            font-family: 'SolaimanLipi';
+            src: url("{{ base_path('public/fonts/SolaimanLipi.ttf') }}") format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+
+
         body {
-            font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+            /* font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; */
+            font-family: 'SolaimanLipi', 'Helvetica', 'Arial', sans-serif;
             color: #334155;
             margin: 0;
             padding: 20px;
@@ -100,8 +110,9 @@
                             style="font-size: 11px; font-weight: bold; color: #4f46e5; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 12px 0;">
                             • Billed To
                         </h3>
-                        <p style="font-size: 14px; font-weight: bold; color: #0f172a; margin: 0 0 3px 0;">
-                            {{ $order->customer->name }}</p>
+                        <p style="font-size: 14px; color: #0f172a; margin: 0 0 3px 0;">
+                            {{ $order->customer->name }}
+                        </p>
                         <p style="font-size: 13px; color: #475569; margin: 0 0 3px 0;">{{ $order->customer->email }}</p>
                         <p style="font-size: 13px; color: #475569; margin: 0 0 12px 0;">{{ $order->shipping_phone }}</p>
 
@@ -119,10 +130,12 @@
                             style="font-size: 11px; font-weight: bold; color: #4f46e5; text-transform: uppercase; letter-spacing: 1px; margin: 0 0 12px 0;">
                             • Shipped To
                         </h3>
-                        <p style="font-size: 14px; font-weight: bold; color: #0f172a; margin: 0 0 3px 0;">
-                            {{ $order->shipping_full_name }}</p>
+                        <p style="font-size: 14px; color: #0f172a; margin: 0 0 3px 0;">
+                            {{ $order->shipping_full_name }}
+                        </p>
                         <p style="font-size: 13px; color: #475569; line-height: 1.5; margin: 0;">
-                            {{ $order->shipping_address_line_1 }}</p>
+                            {{ $order->shipping_address_line_1 }}
+                        </p>
                     </td>
                 </tr>
             </table>
@@ -185,7 +198,8 @@
                                 <tr>
                                     <td style="color: #64748b; font-weight: 500;">Subtotal</td>
                                     <td style="text-align: right; font-weight: bold; color: #0f172a;">BDT
-                                        {{ number_format($order->subtotal, 2) }}</td>
+                                        {{ number_format($order->subtotal, 2) }}
+                                    </td>
                                 </tr>
                             </table>
 
@@ -193,7 +207,8 @@
                                 <tr>
                                     <td style="color: #64748b; font-weight: 500;">Discount</td>
                                     <td style="text-align: right; font-weight: bold; color: #dc2626;">- BDT
-                                        {{ number_format($order->discount_amount, 2) }}</td>
+                                        {{ number_format($order->discount_amount, 2) }}
+                                    </td>
                                 </tr>
                             </table>
 
@@ -201,7 +216,8 @@
                                 <tr>
                                     <td style="color: #64748b; font-weight: 500;">Shipping</td>
                                     <td style="text-align: right; font-weight: bold; color: #0f172a;">BDT
-                                        {{ number_format($order->shipping_cost, 2) }}</td>
+                                        {{ number_format($order->shipping_cost, 2) }}
+                                    </td>
                                 </tr>
                             </table>
 
@@ -209,7 +225,8 @@
                                 <tr>
                                     <td style="color: #64748b; font-weight: 500;">Tax</td>
                                     <td style="text-align: right; font-weight: bold; color: #0f172a;">BDT
-                                        {{ number_format($order->tax_amount ?? 0, 2) }}</td>
+                                        {{ number_format($order->tax_amount ?? 0, 2) }}
+                                    </td>
                                 </tr>
                             </table>
 

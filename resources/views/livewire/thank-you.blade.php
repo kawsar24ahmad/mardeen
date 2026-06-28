@@ -47,10 +47,10 @@
                     <div class="py-6 flex items-start justify-between">
                         <div class="flex-1">
                             <h3 class="text-sm font-medium text-gray-900">{{ $item->product_name }}</h3>
-                            @if($item->variant->image_path)
+                            @if($item->variant && $item->variant->image_path)
                                 <img src="{{ asset('storage/' . $item->variant->image_path) }}" class="w-8 h-8" alt="">
                             @endif
-                            @if($item->variant_name)
+                            @if($item->variant && $item->variant_name)
                                 <p class="mt-1 text-xs text-gray-500">Variant: {{ $item->variant_name }}</p>
                             @endif
                             <p class="mt-1 text-xs text-gray-400">Qty: {{ $item->quantity }} ×
