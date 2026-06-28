@@ -83,12 +83,15 @@ Route::get('/orders/{order}/invoice', function (Order $order) {
         'order' => $order,
     ]);
 
-    // 2. Stream the download back to the user
+    // 2. Stream the download with explicit headers
     return response()->streamDownload(
         fn() => print($pdf->output()),
-        'order-' . $order->id . '.pdf'
+        'order-' . $order->id . '.pdf',
+        [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="order-' . $order->id . '.pdf"',
+        ]
     );
-})
-    ->name('orders.invoice.download');
+})->name('orders.invoice.download');
 
 require __DIR__ . '/auth.php';
