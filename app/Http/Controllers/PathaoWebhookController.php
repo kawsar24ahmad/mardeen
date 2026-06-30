@@ -30,9 +30,9 @@ class PathaoWebhookController extends Controller
         // TODO: Update your order by consignment_id / merchant_order_id
 
 
-        // Order::where('order_number', $payload['merchant_order_id'])->update([
-        //     'courier_status' => $payload['order_status'],
-        // ]);
+        Order::where('order_number', $payload['merchant_order_id'])->update([
+            'courier_status' => $payload['order_status'],
+        ]);
 
         return response()->json(
             ['success' => true],
