@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -27,6 +28,11 @@ class PathaoWebhookController extends Controller
         Log::info('Pathao webhook received', $payload);
 
         // TODO: Update your order by consignment_id / merchant_order_id
+
+
+        Order::where('order_number', $payload['merchant_order_id'])->update([
+            'courier_status' => $payload['order_status'],
+        ]);
 
         return response()->json(
             ['success' => true],
