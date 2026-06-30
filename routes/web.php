@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\Customer\OrderDetails;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\PathaoWebhookController;
 use App\Http\Controllers\SteadFastWebhookController;
 
 Route::get('/', Homepage::class)->name('home');
