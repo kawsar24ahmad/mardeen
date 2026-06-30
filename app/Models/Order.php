@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Coupon;
+use App\Models\Courier;
 use App\Models\Customer;
 use App\Models\OrderItem;
 use Illuminate\Database\Eloquent\Model;
@@ -39,6 +40,10 @@ class Order extends Model
         'tracking_number',
         'customer_notes',
         'admin_notes',
+        'courier_id',
+        'tracking_code',
+        'consignment_id',
+        'courier_status',
     ];
     #[Scope]
     public function ofStatus(Builder $builder, string $status)
@@ -137,5 +142,9 @@ class Order extends Model
             ]);
             // order confirmation email
         });
+    }
+    public function courier()
+    {
+        return $this->belongsTo(Courier::class);
     }
 }

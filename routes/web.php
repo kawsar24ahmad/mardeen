@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\Customer\OrderDetails;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\SteadFastWebhookController;
 
 Route::get('/', Homepage::class)->name('home');
 
@@ -93,5 +94,10 @@ Route::get('/orders/{order}/invoice', function (Order $order) {
         ]
     );
 })->name('orders.invoice.download');
+
+
+
+Route::post('/steadfast/webhook', [SteadFastWebhookController::class, 'handle']);
+
 
 require __DIR__ . '/auth.php';

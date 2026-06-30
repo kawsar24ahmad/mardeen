@@ -26,7 +26,7 @@ class CheckoutPage extends Component
     public $shipping_area = 'inside_dhaka';
 
     public $customerNotes = '';
-    public $paymentMethod = 'stripe';
+    public $paymentMethod = 'cash_on_delivery';
 
     public $couponCode = '';
     public $appliedCoupon = null;
@@ -88,8 +88,9 @@ class CheckoutPage extends Component
 
     public function placeOrder()
     {
+        $this->validateAddress();
+
         try {
-            $this->validateAddress();
 
             DB::beginTransaction();
 

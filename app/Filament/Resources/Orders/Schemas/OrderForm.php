@@ -48,6 +48,19 @@ class OrderForm
                             ->default(null)
                             ->columnSpanFull(),
                     ]),
+                Section::make('Address')
+                    ->columnSpanFull()
+                    ->columns(2)
+                    ->schema([
+
+                        TextInput::make('shipping_full_name')
+                            ->required(),
+                        TextInput::make('shipping_phone')
+                            ->required(),
+                        TextInput::make('shipping_address_line_1')
+                            ->required(),
+
+                    ]),
                 // TextInput::make('order_number')
                 //     ->required(),
                 // TextInput::make('customer_id')

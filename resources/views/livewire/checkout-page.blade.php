@@ -103,6 +103,7 @@
                                 class="text-red-500 text-xs mt-1 block font-medium">{{ $message }}</span> @enderror
                             </div>
                         </div>
+
                     @endif
                 </div>
 
@@ -162,7 +163,7 @@
                     </h2>
 
                     <div class="space-y-3">
-                        <label class="relative block cursor-pointer group">
+                        {{-- <label class="relative block cursor-pointer group">
                             <input type="radio" wire:model.live="paymentMethod" value="stripe" class="peer sr-only">
                             <div
                                 class="border border-slate-200 rounded-xl p-4 transition peer-checked:border-blue-600 peer-checked:bg-blue-50/40 group-hover:border-slate-300 flex items-center justify-between">
@@ -180,7 +181,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </label>
+                        </label> --}}
 
                         <label class="relative block cursor-pointer group">
                             <input type="radio" wire:model.model="paymentMethod" value="cash_on_delivery"
