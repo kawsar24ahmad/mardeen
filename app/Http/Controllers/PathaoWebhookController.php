@@ -10,7 +10,7 @@ class PathaoWebhookController extends Controller
     public function handle(Request $request)
     {
         // $secret    = env('PATHAO_WEBHOOK_SECRET');
-        $secret    = env('pathao-webhook-secret');
+        $secret    = 'pathao-webhook-secret';
         $signature = $request->header('x-pathao-signature');
 
         // if (!$secret || !$signature) {
