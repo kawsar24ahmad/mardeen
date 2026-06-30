@@ -99,5 +99,7 @@ Route::get('/orders/{order}/invoice', function (Order $order) {
 
 Route::post('/steadfast/webhook', [SteadFastWebhookController::class, 'handle']);
 
+Route::post('/pathao/webhook', [PathaoWebhookController::class, 'handle']);
+
 
 require __DIR__ . '/auth.php';
