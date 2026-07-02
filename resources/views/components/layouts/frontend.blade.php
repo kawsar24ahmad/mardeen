@@ -198,7 +198,7 @@
             }); var f = d.getElementsByTagName(s)[0],
                 j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
                     'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', 'GTM-NNHRQ2X5');</script>
+        })(window, document, 'script', 'dataLayer', '{{ env('GTM_ID') }}');</script>
     <!-- End Google Tag Manager -->
 
     @filamentStyles
@@ -207,7 +207,7 @@
 <body class="bg-gray-50 text-gray-800 antialiased min-h-screen flex flex-col">
 
     <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NNHRQ2X5" height="0" width="0"
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ env('GTM_ID') }}" height="0" width="0"
             style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
     <!-- Header -->
