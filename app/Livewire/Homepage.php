@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Banner;
 use App\Models\Category;
 use App\Models\Product;
 use Livewire\Component;
@@ -26,10 +27,16 @@ class Homepage extends Component
             ->limit(6)
             ->get();
 
+        $banners = Banner::where('is_active', true)
+            ->orderBy('serial_number')
+            ->get();
+
+
         return view('livewire.homepage', [
             'featuredProducts' => $featuredProducts,
             'categories' => $categories,
-            'newArrivals' => $newArrivals
+            'newArrivals' => $newArrivals,
+            'banners' => $banners
         ])->layout('components.layouts.frontend');
     }
 }

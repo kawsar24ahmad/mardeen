@@ -189,6 +189,7 @@
             padding-bottom: env(safe-area-inset-bottom);
         }
     </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 
     <!-- Google Tag Manager -->
     <script>(function (w, d, s, l, i) {
@@ -761,6 +762,30 @@
                     document.body.classList.remove('overflow-hidden');
                 }
             }
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script>
+        new Swiper('.heroSwiper', {
+            loop: true,
+
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
+
+            effect: 'fade',
+
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
         });
     </script>
 </body>
