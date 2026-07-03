@@ -56,7 +56,7 @@ class RepeatedCustomersTable extends TableWidget
 
                 TextColumn::make('total_spent')
                     ->label('Total Spent')
-                    ->money('USD')
+                    ->money('BDT')
                     ->sortable(),
 
                 TextColumn::make('last_order_at')
@@ -121,10 +121,10 @@ class RepeatedCustomersTable extends TableWidget
         $now = Carbon::now();
 
         return match ($period) {
-            '7d' => $query->whereHas('orders', fn ($q) => $q->where('created_at', '>=', $now->copy()->subDays(7))),
-            '30d' => $query->whereHas('orders', fn ($q) => $q->where('created_at', '>=', $now->copy()->subDays(30))),
-            '90d' => $query->whereHas('orders', fn ($q) => $q->where('created_at', '>=', $now->copy()->subDays(90))),
-            '365d' => $query->whereHas('orders', fn ($q) => $q->where('created_at', '>=', $now->copy()->subDays(365))),
+            '7d' => $query->whereHas('orders', fn($q) => $q->where('created_at', '>=', $now->copy()->subDays(7))),
+            '30d' => $query->whereHas('orders', fn($q) => $q->where('created_at', '>=', $now->copy()->subDays(30))),
+            '90d' => $query->whereHas('orders', fn($q) => $q->where('created_at', '>=', $now->copy()->subDays(90))),
+            '365d' => $query->whereHas('orders', fn($q) => $q->where('created_at', '>=', $now->copy()->subDays(365))),
             default => $query,
         };
     }

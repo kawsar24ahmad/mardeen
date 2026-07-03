@@ -31,10 +31,10 @@ class CouponsTable
                     ->sortable(),
                 TextColumn::make('minimum_order_value')
                     ->label('Min. Order')
-                    ->money('USD')
+                    ->money('BDT')
                     ->sortable(),
                 TextColumn::make('maximum_discount')
-                    ->money('USD')
+                    ->money('BDT')
                     ->sortable(),
                 TextColumn::make('usage_limit')
                     ->toggleable()
@@ -75,11 +75,11 @@ class CouponsTable
                     ])
                     ->native(false),
                 TernaryFilter::make('is_active')
-                ->label('Status')
-                ->trueLabel('Active Only')
-                ->falseLabel('Inactive Only')
-                ->native(false)
-                ->boolean(),
+                    ->label('Status')
+                    ->trueLabel('Active Only')
+                    ->falseLabel('Inactive Only')
+                    ->native(false)
+                    ->boolean(),
             ])
             ->recordActions([
                 EditAction::make(),

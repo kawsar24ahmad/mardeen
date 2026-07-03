@@ -41,10 +41,12 @@ class OrdersTable
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('subtotal')
                     ->numeric()
+                    ->money('BDT')
                     ->sortable(),
                 TextColumn::make('discount_amount')
                     ->label('Discount')
                     ->numeric()
+                    ->money('BDT')
                     ->sortable(),
                 TextColumn::make('shipping_cost')
                     ->money('BDT')
@@ -54,6 +56,7 @@ class OrdersTable
                 //     ->sortable(),
                 TextColumn::make('total')
                     ->numeric()
+                    ->money('BDT')
                     ->sortable(),
                 TextColumn::make('shipping_full_name')
                     ->searchable(),

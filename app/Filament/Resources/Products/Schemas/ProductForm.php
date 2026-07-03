@@ -107,11 +107,11 @@ class ProductForm
                                             ->required()
                                             ->default(fn() => 'SKU-' . strtoupper(Str::random(8))),
                                         TextInput::make('price')->required()->numeric()->minValue(0)->step(0.01)
-                                            ->helperText('Selling Price')->prefix('$'),
+                                            ->helperText('Selling Price')->prefix('BDT'),
                                         TextInput::make('compare_price')->numeric()->minValue(0)->step(0.01)
-                                            ->helperText('Original Price to show discount')->prefix('$'),
+                                            ->helperText('Original Price to show discount')->prefix('BDT'),
                                         TextInput::make('cost_price')->numeric()->minValue(0)->step(0.01)
-                                            ->helperText('Cost from Supplier (for profit calculation)')->prefix('$'),
+                                            ->helperText('Cost from Supplier (for profit calculation)')->prefix('BDT'),
                                     ]),
                                 Section::make('Inventory')
                                     ->columns(2)
@@ -374,11 +374,11 @@ class ProductForm
                                                     ->columnSpan(1),
 
                                                 TextInput::make('price')
-                                                    ->numeric()->required()->prefix('$')->step(0.01)
+                                                    ->numeric()->required()->prefix('BDT')->step(0.01)
                                                     ->columnSpan(1),
 
                                                 TextInput::make('compare_price')
-                                                    ->numeric()->prefix('$')->step(0.01)
+                                                    ->numeric()->prefix('BDT')->step(0.01)
                                                     ->columnSpan(1),
 
                                                 TextInput::make('stock_quantity')

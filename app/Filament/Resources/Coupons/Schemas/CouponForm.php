@@ -34,7 +34,7 @@ class CouponForm
                             ->required(),
                         TextInput::make('value')
                             ->minValue(0)
-                            ->prefix(fn($get) => $get('type') === 'fixed' ? '$' : null)
+                            ->prefix(fn($get) => $get('type') === 'fixed' ? 'BDT' : null)
                             ->suffix(fn($get) => $get('type') === 'percentage' ? '%' : null)
                             ->required()
                             ->numeric(),
@@ -46,13 +46,13 @@ class CouponForm
                     ->columns(2)
                     ->schema([
                         TextInput::make('minimum_order_value')
-                            ->prefix('$')
+                            ->prefix('BDT')
                             ->numeric()
                             ->default(null),
                         TextInput::make('maximum_discount')
                             ->numeric()
                             ->suffix('%')
-                            ->visible(fn($get)=>$get('type') === 'percentage')
+                            ->visible(fn($get) => $get('type') === 'percentage')
                             ->default(null),
                         TextInput::make('usage_limit')
                             ->numeric()
@@ -69,10 +69,10 @@ class CouponForm
                     ->columns(2)
                     ->schema([
                         DateTimePicker::make('starts_at')
-                        ->native(false)
-                        ->helperText('When The coupon becomes active'),
+                            ->native(false)
+                            ->helperText('When The coupon becomes active'),
                         DateTimePicker::make('expires_at')
-                        ->native(false),
+                            ->native(false),
 
                     ]),
 

@@ -45,7 +45,7 @@ class SalesOverviewChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Revenue ($)',
+                    'label' => 'Revenue (TK.)',
                     'data' => $revenue,
                     'borderColor' => '#10b981',
                     'backgroundColor' => 'rgba(16, 185, 129, 0.15)',
@@ -97,7 +97,7 @@ class SalesOverviewChart extends ChartWidget
                     'beginAtZero' => true,
                     'title' => [
                         'display' => true,
-                        'text' => 'Revenue ($)',
+                        'text' => 'Revenue (TK.)',
                     ],
                 ],
                 'y1' => [

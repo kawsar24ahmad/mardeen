@@ -41,13 +41,13 @@ class ProductsTable
                     ->label('SKU')
                     ->searchable(),
                 TextColumn::make('price')
-                    ->money('USD')
+                    ->money('BDT')
                     ->sortable(),
                 TextColumn::make('compare_price')
-                    ->money()
+                    ->money('BDT')
                     ->sortable(),
                 TextColumn::make('cost_price')
-                    ->money()
+                    ->money('BDT')
                     ->sortable(),
                 TextColumn::make('stock_quantity')
                     ->numeric()

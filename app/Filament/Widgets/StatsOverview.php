@@ -19,7 +19,7 @@ class StatsOverview extends StatsOverviewWidget
     {
         $totalRevenue = Order::where('payment_status', 'paid')->sum('total');
         $todayRevenue = Order::where('payment_status', 'paid')
-        ->whereYear('created_at',today())->sum('total');
+            ->whereYear('created_at', today())->sum('total');
         $totalOrders = Order::count();
         $pendingOrders = Order::where('status', 'pending')->count();
         $totalCustomers = Customer::count();
@@ -27,7 +27,7 @@ class StatsOverview extends StatsOverviewWidget
         $lowStockProduct = Product::lowStock()->count();
         return [
             Stat::make('Total Revenue', $totalRevenue)
-                ->description("Today $". number_format($todayRevenue))
+                ->description("Today TK. " . number_format($todayRevenue))
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->color('success'),
             Stat::make('Total Orders', $totalOrders)
@@ -36,7 +36,7 @@ class StatsOverview extends StatsOverviewWidget
                 ->color('warning')
                 ->url(route('filament.admin.resources.orders.index')),
             Stat::make('Total Customers', $totalCustomers)
-                ->description($newCustomers ." new this month")
+                ->description($newCustomers . " new this month")
                 ->descriptionIcon('heroicon-m-user-group')
                 ->color('info')
                 ->url(route('filament.admin.resources.customers.index')),
