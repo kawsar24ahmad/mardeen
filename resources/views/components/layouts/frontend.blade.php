@@ -13,10 +13,7 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
 
-    <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    @livewireStyles
     <style>
         [x-cloak] {
             display: none !important;
@@ -189,6 +186,10 @@
             padding-bottom: env(safe-area-inset-bottom);
         }
     </style>
+    @livewireStyles
+
+    <!-- Scripts -->
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 
     <!-- Google Tag Manager -->
@@ -203,6 +204,8 @@
     <!-- End Google Tag Manager -->
 
     @filamentStyles
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
 </head>
 
 <body class="bg-gray-50 text-gray-800 antialiased min-h-screen flex flex-col">

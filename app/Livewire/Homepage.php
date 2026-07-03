@@ -14,17 +14,22 @@ class Homepage extends Component
         $featuredProducts = Product::active()
             ->featured()
             ->with(['category', 'brand', 'primaryImage'])
-            ->limit(8)
+            ->limit(4)
             ->get();
         $newArrivals = Product::active()
             ->with(['category', 'brand', 'primaryImage'])
             ->latest()
-            ->limit(8)
+            ->limit(4)
+            ->get();
+        $tshirts = Product::active()
+            ->with(['category', 'brand', 'primaryImage'])
+            ->where('category_id', 11)
+            ->latest()
+            ->limit(4)
             ->get();
         $categories = Category::active()
             ->sorted()
             ->withCount('products')
-            ->limit(6)
             ->get();
 
         $banners = Banner::where('is_active', true)
@@ -36,7 +41,8 @@ class Homepage extends Component
             'featuredProducts' => $featuredProducts,
             'categories' => $categories,
             'newArrivals' => $newArrivals,
-            'banners' => $banners
+            'banners' => $banners,
+            'tshirts' => $tshirts,
         ])->layout('components.layouts.frontend');
     }
 }

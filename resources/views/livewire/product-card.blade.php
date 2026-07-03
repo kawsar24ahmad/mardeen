@@ -72,19 +72,33 @@
     {{-- Action buttons --}}
     {{-- ====================================================== --}}
     @if($product->stock_status === 'in_stock')
-        <div class="flex gap-1">
-            <div class="p-1 pt-0 w-full">
-                <button wire:click="addToCartClicked"
-                    class="w-full cursor-pointer bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition font-medium">
-                    Add to Cart
-                </button>
-            </div>
-            <div class="p-1 pt-0 w-full">
-                <button wire:click="buyNowClicked"
-                    class="w-full cursor-pointer bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition font-medium">
-                    Buy Now
-                </button>
-            </div>
+        <div class="grid grid-cols-2 gap-2 mt-4">
+
+            <!-- Add to Cart -->
+            <button wire:click="addToCartClicked"
+                class="group flex items-center justify-center gap-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 px-3 py-3 text-sm font-semibold text-white shadow-md hover:shadow-xl transition-all duration-300 active:scale-95">
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform duration-300 group-hover:scale-110"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1 5h12m-9 0a1 1 0 102 0m4 0a1 1 0 102 0" />
+                </svg>
+
+                <span class="hidden sm:inline">Add to Cart</span>
+            </button>
+
+            <!-- Buy Now -->
+            <button wire:click="buyNowClicked"
+                class="group flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800  px-3 py-3 text-sm font-semibold text-white shadow-md hover:shadow-xl transition-all duration-300 active:scale-95">
+
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform duration-300 group-hover:scale-110"
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+
+                <span>Buy</span>
+            </button>
+
         </div>
     @else
         <div class="p-4 pt-0">
@@ -117,17 +131,17 @@
 
                     {{-- LEFT: Product basic info --}}
                     @php
-                        $currentVariant = $selectedVariant
-                            ? $product->variants->find($selectedVariant)
-                            : null;
+    $currentVariant = $selectedVariant
+        ? $product->variants->find($selectedVariant)
+        : null;
 
-                        $displayImage = $currentVariant?->image_path
-                            ?: $product->primaryImage?->image_path;
+    $displayImage = $currentVariant?->image_path
+        ?: $product->primaryImage?->image_path;
 
-                        $displayPrice = $currentVariant?->price ?? $product->price;
-                        $displayCompare = $currentVariant?->compare_price ?? $product->compare_price;
+    $displayPrice = $currentVariant?->price ?? $product->price;
+    $displayCompare = $currentVariant?->compare_price ?? $product->compare_price;
 
-                        $variantTitle = $currentVariant?->display_label;
+    $variantTitle = $currentVariant?->display_label;
                     @endphp
 
                     <div class="md:col-span-2">
@@ -193,18 +207,18 @@
                         <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-5 max-h-[40vh] overflow-y-auto pr-1">
                             @foreach($product->variants->where('is_active', true) as $item)
                                             @php
-                                                $variantTitle = collect([
-                                                    $item->color?->name,
-                                                    $item->size?->name,
-                                                ])->filter()->implode(' • ');
+        $variantTitle = collect([
+            $item->color?->name,
+            $item->size?->name,
+        ])->filter()->implode(' • ');
 
-                                                $variantTitle = $variantTitle ?: $item->name;
+        $variantTitle = $variantTitle ?: $item->name;
                                             @endphp
 
                                             <button type="button" wire:click="selectVariant({{ $item->id }})" class="border rounded-xl overflow-hidden text-left transition bg-white
-                                                                                                                                {{ $selectedVariant == $item->id
-                                ? 'ring-2 ring-blue-500 border-blue-500 shadow-md'
-                                : 'border-gray-200 hover:border-blue-300 hover:shadow' }}">
+                                                                                                                                                    {{ $selectedVariant == $item->id
+            ? 'ring-2 ring-blue-500 border-blue-500 shadow-md'
+            : 'border-gray-200 hover:border-blue-300 hover:shadow' }}">
 
                                                 @if($item->image_path)
                                                     <div class="aspect-square bg-gray-100 overflow-hidden">
@@ -266,9 +280,9 @@
                                 Cancel
                             </button>
                             <button wire:click="confirmVariant" type="button" @disabled(!$selectedVariant) class="flex-1 px-5 py-2.5 rounded-lg font-medium transition
-                                                            {{ $selectedVariant
-            ? 'bg-blue-600 text-white hover:bg-indigo-700'
-            : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}">
+                                                                {{ $selectedVariant
+        ? 'bg-blue-600 text-white hover:bg-indigo-700'
+        : 'bg-gray-300 text-gray-500 cursor-not-allowed' }}">
                                 {{ $buyNowAction ? 'Buy Now' : 'Add to Cart' }}
                             </button>
                         </div>

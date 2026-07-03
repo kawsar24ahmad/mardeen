@@ -84,13 +84,11 @@
             </div>
         </div>
     </section>
-
-    <!-- New Arrivals -->
-    <section class="py-16 bg-white">
+    <section class="py-16 bg-gray-50">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between mb-8">
-                <h2 class="text-3xl font-bold text-gray-900">New Arrivals</h2>
-                <a href="{{ route('products.index', ['sort' => 'newest']) }}"
+                <h2 class="text-3xl font-bold text-gray-900">Featured Products</h2>
+                <a href="{{ route('products.index', ['featured' => 1]) }}"
                     class="text-blue-600 hover:text-indigo-700 font-medium">
                     View All →
                 </a>
@@ -103,6 +101,44 @@
             </div>
         </div>
     </section>
+
+    <!-- New Arrivals -->
+    <section class="py-16 bg-white">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-3xl font-bold text-gray-900">New Arrivals</h2>
+                <a href="{{ route('products.index', ['sort' => 'newest']) }}"
+                    class="text-blue-600 hover:text-indigo-700 font-medium">
+                    View All →
+                </a>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                @foreach($newArrivals as $product)
+                    <livewire:product-card :product="$product" :key="'new-' . $product->id" />
+                @endforeach
+            </div>
+        </div>
+    </section>
+    <!-- New t-shirt -->
+    <section class="py-16 bg-white">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-3xl font-bold text-gray-900">T-Shirt</h2>
+                <a href="{{ route('products.index', ['category' => 't-shirt']) }}"
+                    class="text-blue-600 hover:text-indigo-700 font-medium">
+                    View All →
+                </a>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                @foreach($tshirts as $product)
+                    <livewire:product-card :product="$product" :key="'new-' . $product->id" />
+                @endforeach
+            </div>
+        </div>
+    </section>
+
     <!-- Benefits Section -->
     <section class="py-16 bg-gray-50">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
