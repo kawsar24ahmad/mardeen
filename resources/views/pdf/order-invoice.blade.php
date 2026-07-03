@@ -88,7 +88,7 @@
                         </span>
                         <h1
                             style="font-size: 20px; font-weight: bold; margin: 0 0 5px 0; color: #ffffff; tracking-tight">
-                            Order #{{ $order->id }}
+                            Order #{{ $order->order_number }}
                         </h1>
                         <p style="font-size: 13px; color: #cbd5e1; margin: 0; font-weight: 500;">
                             {{ $order->created_at->format('d M Y') }}

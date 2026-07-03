@@ -47,7 +47,7 @@
                                             @if($item['variant_name'])
                                                 <p class="text-xs sm:text-sm text-gray-600 mb-1 sm:mb-2 truncate">{{ $item['variant_name'] }}</p>
                                             @endif
-                                            <p class="text-base sm:text-lg font-bold text-blue-600">${{ number_format($item['price'], 2) }}</p>
+                                            <p class="text-base sm:text-lg font-bold text-blue-600">TK. {{ number_format($item['price'], 2) }}</p>
                                         </div>
 
                                         <!-- Mobile Remove Button -->
@@ -87,7 +87,7 @@
                                     </div>
 
                                     <p class="text-base sm:text-lg font-bold text-gray-900 whitespace-nowrap">
-                                        ${{ number_format($item['price'] * $item['quantity'], 2) }}
+                                        TK. {{ number_format($item['price'] * $item['quantity'], 2) }}
                                     </p>
                                 </div>
                             </div>
@@ -116,7 +116,7 @@
                         <div class="space-y-3 mb-6">
                             <div class="flex justify-between">
                                 <span class="text-gray-600">Subtotal ({{ count($cart) }} items)</span>
-                                <span class="font-medium">${{ number_format($this->subtotal, 2) }}</span>
+                                <span class="font-medium">TK. {{ number_format($this->subtotal, 2) }}</span>
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-gray-600">Shipping</span>
@@ -128,7 +128,7 @@
                             <div class="flex justify-between items-center">
                                 <span class="text-lg font-semibold">Total</span>
                                 <span class="text-2xl font-bold text-blue-600">
-                                    ${{ number_format($this->subtotal, 2) }}
+                                    TK. {{ number_format($this->subtotal, 2) }}
                                 </span>
                             </div>
                         </div>

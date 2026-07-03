@@ -54,10 +54,10 @@
                                 <p class="mt-1 text-xs text-gray-500">Variant: {{ $item->variant_name }}</p>
                             @endif
                             <p class="mt-1 text-xs text-gray-400">Qty: {{ $item->quantity }} ×
-                                ${{ number_format($item->price, 2) }}</p>
+                                TK. {{ number_format($item->price, 2) }}</p>
                         </div>
                         <div class="text-sm font-medium text-gray-900 ml-4">
-                            ${{ number_format($item->subtotal, 2) }}
+                            TK. {{ number_format($item->subtotal, 2) }}
                         </div>
                     </div>
                 @endforeach
@@ -66,24 +66,24 @@
             <div class="bg-gray-50 px-6 py-6 border-t border-gray-100 space-y-3">
                 <div class="flex justify-between text-sm text-gray-600">
                     <span>Subtotal</span>
-                    <span>${{ number_format($order->subtotal, 2) }}</span>
+                    <span>TK. {{ number_format($order->subtotal, 2) }}</span>
                 </div>
 
                 @if($order->discount_amount > 0)
                     <div class="flex justify-between text-sm text-green-600">
                         <span>Discount</span>
-                        <span>-${{ number_format($order->discount_amount, 2) }}</span>
+                        <span>-TK. {{ number_format($order->discount_amount, 2) }}</span>
                     </div>
                 @endif
 
                 <div class="flex justify-between text-sm text-gray-600">
                     <span>Shipping Cost</span>
-                    <span>${{ number_format($order->shipping_cost, 2) }}</span>
+                    <span>TK. {{ number_format($order->shipping_cost, 2) }}</span>
                 </div>
 
                 <div class="flex justify-between text-base font-bold text-gray-900 pt-3 border-t border-gray-200">
                     <span>Total Paid</span>
-                    <span>${{ number_format($order->total, 2) }}</span>
+                    <span>TK. {{ number_format($order->total, 2) }}</span>
                 </div>
             </div>
         </div>

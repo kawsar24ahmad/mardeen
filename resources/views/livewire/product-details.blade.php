@@ -34,20 +34,20 @@
                     </div>
 
                     @php
-                        $gallery = $product->images
-                            ->sortBy('sort_order')
-                            ->values();
+$gallery = $product->images
+    ->sortBy('sort_order')
+    ->values();
 
-                        $variantImagePath = $selectedVariant
-                            ? $product->variants->find($selectedVariant)?->image_path
-                            : null;
+$variantImagePath = $selectedVariant
+    ? $product->variants->find($selectedVariant)?->image_path
+    : null;
 
-                        if ($variantImagePath) {
-                            $gallery = $gallery->prepend((object) [
-                                'image_path' => $variantImagePath,
-                                'sort_order' => -1,
-                            ]);
-                        }
+if ($variantImagePath) {
+    $gallery = $gallery->prepend((object) [
+        'image_path' => $variantImagePath,
+        'sort_order' => -1,
+    ]);
+}
                     @endphp
 
                     @if($gallery->count() > 1)
@@ -113,7 +113,7 @@
                         @if($variant)
                             <div class="flex items-center gap-3">
                                 <span
-                                    class="text-3xl font-bold text-gray-900">${{ number_format($variant->price, 2) }}</span>
+                                    class="text-3xl font-bold text-gray-900">TK. {{ number_format($variant->price, 2) }}</span>
                                 @if($variant->compare_price)
                                     <span
                                         class="text-xl text-gray-500 line-through">${{ number_format($variant->compare_price, 2) }}</span>
@@ -125,10 +125,10 @@
                         @else
                             <div class="flex items-center gap-3">
                                 <span
-                                    class="text-3xl font-bold text-gray-900">${{ number_format($product->price, 2) }}</span>
+                                    class="text-3xl font-bold text-gray-900">TK. {{ number_format($product->price, 2) }}</span>
                                 @if($product->compare_price)
                                     <span
-                                        class="text-xl text-gray-500 line-through">${{ number_format($product->compare_price, 2) }}</span>
+                                        class="text-xl text-gray-500 line-through">TK. {{ number_format($product->compare_price, 2) }}</span>
                                     <span class="bg-red-100 text-red-800 px-2 py-1 rounded text-sm font-semibold">
                                         -{{ $product->discount_percentage }}%
                                     </span>
@@ -142,16 +142,16 @@
                     @endif
 
                     @php
-                        $sizeGroups = $product->variants
-                            ->where('is_active', true)
-                            ->filter(fn($v) => $v->size_id)
-                            ->groupBy('size_id');
+$sizeGroups = $product->variants
+    ->where('is_active', true)
+    ->filter(fn($v) => $v->size_id)
+    ->groupBy('size_id');
 
-                        $offeredSizes = $sizeGroups->map(fn($g) => $g->first()->size);
-                        $sizeGroups = $product->variants
-                            ->where('is_active', true)
-                            ->filter(fn($v) => $v->size_id)
-                            ->groupBy('size_id');
+$offeredSizes = $sizeGroups->map(fn($g) => $g->first()->size);
+$sizeGroups = $product->variants
+    ->where('is_active', true)
+    ->filter(fn($v) => $v->size_id)
+    ->groupBy('size_id');
                     @endphp
                     @if($offeredSizes->whereNotNull('chest')->isNotEmpty() || $offeredSizes->whereNotNull('length')->isNotEmpty())
                         <div class="my-6 overflow-x-auto">
@@ -195,17 +195,17 @@
                             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                                 @foreach($product->variants->where('is_active', true) as $item)
                                                     @php
-                                                        $variantTitle = collect([
-                                                            $item->color?->name,
-                                                            $item->size?->name,
-                                                        ])->filter()->implode(' • ');
-                                                        $variantTitle = $variantTitle ?: $item->name;
+        $variantTitle = collect([
+            $item->color?->name,
+            $item->size?->name,
+        ])->filter()->implode(' • ');
+        $variantTitle = $variantTitle ?: $item->name;
                                                     @endphp
 
                                                     <button type="button" wire:click="selectVariant({{ $item->id }})" class="group relative border rounded-xl overflow-hidden bg-white text-left transition-all duration-300 hover:shadow-lg hover:-translate-y-1
                                                                                                                                                                                                                                                                             {{ $selectedVariant == $item->id
-                                    ? 'ring-2 ring-blue-500 border-blue-500 shadow-lg'
-                                    : 'border-gray-200 hover:border-blue-300' }}">
+            ? 'ring-2 ring-blue-500 border-blue-500 shadow-lg'
+            : 'border-gray-200 hover:border-blue-300' }}">
 
                                                         @if($item->image_path)
                                                             <div class="aspect-square bg-gray-100 overflow-hidden">
