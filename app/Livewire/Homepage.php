@@ -28,6 +28,13 @@ class Homepage extends Component
             ->limit(4)
             ->get();
         $categories = Category::active()
+            ->with([
+                'products' => function ($query) {
+                    $query->where('is_active', true)
+                        ->latest()
+                        ->take(4);
+                }
+            ])
             ->sorted()
             ->withCount('products')
             ->get();

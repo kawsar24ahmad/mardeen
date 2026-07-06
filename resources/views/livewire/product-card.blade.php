@@ -1,4 +1,4 @@
-<div class="group relative bg-white rounded-lg shadow-sm hover:shadow-lg transition duration-300 overflow-hidden">
+<div class="group relative bg-white rounded-lg shadow-sm hover:shadow-lg transition duration-300 overflow-hidden p-2">
     <a href="{{ route('products.show', $product->slug) }}" class="block">
         {{-- Product Image --}}
         <div class="aspect-square overflow-hidden bg-gray-200">
