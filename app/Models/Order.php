@@ -44,6 +44,12 @@ class Order extends Model
         'tracking_code',
         'consignment_id',
         'courier_status',
+        'courier_check',
+        'courier_checked_at',
+    ];
+    protected $casts = [
+        'courier_check' => 'array',
+        'courier_checked_at' => 'datetime',
     ];
     #[Scope]
     public function ofStatus(Builder $builder, string $status)

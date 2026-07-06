@@ -2,13 +2,14 @@
 
 namespace App\Filament\Resources\Orders\Schemas;
 
-use Filament\Infolists\Components\ImageEntry;
 use Filament\Schemas\Schema;
-use Filament\Support\Enums\FontWeight;
 use Filament\Support\Enums\TextSize;
 use Filament\Schemas\Components\Grid;
+use Filament\Support\Enums\FontWeight;
 use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\Placeholder;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\RepeatableEntry;
 use App\Filament\Resources\Customers\CustomerResource;
 
@@ -453,6 +454,153 @@ class OrderInfolist
                                         TextEntry::make('type')
                                             ->badge(),
                                     ]),
+
+                            ]),
+                    ]),
+
+                Section::make('Courier History')
+                    ->columnSpanFull()
+                    ->collapsible()
+                    ->schema([
+                        Section::make('🛡️ Risk Analysis')
+                            ->icon('heroicon-o-shield-check')
+                            ->columns(3)
+                            ->schema([
+                                TextEntry::make('courier_check.risk_verdict.label')
+                                    ->label('Risk Level')
+                                    ->badge()
+                                    ->size('lg')
+                                    ->color(fn($state) => match (strtolower($state ?? '')) {
+                                        'safe' => 'success',
+                                        'medium' => 'warning',
+                                        'high' => 'danger',
+                                        default => 'gray',
+                                    }),
+
+                                TextEntry::make('courier_check.risk_verdict.action')
+                                    ->label('Recommendation')
+                                    ->badge(),
+
+                                TextEntry::make('courier_checked_at')
+                                    ->label('Last Checked')
+                                    ->since(),
+                            ]),
+
+                        Section::make('📊 Delivery Summary')
+                            ->icon('heroicon-o-chart-bar')
+                            ->columns(4)
+                            ->schema([
+                                TextEntry::make('courier_check.data.summary.total_parcel')
+                                    ->label('Total Parcel')
+                                    ->badge()
+                                    ->color('gray'),
+
+                                TextEntry::make('courier_check.data.summary.success_parcel')
+                                    ->label('Delivered')
+                                    ->badge()
+                                    ->color('success'),
+
+                                TextEntry::make('courier_check.data.summary.cancelled_parcel')
+                                    ->label('Cancelled')
+                                    ->badge()
+                                    ->color('danger'),
+
+                                TextEntry::make('courier_check.data.summary.success_ratio')
+                                    ->label('Success Rate')
+                                    ->suffix('%')
+                                    ->badge()
+                                    ->color(fn($state) => match (true) {
+                                        $state >= 90 => 'success',
+                                        $state >= 70 => 'warning',
+                                        default => 'danger',
+                                    }),
+                            ]),
+
+                        Section::make('Courier Performance')
+                            ->icon('heroicon-o-truck')
+                            ->columnSpanFull()
+                            ->schema([
+
+                                Grid::make(6)
+                                    ->schema([
+                                        TextEntry::make('header_logo')
+                                            ->hiddenLabel()
+                                            ->state('Logo')
+                                            ->weight(FontWeight::Bold),
+
+                                        TextEntry::make('header_name')
+                                            ->hiddenLabel()
+                                            ->state('Courier')
+                                            ->weight(FontWeight::Bold),
+
+                                        TextEntry::make('header_total')
+                                            ->hiddenLabel()
+                                            ->state('Total')
+                                            ->weight(FontWeight::Bold),
+
+                                        TextEntry::make('header_success')
+                                            ->hiddenLabel()
+                                            ->state('Delivered')
+                                            ->weight(FontWeight::Bold),
+
+                                        TextEntry::make('header_cancel')
+                                            ->hiddenLabel()
+                                            ->state('Cancelled')
+                                            ->weight(FontWeight::Bold),
+
+                                        TextEntry::make('header_ratio')
+                                            ->hiddenLabel()
+                                            ->state('Success')
+                                            ->weight(FontWeight::Bold),
+                                    ]),
+
+                                RepeatableEntry::make('courier_stats')
+                                    ->hiddenLabel()
+                                    ->contained(false)
+                                    ->state(fn($record) => collect($record->courier_check['data'] ?? [])
+                                        ->except('summary')
+                                        ->values()
+                                        ->toArray())
+                                    ->schema([
+
+                                        ImageEntry::make('logo')
+                                            ->hiddenLabel()
+                                            ->imageHeight(30)
+                                            ->imageWidth(120)
+                                            ->extraImgAttributes([
+                                                'class' => 'object-contain',
+                                            ]),
+
+                                        TextEntry::make('name')
+                                            ->hiddenLabel()
+                                            ->weight(FontWeight::Bold),
+
+                                        TextEntry::make('total_parcel')
+                                            ->hiddenLabel()
+                                            ->badge(),
+
+                                        TextEntry::make('success_parcel')
+                                            ->hiddenLabel()
+                                            ->badge()
+                                            ->color('success'),
+
+                                        TextEntry::make('cancelled_parcel')
+                                            ->hiddenLabel()
+                                            ->badge()
+                                            ->color('danger'),
+
+                                        TextEntry::make('success_ratio')
+                                            ->hiddenLabel()
+                                            ->suffix('%')
+                                            ->badge()
+                                            ->color(fn($state) => match (true) {
+                                                $state >= 90 => 'success',
+                                                $state >= 70 => 'warning',
+                                                default => 'danger',
+                                            }),
+
+                                    ])
+                                    ->columns(6),
                             ]),
                     ]),
             ]);
