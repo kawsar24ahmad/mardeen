@@ -40,26 +40,39 @@
         </section>
     @endif
     <!-- Categories Section -->
+
     <section class="py-16 bg-white">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <h2 class="text-3xl font-bold text-gray-900 mb-8">Shop by Category</h2>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+
+            <!--
+              Mobile: flex layout with horizontal scrolling, hiding scrollbars.
+              Tablet/Desktop: Switches back to your original grid layout.
+            -->
+            <div
+                class="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-4 scrollbar-none md:grid md:grid-cols-3 lg:grid-cols-6 md:pb-0">
                 @foreach($categories as $category)
-                    <a href="{{ route('products.index', ['category' => $category->slug]) }}" class="group">
+                    <!-- shrink-0 and w-[40%] ensures mobile cards have a consistent, predictable width -->
+                    <a href="{{ route('products.index', ['category' => $category->slug]) }}"
+                        class="group min-w-[140px] w-[40%] shrink-0 snap-start md:w-auto md:min-w-0">
+
                         <div class="aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3">
                             @if($category->image)
                                 <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}"
                                     class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
                             @else
                                 <div class="w-full h-full flex items-center justify-center bg-blue-600">
-                                    <span class="text-4xl text-white">{{ substr($category->name, 0, 1) }}</span>
+                                    <span
+                                        class="text-4xl font-bold text-white uppercase">{{ substr($category->name, 0, 1) }}</span>
                                 </div>
                             @endif
                         </div>
-                        <h3 class="text-center font-medium text-gray-900 group-hover:text-blue-600">
+
+                        <h3
+                            class="text-center font-medium text-gray-900 group-hover:text-blue-600 truncate text-sm md:text-base">
                             {{ $category->name }}
                         </h3>
-                        <p class="text-center text-sm text-gray-500">{{ $category->products_count }} items</p>
+                        <p class="text-center text-xs md:text-sm text-gray-500">{{ $category->products_count }} items</p>
                     </a>
                 @endforeach
             </div>
@@ -97,7 +110,7 @@
                 </a>
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 @foreach($newArrivals as $product)
                     <livewire:product-card :product="$product" :key="'new-' . $product->id" />
                 @endforeach
@@ -139,7 +152,7 @@
                         </a>
                     </div>
 
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                         @foreach ($category->products as $product)
                             <livewire:product-card :product="$product" :key="'category-' . $category->id . '-product-' . $product->id" />
                         @endforeach
