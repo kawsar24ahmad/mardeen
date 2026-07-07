@@ -1,3 +1,10 @@
+@php
+    // ডাটাবেজ থেকে সেটিংস অবজেক্টটি নিয়ে আসা
+    $siteSetting = \App\Models\SiteSetting::getSettings();
+
+    // যদি ডাটাবেজে সাইটের নাম থাকে তবে সেটি নিবে, নাহলে .env এর APP_NAME নিবে
+    $siteName = $siteSetting?->site_name ?? config('app.name', 'E-Commerce');
+@endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -217,11 +224,13 @@
     <!-- Header -->
     <header class="bg-white/95 backdrop-blur-sm shadow-sm sticky top-0 z-50 border-b border-gray-100">
         <!-- Announcement bar (optional) -->
-        <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs sm:text-sm">
-            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-2 text-center">
-                Free shipping on orders over $50. Shop now and save big!
+        @if ($siteSetting->top_bar_text)
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs sm:text-sm">
+                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-2 text-center">
+                    {{ $siteSetting->top_bar_text ?? "" }}
+                </div>
             </div>
-        </div>
+        @endif
 
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <!-- Main Header Row -->
@@ -229,7 +238,6 @@
 
                 <!-- Mobile: Hamburger + Logo -->
                 <div class="flex items-center gap-2 sm:gap-3 flex-1 sm:flex-none">
-                    <!-- Mobile Menu Toggle -->
                     <button type="button" onclick="toggleMobileMenu()" aria-label="Open menu"
                         class="lg:hidden p-2 -ml-2 rounded-lg text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -238,14 +246,21 @@
                         </svg>
                     </button>
 
-                    <!-- Logo -->
+
+
                     <a href="{{ route('home') }}" class="flex items-center gap-2">
-                        <div
-                            class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm sm:text-base shadow-sm">
-                            {{ strtoupper(substr(config('app.name', 'E'), 0, 1)) }}
-                        </div>
+                        @if($siteSetting && $siteSetting->site_logo)
+                            <img src="{{ asset('storage/' . $siteSetting->site_logo) }}" alt="{{ $siteName }} Logo"
+                                class="w-8 h-8 sm:w-9 sm:h-9 object-contain rounded-lg shadow-sm">
+                        @else
+                            <div
+                                class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm sm:text-base shadow-sm">
+                                {{ strtoupper(substr($siteName, 0, 1)) }}
+                            </div>
+                        @endif
+
                         <span class="text-lg sm:text-xl font-bold text-gray-900 truncate max-w-[140px] sm:max-w-none">
-                            {{ config('app.name', 'E-Commerce') }}
+                            {{ $siteName }}
                         </span>
                     </a>
                 </div>
@@ -397,13 +412,28 @@
     <aside id="mobileMenu"
         class="mobile-menu fixed top-0 left-0 bottom-0 w-80 max-w-[85vw] bg-white z-50 lg:hidden shadow-2xl overflow-y-auto no-scrollbar">
         <div class="flex items-center justify-between p-4 border-b border-gray-100">
+            @php
+                // ডাটাবেজ থেকে সেটিংস অবজেক্টটি নিয়ে আসা
+                $siteSetting = \App\Models\SiteSetting::getSettings();
+
+                // সাইটের নাম (ডাটাবেজ অথবা ব্যাকআপ .env)
+                $siteName = $siteSetting?->site_name ?? config('app.name', 'E-Commerce');
+            @endphp
+
             <div class="flex items-center gap-2">
-                <div
-                    class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm">
-                    {{ strtoupper(substr(config('app.name', 'E'), 0, 1)) }}
-                </div>
-                <span class="font-bold text-gray-900">{{ config('app.name') }}</span>
+                @if($siteSetting && $siteSetting->site_logo)
+                    <img src="{{ asset('storage/' . $siteSetting->site_logo) }}" alt="{{ $siteName }} Logo"
+                        class="w-8 h-8 object-contain rounded-lg shadow-sm">
+                @else
+                    <div
+                        class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm">
+                        {{ strtoupper(substr($siteName, 0, 1)) }}
+                    </div>
+                @endif
+
+                <span class="font-bold text-gray-900">{{ $siteName }}</span>
             </div>
+
             <button type="button" onclick="toggleMobileMenu()" aria-label="Close menu"
                 class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
