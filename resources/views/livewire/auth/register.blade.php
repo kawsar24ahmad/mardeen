@@ -60,65 +60,59 @@ new #[Layout('components.layouts.customer')] class extends Component {
         <div class="bg-white py-8 px-6 shadow-lg rounded-lg">
             <form wire:submit="register">
 
-                <!-- Name -->
                 <div class="mb-4">
                     <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
                         Full Name
                     </label>
                     <input id="name" wire:model="name" type="text" name="name" value="{{ old('name') }}" required
                         autofocus
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                        class="w-full px-4 py-2 bg-white text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                     @error('name')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <!-- Email -->
                 <div class="mb-4">
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
                         Email Address
                     </label>
                     <input id="email" wire:model="email" type="email" name="email" value="{{ old('email') }}" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                        class="w-full px-4 py-2 bg-white text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                     @error('email')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <!-- Phone -->
                 <div class="mb-4">
                     <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
                         Phone Number (Optional)
                     </label>
                     <input id="phone" wire:model="phone" type="tel" name="phone"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                        class="w-full px-4 py-2 bg-white text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                     @error('phone')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <!-- Password -->
                 <div class="mb-4">
                     <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
                         Password
                     </label>
                     <input id="password" wire:model="password" type="password" name="password" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                        class="w-full px-4 py-2 bg-white text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                     @error('password')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <!-- Password Confirmation -->
                 <div class="mb-4">
                     <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-2">
                         Confirm Password
                     </label>
                     <input id="password_confirmation" wire:model="password_confirmation" type="password"
                         name="password_confirmation" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                        class="w-full px-4 py-2 bg-white text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                 </div>
-
 
 
                 <!-- Submit Button -->
