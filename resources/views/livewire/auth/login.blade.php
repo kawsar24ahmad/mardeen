@@ -115,17 +115,18 @@ new #[Layout('components.layouts.customer')] class extends Component {
 
 
                 <!-- Email -->
-                <div class="mb-4">
-                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-                        Email Address
-                    </label>
-                    <input id="email" type="email" wire:model="email" name="email" value="{{ old('email') }}" required
-                        autofocus
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                    @error('email')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
+            <div class="mb-4">
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                    Email Address
+                </label>
+                <input id="email" type="email" wire:model="email" name="email" value="{{ old('email') }}" required autofocus /*
+                    text-gray-900 এবং bg-white যোগ করা হয়েছে মোবাইলের টেক্সট ভিজিবিলিটি ঠিক করার জন্য */
+                    class="w-full px-4 py-2 bg-white text-gray-900 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+
+                @error('email')
+                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
 
                 <!-- Password -->
                 <div class="mb-4">
