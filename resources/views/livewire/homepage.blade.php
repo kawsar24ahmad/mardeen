@@ -1,21 +1,5 @@
 <div>
-    <!-- Hero Section -->
-    {{-- <section class="bg-blue-600 text-white py-20">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h1 class="text-4xl md:text-6xl font-bold mb-4">
-                    Welcome to {{ config('app.name') }}
-                </h1>
-                <p class="text-xl md:text-2xl mb-8 text-indigo-100">
-                    Discover amazing products at unbeatable prices
-                </p>
-                <a href="{{ route('products.index') }}"
-                    class="inline-block bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
-                    Shop Now
-                </a>
-            </div>
-        </div>
-    </section> --}}
+
     @if($banners->count())
         <section class="relative overflow-hidden" wire:ignore>
             <div class="swiper heroSwiper">
@@ -41,18 +25,29 @@
     @endif
     <!-- Categories Section -->
 
-    <section class="py-16 bg-white">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section class="py-16 bg-white relative group/section">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
             <h2 class="text-3xl font-bold text-gray-900 mb-8">Shop by Category</h2>
 
-            <!--
-              Mobile: flex layout with horizontal scrolling, hiding scrollbars.
-              Tablet/Desktop: Switches back to your original grid layout.
-            -->
-            <div
-                class="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-4 scrollbar-none md:grid md:grid-cols-3 lg:grid-cols-6 md:pb-0">
+            {{-- বামের অ্যারো বাটন (ক্লিক করলে বামে স্ক্রোল হবে) --}}
+            <button onclick="scrollCategories('left')"
+                class="absolute top-[50%] transform -translate-y-1/2 left-2 z-20 md:hidden opacity-80 active:scale-95 bg-white p-2 rounded-full shadow-lg border border-gray-100 text-gray-700 transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+
+            {{-- ডানের অ্যারো বাটন (ক্লিক করলে ডানে স্ক্রোল হবে) --}}
+            <button onclick="scrollCategories('right')"
+                class="absolute top-[50%] transform -translate-y-1/2 right-2 z-20 md:hidden opacity-80 active:scale-95 bg-white p-2 rounded-full shadow-lg border border-gray-100 text-gray-700 transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+
+            <div id="categoryContainer"
+                class="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-4 scrollbar-none md:grid md:grid-cols-3 lg:grid-cols-6 md:pb-0 scroll-smooth">
                 @foreach($categories as $category)
-                    <!-- shrink-0 and w-[40%] ensures mobile cards have a consistent, predictable width -->
                     <a href="{{ route('products.index', ['category' => $category->slug]) }}"
                         class="group min-w-[140px] w-[40%] shrink-0 snap-start md:w-auto md:min-w-0">
 
@@ -79,6 +74,19 @@
         </div>
     </section>
 
+    @script
+    <script>
+        // এই কোডটি শুধুমাত্র এই কম্পোনেন্টের জন্যই এক্সিকিউট হবে
+        window.scrollCategories = function (direction) {
+            const container = document.getElementById('categoryContainer');
+            if (direction === 'left') {
+                container.scrollLeft -= 200;
+            } else {
+                container.scrollLeft += 200;
+            }
+        }
+    </script>
+    @endscript
     <!-- Featured Products -->
     <section class="py-16 bg-gray-50">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

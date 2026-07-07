@@ -438,13 +438,38 @@
                     <p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Categories</p>
                 </li>
                 @foreach(\App\Models\Category::active()->sorted()->limit(5)->get() as $category)
-                    <li>
+                    {{-- <li>
                         <a href="{{ route('products.index', ['category' => $category->slug]) }}"
                             class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition">
                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                             </svg>
                             {{ $category->name }}
+                        </a>
+                    </li> --}}
+                    <li>
+                        <a href="{{ route('products.index', ['category' => $category->slug]) }}"
+                            class="group flex items-center gap-3 px-4 py-2.5 rounded-xl text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition duration-200">
+
+                            {{-- ইমেজ থাকলে ইমেজ দেখাবে, না থাকলে আইকন --}}
+                            @if($category->image)
+                                <div class="w-7 h-7 rounded-lg overflow-hidden shrink-0 bg-gray-100 border border-gray-100">
+                                    <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}"
+                                        class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                                </div>
+                            @else
+                                <div
+                                    class="w-7 h-7 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 group-hover:bg-blue-100 transition duration-200">
+                                    <svg class="w-3.5 h-3.5 text-gray-400 group-hover:text-blue-600 transition" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                            d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </div>
+                            @endif
+
+                            {{-- ক্যাটাগরি নাম --}}
+                            <span class="text-sm font-medium truncate">{{ $category->name }}</span>
                         </a>
                     </li>
                 @endforeach
@@ -607,10 +632,17 @@
                     <li>
                         <a href="{{ route('products.index', ['category' => $category->slug]) }}" onclick="toggleCatSheet()"
                             class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition">
-                            <span
-                                class="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center text-blue-600 font-semibold text-sm">
-                                {{ strtoupper(substr($category->name, 0, 1)) }}
-                            </span>
+                            @if ($category->image)
+                                <div class="w-7 h-7 rounded-lg overflow-hidden shrink-0 bg-gray-100 border border-gray-100">
+                                    <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}"
+                                        class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                                </div>
+                            @else
+                                <span
+                                    class="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center text-blue-600 font-semibold text-sm">
+                                    {{ strtoupper(substr($category->name, 0, 1)) }}
+                                </span>
+                            @endif
                             <span class="flex-1">{{ $category->name }}</span>
                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
@@ -791,6 +823,7 @@
             },
         });
     </script>
+    @stack('scripts')
 </body>
 
 </html>

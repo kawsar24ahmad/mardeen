@@ -91,11 +91,11 @@
                 <button wire:click="buyNowClicked"
                     class="group/btn flex items-center justify-center gap-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 px-2 py-2.5 text-sm font-semibold text-white shadow-sm transition-all active:scale-95">
                     <svg xmlns="http://www.w3.org/2000/svg"
-                        class="h-4 w-4 transition-transform group-hover/btn:translate-x-0.5" fill="none" viewBox="0 0 24 24"
+                        class="hidden md:inline h-4 w-4 transition-transform group-hover/btn:translate-x-0.5" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
-                    <span class="text-xs">Buy Now</span>
+                    <span class="text-xs">Buy <span class="hidden md:inline">Now</span></span>
                 </button>
             </div>
         @else
@@ -129,11 +129,11 @@
                 {{-- Modal Main Core Content Area --}}
                 <div class="overflow-y-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                     @php
-                        $currentVariant = $selectedVariant ? $product->variants->find($selectedVariant) : null;
-                        $displayImage = $currentVariant?->image_path ?: $product->primaryImage?->image_path;
-                        $displayPrice = $currentVariant?->price ?? $product->price;
-                        $displayCompare = $currentVariant?->compare_price ?? $product->compare_price;
-                        $variantTitle = $currentVariant?->display_label;
+    $currentVariant = $selectedVariant ? $product->variants->find($selectedVariant) : null;
+    $displayImage = $currentVariant?->image_path ?: $product->primaryImage?->image_path;
+    $displayPrice = $currentVariant?->price ?? $product->price;
+    $displayCompare = $currentVariant?->compare_price ?? $product->compare_price;
+    $variantTitle = $currentVariant?->display_label;
                     @endphp
 
                     {{-- Left View Column: Context Media Presentation --}}
@@ -175,7 +175,7 @@
                             <div class="grid grid-cols-2 gap-2 mb-4 max-h-[180px] overflow-y-auto pr-1">
                                 @foreach($product->variants->where('is_active', true) as $item)
                                     @php
-                                        $variantTitle = collect([$item->color?->name, $item->size?->name])->filter()->implode(' • ') ?: $item->name;
+        $variantTitle = collect([$item->color?->name, $item->size?->name])->filter()->implode(' • ') ?: $item->name;
                                     @endphp
                                     <button type="button" wire:click="selectVariant({{ $item->id }})"
                                         class="p-2 border text-left rounded-xl transition-all text-xs flex items-center gap-2
