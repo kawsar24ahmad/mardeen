@@ -37,7 +37,7 @@
             <p class="text-[11px] font-medium text-blue-600 uppercase tracking-wider mb-1">
                 {{ $product->category->name }}</p>
             <h3
-                class="font-medium text-gray-800 text-sm md:text-base line-clamp-2 min-h-[2.5rem] group-hover:text-blue-600 transition duration-200">
+                class="font-medium text-gray-800 text-sm md:text-base line-clamp-2  group-hover:text-blue-600 transition duration-200">
                 {{ $product->name }}
             </h3>
 
@@ -56,7 +56,7 @@
                     <span class="text-xs text-gray-400 font-medium">({{ $product->reviews_count }})</span>
                 </div>
             @else
-                <div class="h-5"></div> {{-- Visual layout spacer --}}
+                <div class="h-1"></div> {{-- Visual layout spacer --}}
             @endif
 
             {{-- Base and Comparison Pricing --}}
