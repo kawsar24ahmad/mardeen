@@ -391,6 +391,7 @@
                             Shop
                         </a>
                     </li>
+
                     @foreach(\App\Models\Category::active()->sorted()->limit(5)->get() as $category)
                         <li>
                             <a href="{{ route('products.index', ['category' => $category->slug]) }}"
@@ -399,6 +400,12 @@
                             </a>
                         </li>
                     @endforeach
+                    <li>
+
+                        <a href="{{ route('order.track') }}"
+                            class="nav-link text-sm font-medium text-gray-700 hover:text-blue-600 transition {{ request()->routeIs('order.track') ? 'active text-blue-600' : '' }}">Track
+                            Your Order</a>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -503,6 +510,21 @@
                         </a>
                     </li>
                 @endforeach
+
+                <li>
+                    <a href="{{ route('order.track') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 font-medium transition">
+                        <!-- Delivery Truck Icon -->
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8h4l3 4v4a1 1 0 01-1 1h-1m-4-1a1 1 0 00-1 1v.5M7 16h6" />
+                        </svg>
+                        Track Order
+                    </a>
+                </li>
 
                 @auth('customer')
                     <li class="pt-3 pb-1">

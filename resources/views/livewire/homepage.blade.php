@@ -147,7 +147,7 @@
     @foreach ($categories as $category)
         @if ($category->products->isNotEmpty())
             <section class="py-16 {{ $loop->even ? 'bg-gray-100' : 'bg-white' }}">
-                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
 
                     <div class="flex items-center justify-between mb-8">
                         <h2 class="text-3xl font-bold text-gray-900">
@@ -160,7 +160,7 @@
                         </a>
                     </div>
 
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 gap-y-4 md:gap-6">
                         @foreach ($category->products as $product)
                             <livewire:product-card :product="$product" :key="'category-' . $category->id . '-product-' . $product->id" />
                         @endforeach

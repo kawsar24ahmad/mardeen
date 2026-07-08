@@ -6,6 +6,7 @@ use App\Livewire\Orders;
 use App\Livewire\CartPage;
 use App\Livewire\Homepage;
 use App\Livewire\ThankYou;
+use App\Livewire\TrackOrder;
 use App\Livewire\CheckoutPage;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Livewire\ProductDetails;
@@ -102,5 +103,8 @@ Route::post('/steadfast/webhook', [SteadFastWebhookController::class, 'handle'])
 
 Route::post('/pathao/webhook', [PathaoWebhookController::class, 'handle']);
 
+
+// This makes it publicly accessible at yourwebsite.com/track-order
+Route::get('/track-order', TrackOrder::class)->name('order.track');
 
 require __DIR__ . '/auth.php';
