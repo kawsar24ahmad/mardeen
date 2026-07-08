@@ -146,7 +146,7 @@
     <!-- All Categories with 4 products -->
     @foreach ($categories as $category)
         @if ($category->products->isNotEmpty())
-            <section class="py-16 {{ $loop->even ? 'bg-gray-50' : 'bg-white' }}">
+            <section class="py-16 {{ $loop->even ? 'bg-gray-100' : 'bg-white' }}">
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
                     <div class="flex items-center justify-between mb-8">
