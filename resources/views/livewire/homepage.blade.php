@@ -98,7 +98,7 @@
                 </a>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 @foreach($featuredProducts as $product)
                     <livewire:product-card :product="$product" :key="$product->id" />
                 @endforeach
@@ -118,7 +118,7 @@
                 </a>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 @foreach($newArrivals as $product)
                     <livewire:product-card :product="$product" :key="'new-' . $product->id" />
                 @endforeach
