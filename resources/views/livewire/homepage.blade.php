@@ -174,12 +174,17 @@
                     <div class="flex justify-center mt-8 px-4">
                         <a href="{{ route('products.index', ['category' => $category->slug]) }}"
                             class="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full bg-slate-900 px-5 sm:px-7 py-3 text-sm sm:text-base font-semibold text-white shadow-md transition-all duration-300 hover:bg-indigo-600 hover:shadow-xl hover:scale-105">
+
                             <span>View More</span>
 
-                            <span
-                                class="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-white/20 transition-transform duration-300 group-hover:translate-x-1">
-                                →
+                            <span class="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-white/20">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6l6 6-6 6" />
+                                </svg>
                             </span>
+
                         </a>
                     </div>
 
