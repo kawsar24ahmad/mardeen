@@ -89,19 +89,30 @@
     @endscript
     <!-- Featured Products -->
     <section class="py-16 bg-gray-50">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="flex items-center justify-between mb-8">
-                <h2 class="text-3xl font-bold text-gray-900">Featured Products</h2>
-                <a href="{{ route('products.index', ['featured' => 1]) }}"
+                <h2 class="text-3xl ps-4  font-bold text-gray-900">Featured Products</h2>
+                {{-- <a href="{{ route('products.index', ['featured' => 1]) }}"
                     class="text-blue-600 hover:text-indigo-700 font-medium">
                     View All →
-                </a>
+                </a> --}}
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4  gap-1 gap-y-4 md:gap-6">
                 @foreach($featuredProducts as $product)
                     <livewire:product-card :product="$product" :key="$product->id" />
                 @endforeach
+            </div>
+            <div class="flex justify-center mt-8 px-4">
+                <a href="{{ route('products.index', ['featured' => 1]) }}"
+                    class="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full bg-slate-900 px-5 sm:px-7 py-3 text-sm sm:text-base font-semibold text-white shadow-md transition-all duration-300 hover:bg-indigo-600 hover:shadow-xl hover:scale-105">
+                    <span>View More</span>
+
+                    <span
+                        class="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-white/20 transition-transform duration-300 group-hover:translate-x-1">
+                        →
+                    </span>
+                </a>
             </div>
         </div>
     </section>
@@ -109,40 +120,34 @@
 
     <!-- New Arrivals -->
     <section class="py-16 bg-white">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-7xl  sm:px-6 lg:px-8">
             <div class="flex items-center justify-between mb-8">
-                <h2 class="text-3xl font-bold text-gray-900">New Arrivals</h2>
-                <a href="{{ route('products.index', ['sort' => 'newest']) }}"
+                <h2 class="text-3xl ps-4 font-bold text-gray-900">New Arrivals</h2>
+                {{-- <a href="{{ route('products.index', ['sort' => 'newest']) }}"
                     class="text-blue-600 hover:text-indigo-700 font-medium">
                     View All →
-                </a>
+                </a> --}}
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-1 gap-y-4 md:gap-6">
                 @foreach($newArrivals as $product)
                     <livewire:product-card :product="$product" :key="'new-' . $product->id" />
                 @endforeach
             </div>
-        </div>
-    </section>
-    <!-- New t-shirt -->
-    {{-- <section class="py-16 bg-white">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between mb-8">
-                <h2 class="text-3xl font-bold text-gray-900">T-Shirt</h2>
-                <a href="{{ route('products.index', ['category' => 't-shirt']) }}"
-                    class="text-blue-600 hover:text-indigo-700 font-medium">
-                    View All →
+            <div class="flex justify-center mt-8 px-4">
+                <a href="{{ route('products.index', ['sort' => 'newest']) }}"
+                    class="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full bg-slate-900 px-5 sm:px-7 py-3 text-sm sm:text-base font-semibold text-white shadow-md transition-all duration-300 hover:bg-indigo-600 hover:shadow-xl hover:scale-105">
+                    <span>View More</span>
+
+                    <span
+                        class="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-white/20 transition-transform duration-300 group-hover:translate-x-1">
+                        →
+                    </span>
                 </a>
             </div>
-
-            <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                @foreach($tshirts as $product)
-                <livewire:product-card :product="$product" :key="'new-' . $product->id" />
-                @endforeach
-            </div>
         </div>
-    </section> --}}
+    </section>
+
     <!-- All Categories with 4 products -->
     @foreach ($categories as $category)
         @if ($category->products->isNotEmpty())
@@ -150,20 +155,32 @@
                 <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
 
                     <div class="flex items-center justify-between mb-8">
-                        <h2 class="text-3xl font-bold text-gray-900">
+                        <h2 class="text-3xl ps-4 font-bold text-gray-900">
                             {{ $category->name }}
                         </h2>
 
-                        <a href="{{ route('products.index', ['category' => $category->slug]) }}"
+                        {{-- <a href="{{ route('products.index', ['category' => $category->slug]) }}"
                             class="text-indigo-600 hover:text-indigo-700 font-semibold transition">
                             View All →
-                        </a>
+                        </a> --}}
                     </div>
 
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 gap-y-4 md:gap-6">
                         @foreach ($category->products as $product)
                             <livewire:product-card :product="$product" :key="'category-' . $category->id . '-product-' . $product->id" />
                         @endforeach
+
+                    </div>
+                    <div class="flex justify-center mt-8 px-4">
+                        <a href="{{ route('products.index', ['category' => $category->slug]) }}"
+                            class="group inline-flex items-center justify-center gap-2 sm:gap-3 rounded-full bg-slate-900 px-5 sm:px-7 py-3 text-sm sm:text-base font-semibold text-white shadow-md transition-all duration-300 hover:bg-indigo-600 hover:shadow-xl hover:scale-105">
+                            <span>View More</span>
+
+                            <span
+                                class="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-white/20 transition-transform duration-300 group-hover:translate-x-1">
+                                →
+                            </span>
+                        </a>
                     </div>
 
                 </div>
