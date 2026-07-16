@@ -95,19 +95,21 @@
 
             <!-- বামের অ্যারো বাটন -->
             <button
-                class="category-prev absolute top-[55%] transform -translate-y-1/2 left-2 z-20  active:scale-95 bg-white p-2.5 rounded-full shadow-lg border border-gray-100 text-gray-700 transition-all duration-300 cursor-pointer hover:bg-gray-50">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                class="category-prev absolute top-[50%] transform -translate-y-1/2 left-2 z-20  opacity-100 active:scale-95 bg-white p-2.5 rounded-full shadow-lg border border-gray-100 text-gray-700 transition-all duration-300 cursor-pointer hover:bg-gray-50">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
                 </svg>
             </button>
 
+
             <!-- ডানের অ্যারো বাটন -->
             <button
-                class="category-next absolute top-[55%] transform -translate-y-1/2 right-2 z-20  active:scale-95 bg-white p-2.5 rounded-full shadow-lg border border-gray-100 text-gray-700 transition-all duration-300 cursor-pointer hover:bg-gray-50">
+                class="category-next absolute top-[50%] transform -translate-y-1/2 right-2 z-20  opacity-100 active:scale-95 bg-white p-2.5 rounded-full shadow-lg border border-gray-100 text-gray-700 transition-all duration-300 cursor-pointer hover:bg-gray-50">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
                 </svg>
             </button>
+
 
             <!-- Swiper Container -->
             <div class="swiper categorySwiper">
