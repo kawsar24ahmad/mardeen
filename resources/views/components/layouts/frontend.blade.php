@@ -16,6 +16,25 @@
 
     <title>{{ $title ?? config('app.name', 'E-Commerce Store') }}</title>
 
+
+    <link rel="shortcut icon" href="fav.png" />
+
+    {{--
+    <meta property="og:title" content="Premium Shirt 25" />
+    <meta property="og:description"
+        content="● Fabrics Description : Comfortable Premium Fabrics● Occasion : Festival, Party, Wedding, Casual● Buttons : Export Quality butt…" />
+    <meta property="og:url" content="https://example.org/facebook" />
+    <meta property="og:image"
+        content="https://cdn.redshop.io/media/images/1753642748-6c0c7971-7059-4f60-b36f-df5158b15b32.jpg" />
+    <meta property="product:brand" content="maardeen" />
+    <meta property="product:availability" content="in stock" />
+    <meta property="product:condition" content="new" />
+    <meta property="product:price:amount" content="500" />
+    <meta property="product:price:currency" content="BDT" />
+    <meta property="product:retailer_item_id" content="sku" />
+    <meta property="product:item_group_id" content="Summer Collection" />
+    <meta property="og:type" content="product" /> --}}
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
@@ -251,17 +270,18 @@
                     <a href="{{ route('home') }}" class="flex items-center gap-2">
                         @if($siteSetting && $siteSetting->site_logo)
                             <img src="{{ asset('storage/' . $siteSetting->site_logo) }}" alt="{{ $siteName }} Logo"
-                                class="w-8 h-8 sm:w-9 sm:h-9 object-contain rounded-lg shadow-sm">
+                                class="h-8 w-auto object-contain">
                         @else
                             <div
                                 class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm sm:text-base shadow-sm">
                                 {{ strtoupper(substr($siteName, 0, 1)) }}
                             </div>
+                            <span class="text-lg sm:text-xl font-bold text-gray-900 truncate max-w-[140px] sm:max-w-none">
+                                {{ $siteName }}
+                            </span>
                         @endif
 
-                        <span class="text-lg sm:text-xl font-bold text-gray-900 truncate max-w-[140px] sm:max-w-none">
-                            {{ $siteName }}
-                        </span>
+
                     </a>
                 </div>
 
@@ -427,22 +447,23 @@
                 $siteName = $siteSetting?->site_name ?? config('app.name', 'E-Commerce');
             @endphp
 
-            <div class="flex items-center gap-2">
+            <div class="flex items-center justify-center gap-2 w-full">
                 @if($siteSetting && $siteSetting->site_logo)
+                    <!-- Logo Image: Perfectly centered, no text, small size -->
                     <img src="{{ asset('storage/' . $siteSetting->site_logo) }}" alt="{{ $siteName }} Logo"
-                        class="w-8 h-8 object-contain rounded-lg shadow-sm">
+                        class="h-8 w-auto object-contain block mx-auto">
                 @else
+                    <!-- Fallback Placeholder: Shows initial and text side-by-side -->
                     <div
-                        class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm">
+                        class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shrink-0">
                         {{ strtoupper(substr($siteName, 0, 1)) }}
                     </div>
+                    <span class="font-bold text-gray-900">{{ $siteName }}</span>
                 @endif
-
-                <span class="font-bold text-gray-900">{{ $siteName }}</span>
             </div>
 
             <button type="button" onclick="toggleMobileMenu()" aria-label="Close menu"
-                class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition">
+                class="p-2 rounded-lg bg-gray-300 text-black hover:bg-red-600 transition">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
