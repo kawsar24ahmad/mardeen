@@ -31,27 +31,27 @@
 
             <!-- বামের অ্যারো বাটন -->
             <button
-                class="category-prev absolute top-[50%] transform -translate-y-1/2 left-2 z-20  opacity-100 active:scale-95 bg-white p-2.5 rounded-full shadow-lg border border-gray-100 text-gray-700 transition-all duration-300 cursor-pointer hover:bg-gray-50">
+                class="category-prev absolute top-[50%] transform -translate-y-1/2 left-2 z-20 opacity-100 active:scale-95 bg-white p-2.5 rounded-full shadow-lg border border-gray-100 text-gray-700 transition-all duration-300 cursor-pointer hover:bg-gray-50">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
                 </svg>
             </button>
 
-
             <!-- ডানের অ্যারো বাটন -->
             <button
-                class="category-next absolute top-[50%] transform -translate-y-1/2 right-2 z-20  opacity-100 active:scale-95 bg-white p-2.5 rounded-full shadow-lg border border-gray-100 text-gray-700 transition-all duration-300 cursor-pointer hover:bg-gray-50">
+                class="category-next absolute top-[50%] transform -translate-y-1/2 right-2 z-20 opacity-100 active:scale-95 bg-white p-2.5 rounded-full shadow-lg border border-gray-100 text-gray-700 transition-all duration-300 cursor-pointer hover:bg-gray-50">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
                 </svg>
             </button>
 
-
-            <!-- Swiper Container -->
-            <div class="swiper categorySwiper">
-                <div class="swiper-wrapper pb-4">
+            <!-- Swiper Container (এখানে overflow-hidden এবং flex-nowrap যুক্ত করা হয়েছে) -->
+            <div class="swiper categorySwiper !overflow-hidden">
+                <!-- flex এবং flex-nowrap ব্যবহারের ফলে JS লোড হওয়ার আগেই আইটেমগুলো এক লাইনে পাশাপাশি থাকবে, নিচে নামবে না -->
+                <div class="swiper-wrapper pb-4 flex flex-nowrap">
                     @foreach($categories as $category)
-                        <div class="swiper-slide">
+                        <!-- initial width ফিক্স করার জন্য shrink-0 এবং নির্দিষ্ট width ক্লাস যুক্ত করা হয়েছে -->
+                        <div class="swiper-slide shrink-0 w-[40%] sm:w-[28%] md:w-[25%] lg:w-[16.666%]">
                             <a href="{{ route('products.index', ['category' => $category->slug]) }}"
                                 class="group block text-center">
                                 <div class="aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3">

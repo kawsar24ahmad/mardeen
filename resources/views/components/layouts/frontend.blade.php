@@ -884,6 +884,72 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <script>
+        // স্লাইডারগুলো ইনিশিয়ালাইজ করার জন্য একটি রিইউজেবল ফাংশন
+        function initSwipers() {
+            // ১. হিরো ব্যানার স্লাইডার
+            if (document.querySelector('.heroSwiper')) {
+                new Swiper('.heroSwiper', {
+                    loop: true,
+                    autoplay: {
+                        delay: 3000,
+                        disableOnInteraction: false,
+                    },
+                    effect: 'fade',
+                    pagination: {
+                        el: '.swiper-pagination',
+                        clickable: true,
+                    },
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
+                    },
+                });
+            }
+
+            // ২. ক্যাটাগরি স্লাইডার
+            if (document.querySelector('.categorySwiper')) {
+                new Swiper('.categorySwiper', {
+                    slidesPerView: 2.5,          // মোবাইলে একসাথে আড়াইটি ক্যাটাগরি দেখাবে
+                    spaceBetween: 16,            // স্লাইডগুলোর মাঝখানের দূরত্ব
+                    loop: true,                  // অনবরত ঘুরতে থাকবে
+                    autoplay: {
+                        delay: 3000,             // প্রতি ৩ সেকেন্ড পর পর পরিবর্তন হবে
+                        disableOnInteraction: false,
+                    },
+                    navigation: {
+                        nextEl: '.category-next',
+                        prevEl: '.category-prev',
+                    },
+                    breakpoints: {
+                        640: {
+                            slidesPerView: 3.5,
+                            spaceBetween: 20,
+                        },
+                        768: {
+                            slidesPerView: 4,
+                            spaceBetween: 24,
+                        },
+                        1024: {
+                            slidesPerView: 6,    // ডেস্কটপে একসাথে ৬টি ক্যাটাগরি
+                            spaceBetween: 24,
+                        }
+                    }
+                });
+            }
+        }
+
+        // প্রথমবার পেজ লোড হওয়ার পর রান হবে
+        document.addEventListener('DOMContentLoaded', () => {
+            initSwipers();
+        });
+
+        // লাইভওয়্যার কোনো নেভিগেশন বা রেন্ডার করলে স্লাইডারগুলোকে পুনরায় সচল করার জন্য
+        document.addEventListener('livewire:navigated', () => {
+            initSwipers();
+        });
+    </script>
+    {{--
+    <script>
         new Swiper('.heroSwiper', {
             loop: true,
 
@@ -933,7 +999,7 @@
                 }
             }
         });
-    </script>
+    </script> --}}
     @stack('scripts')
 </body>
 
