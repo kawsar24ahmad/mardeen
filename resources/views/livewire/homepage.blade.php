@@ -87,6 +87,62 @@
         }
     </script>
     @endscript
+
+    <!-- Categories Section -->
+    <section class="py-16 bg-white relative group/section" wire:ignore>
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8">Shop by Category</h2>
+
+            <!-- বামের অ্যারো বাটন -->
+            <button
+                class="category-prev absolute top-[55%] transform -translate-y-1/2 left-2 z-20  active:scale-95 bg-white p-2.5 rounded-full shadow-lg border border-gray-100 text-gray-700 transition-all duration-300 cursor-pointer hover:bg-gray-50">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+
+            <!-- ডানের অ্যারো বাটন -->
+            <button
+                class="category-next absolute top-[55%] transform -translate-y-1/2 right-2 z-20  active:scale-95 bg-white p-2.5 rounded-full shadow-lg border border-gray-100 text-gray-700 transition-all duration-300 cursor-pointer hover:bg-gray-50">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+
+            <!-- Swiper Container -->
+            <div class="swiper categorySwiper">
+                <div class="swiper-wrapper pb-4">
+                    @foreach($categories as $category)
+                        <div class="swiper-slide">
+                            <a href="{{ route('products.index', ['category' => $category->slug]) }}"
+                                class="group block text-center">
+                                <div class="aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3">
+                                    @if($category->image)
+                                        <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}"
+                                            class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                                    @else
+                                        <div class="w-full h-full flex items-center justify-center bg-blue-600">
+                                            <span
+                                                class="text-4xl font-bold text-white uppercase">{{ substr($category->name, 0, 1) }}</span>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <h3
+                                    class="font-medium text-gray-900 group-hover:text-blue-600 truncate text-sm md:text-base px-1">
+                                    {{ $category->name }}
+                                </h3>
+                                <p class="text-xs md:text-sm text-gray-500 mt-1">{{ $category->products_count }} items</p>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
     <!-- Featured Products -->
     <section class="py-16 bg-gray-50">
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">

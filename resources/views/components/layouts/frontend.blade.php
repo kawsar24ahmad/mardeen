@@ -734,11 +734,20 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
                 <div class="col-span-2 md:col-span-1">
                     <div class="flex items-center gap-2 mb-4">
-                        <div
-                            class="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-white font-bold">
-                            {{ strtoupper(substr(config('app.name', 'E'), 0, 1)) }}
+                        <div class="flex items-center justify-center gap-2 w-full bg-white rounded-lg p-2">
+                            @if($siteSetting && $siteSetting->site_logo)
+                                <!-- Logo Image: Perfectly centered, no text, small size -->
+                                <img src="{{ asset('storage/' . $siteSetting->site_logo) }}" alt="{{ $siteName }} Logo"
+                                    class="h-8 w-auto object-contain block mx-auto">
+                            @else
+                                <!-- Fallback Placeholder: Shows initial and text side-by-side -->
+                                <div
+                                    class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shrink-0">
+                                    {{ strtoupper(substr($siteName, 0, 1)) }}
+                                </div>
+                                <span class="font-bold text-gray-900">{{ $siteName }}</span>
+                            @endif
                         </div>
-                        <h3 class="text-lg font-bold text-white">{{ config('app.name') }}</h3>
                     </div>
                     <p class="text-sm text-gray-400 leading-relaxed">Your one-stop shop for quality products at
                         unbeatable prices.</p>
@@ -894,6 +903,35 @@
                 nextEl: '.swiper-button-next',
                 prevEl: '.swiper-button-prev',
             },
+        });
+
+        const categorySwiper = new Swiper('.categorySwiper', {
+            slidesPerView: 2.5,          // মোবাইলে একসাথে আড়াইটি ক্যাটাগরি দেখাবে (যাতে বোঝা যায় পাশে আরও আছে)
+            spaceBetween: 16,            // স্লাইডগুলোর মাঝখানের দূরত্ব (16px)
+            loop: true,                  // অনবরত ঘুরতে থাকবে (Infinite Loop)
+            autoplay: {
+                delay: 3000,             // প্রতি ৩ সেকেন্ড পর পর স্লাইড পরিবর্তন হবে
+                disableOnInteraction: false, // ইউজার ক্লিক বা টাচ করলেও অটো-প্লে বন্ধ হবে না
+            },
+            navigation: {
+                nextEl: '.category-next', // ডানের অ্যারো বাটন ক্লাস
+                prevEl: '.category-prev', // বামের অ্যারো বাটন ক্লাস
+            },
+            // রেসপনসিভ ব্রেকপয়েন্ট (বিভিন্ন স্ক্রিন সাইজের জন্য সেটআপ)
+            breakpoints: {
+                640: {
+                    slidesPerView: 3.5,
+                    spaceBetween: 20,
+                },
+                768: {
+                    slidesPerView: 4,
+                    spaceBetween: 24,
+                },
+                1024: {
+                    slidesPerView: 6,    // বড় স্ক্রিনে বা ডেস্কটপে একসাথে ৬টি ক্যাটাগরি দেখাবে
+                    spaceBetween: 24,
+                }
+            }
         });
     </script>
     @stack('scripts')
