@@ -7,8 +7,10 @@
 
                     @foreach ($banners as $banner)
                         <div class="swiper-slide">
-                            <img src="{{ asset('storage/' . $banner->banner_image) }}" alt="{{ $banner->banner_title }}"
-                                class="w-full h-[220px] sm:h-[350px] md:h-[500px] lg:h-[650px] object-cover">
+                            <div class="w-full h-[220px] sm:h-[350px] md:h-[500px] lg:h-[650px]">
+                                <img src="{{ asset('storage/' . $banner->banner_image) }}" alt="{{ $banner->banner_title }}"
+                                    class="w-full h-full object-cover">
+                            </div>
                         </div>
                     @endforeach
 
@@ -23,61 +25,135 @@
             </div>
         </section>
     @endif
-
     <!-- Categories Section -->
-    <section class="py-16 bg-white relative group/section" wire:ignore>
+    <!-- Categories Section -->
+    <section class="py-16 bg-white relative group/section overflow-hidden">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
             <h2 class="text-3xl font-bold text-gray-900 mb-8">Shop by Category</h2>
 
             <!-- বামের অ্যারো বাটন -->
             <button
-                class="category-prev absolute top-[50%] transform -translate-y-1/2 left-2 z-20 opacity-100 active:scale-95 bg-white p-2.5 rounded-full shadow-lg border border-gray-100 text-gray-700 transition-all duration-300 cursor-pointer hover:bg-gray-50">
+                class="category-prev absolute top-[50%] transform -translate-y-1/2 left-2 z-20  opacity-100 active:scale-95 bg-white p-2.5 rounded-full shadow-lg border border-gray-100 text-gray-700 transition-all duration-300 cursor-pointer hover:bg-gray-50">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
                 </svg>
             </button>
 
+
             <!-- ডানের অ্যারো বাটন -->
             <button
-                class="category-next absolute top-[50%] transform -translate-y-1/2 right-2 z-20 opacity-100 active:scale-95 bg-white p-2.5 rounded-full shadow-lg border border-gray-100 text-gray-700 transition-all duration-300 cursor-pointer hover:bg-gray-50">
+                class="category-next absolute top-[50%] transform -translate-y-1/2 right-2 z-20  opacity-100 active:scale-95 bg-white p-2.5 rounded-full shadow-lg border border-gray-100 text-gray-700 transition-all duration-300 cursor-pointer hover:bg-gray-50">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
                 </svg>
             </button>
 
-            <!-- Swiper Container (এখানে overflow-hidden এবং flex-nowrap যুক্ত করা হয়েছে) -->
-            <div class="swiper categorySwiper !overflow-hidden">
-                <!-- flex এবং flex-nowrap ব্যবহারের ফলে JS লোড হওয়ার আগেই আইটেমগুলো এক লাইনে পাশাপাশি থাকবে, নিচে নামবে না -->
-                <div class="swiper-wrapper pb-4 flex flex-nowrap">
+            {{-- Swiper Container --}}
+            <div class="swiper categorySwiper">
+                <div class="swiper-wrapper pb-4">
                     @foreach($categories as $category)
-                        <!-- initial width ফিক্স করার জন্য shrink-0 এবং নির্দিষ্ট width ক্লাস যুক্ত করা হয়েছে -->
-                        <div class="swiper-slide shrink-0 w-[40%] sm:w-[28%] md:w-[25%] lg:w-[16.666%]">
-                            <a href="{{ route('products.index', ['category' => $category->slug]) }}"
-                                class="group block text-center">
-                                <div class="aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3">
-                                    @if($category->image)
-                                        <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}"
-                                            class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
-                                    @else
-                                        <div class="w-full h-full flex items-center justify-center bg-blue-600">
-                                            <span
-                                                class="text-4xl font-bold text-white uppercase">{{ substr($category->name, 0, 1) }}</span>
-                                        </div>
-                                    @endif
-                                </div>
+                        {{-- স্লাইড কন্টেইনার (Letting Swiper control the width natively) --}}
+                        <div class="swiper-slide">
+                            <div class="h-[250px] w-[200px] ">
+                                <a href="{{ route('products.index', ['category' => $category->slug]) }}"
+                                    class="group block w-full">
 
-                                <h3
-                                    class="font-medium text-gray-900 group-hover:text-blue-600 truncate text-sm md:text-base px-1">
-                                    {{ $category->name }}
-                                </h3>
-                                <p class="text-xs md:text-sm text-gray-500 mt-1">{{ $category->products_count }} items</p>
-                            </a>
+                                    {{-- ক্যাটাগরি ইমেজ/বক্স --}}
+                                    <div
+                                        class="aspect-square rounded-2xl overflow-hidden bg-gray-50 border border-gray-100 mb-3 relative shadow-sm group-hover:shadow-md transition-all duration-300">
+                                        @if($category->image)
+                                            <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}"
+                                                class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                                        @else
+                                            <div
+                                                class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-indigo-600">
+                                                <span
+                                                    class="text-2xl font-bold text-white uppercase">{{ substr($category->name, 0, 1) }}</span>
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    {{-- টেক্সট ডিটেইলস --}}
+                                    <h3
+                                        class="text-center font-medium text-gray-800 group-hover:text-blue-600 truncate text-xs md:text-sm px-1 transition-colors">
+                                        {{ $category->name }}
+                                    </h3>
+                                    <p class="text-center text-[10px] md:text-xs text-gray-400 mt-0.5">
+                                        {{ $category->products_count }} items
+                                    </p>
+                                </a>
+                            </div>
+
                         </div>
                     @endforeach
                 </div>
             </div>
         </div>
     </section>
+
+    {{-- <section class="py-16 bg-white relative group/section">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8">Shop by Category</h2>
+
+            <button onclick="scrollCategories('left')"
+                class="absolute top-[50%] transform -translate-y-1/2 left-2 z-20 md:hidden opacity-80 active:scale-95 bg-white p-2 rounded-full shadow-lg border border-gray-100 text-gray-700 transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+
+            <button onclick="scrollCategories('right')"
+                class="absolute top-[50%] transform -translate-y-1/2 right-2 z-20 md:hidden opacity-80 active:scale-95 bg-white p-2 rounded-full shadow-lg border border-gray-100 text-gray-700 transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+
+            <div id="categoryContainer"
+                class="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-4 scrollbar-none md:grid md:grid-cols-3 lg:grid-cols-6 md:pb-0 scroll-smooth">
+                @foreach($categories as $category)
+                <a href="{{ route('products.index', ['category' => $category->slug]) }}"
+                    class="group min-w-[140px] w-[40%] shrink-0 snap-start md:w-auto md:min-w-0">
+
+                    <div class="aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3">
+                        @if($category->image)
+                        <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}"
+                            class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                        @else
+                        <div class="w-full h-full flex items-center justify-center bg-blue-600">
+                            <span class="text-4xl font-bold text-white uppercase">{{ substr($category->name, 0, 1)
+                                }}</span>
+                        </div>
+                        @endif
+                    </div>
+
+                    <h3
+                        class="text-center font-medium text-gray-900 group-hover:text-blue-600 truncate text-sm md:text-base">
+                        {{ $category->name }}
+                    </h3>
+                    <p class="text-center text-xs md:text-sm text-gray-500">{{ $category->products_count }} items</p>
+                </a>
+                @endforeach
+            </div>
+        </div>
+    </section> --}}
+
+    {{-- @script
+    <script>
+        // এই কোডটি শুধুমাত্র এই কম্পোনেন্টের জন্যই এক্সিকিউট হবে
+        window.scrollCategories = function (direction) {
+            const container = document.getElementById('categoryContainer');
+            if (direction === 'left') {
+                container.scrollLeft -= 200;
+            } else {
+                container.scrollLeft += 200;
+            }
+        }
+    </script>
+    @endscript --}}
+
+
+
 
 
 
