@@ -24,7 +24,9 @@ use Filament\Tables\Filters\TrashedFilter;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ImageEntry;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 use Filament\Infolists\Components\RepeatableEntry;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
 use App\Filament\Resources\Customers\CustomerResource;
 
 class OrdersTable
@@ -332,6 +334,16 @@ class OrdersTable
                     }),
             ])
             ->toolbarActions([
+
+                ExportAction::make()
+                    ->label('Export Orders')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->exports([
+                        ExcelExport::make()
+                            ->fromTable()
+                            ->withFilename('orders-' . now()->format('Y-m-d-H-i')),
+                    ]),
+
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                     ForceDeleteBulkAction::make(),
