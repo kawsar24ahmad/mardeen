@@ -77,28 +77,55 @@
     {{-- Interactive Call to Action Elements --}}
     <div class="mt-2 px-1 pb-1">
         @if($product->stock_status === 'in_stock')
-            <div class="grid grid-cols-2 gap-2">
-                <button wire:click="addToCartClicked"
-                    class="group/btn flex items-center justify-center gap-2 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 px-2 py-2.5 text-sm font-semibold text-gray-700 transition-all active:scale-95">
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                        class="h-4 w-4 text-gray-600 transition-transform group-hover/btn:scale-110" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1 5h12m-9 0a1 1 0 102 0m4 0a1 1 0 102 0" />
-                    </svg>
-                    <span class="hidden md:inline text-xs">Add to Cart</span>
-                </button>
+                        {{-- <div class="grid grid-cols-2 gap-2">
+                            <button wire:click="addToCartClicked"
+                                class="group/btn flex items-center justify-center gap-2 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 px-2 py-2.5 text-sm font-semibold text-gray-700 transition-all active:scale-95">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="h-4 w-4 text-gray-600 transition-transform group-hover/btn:scale-110" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1 5h12m-9 0a1 1 0 102 0m4 0a1 1 0 102 0" />
+                                </svg>
+                                <span class="hidden md:inline text-xs">Add to Cart</span>
+                            </button>
 
-                <button wire:click="buyNowClicked"
-                    class="group/btn flex items-center justify-center gap-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 px-2 py-2.5 text-sm font-semibold text-white shadow-sm transition-all active:scale-95">
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                        class="hidden md:inline h-4 w-4 transition-transform group-hover/btn:translate-x-0.5" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                    <span class="text-xs">Buy <span class="hidden md:inline">Now</span></span>
-                </button>
-            </div>
+                            <button wire:click="buyNowClicked"
+                                class="group/btn flex items-center justify-center gap-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 px-2 py-2.5 text-sm font-semibold text-white shadow-sm transition-all active:scale-95">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="hidden md:inline h-4 w-4 transition-transform group-hover/btn:translate-x-0.5" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                                <span class="text-xs">Buy <span class="hidden md:inline">Now</span></span>
+                            </button>
+                        </div> --}}
+                    <div class="grid grid-cols-[auto_1fr] md:grid-cols-2 gap-2.5 w-full items-stretch">
+                        <!-- Add to Cart (Secondary: Light & Clean) -->
+                        <button wire:click="addToCartClicked" type="button"
+                            class="group/btn flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 px-4 py-3 text-xs font-semibold text-slate-800 transition-all active:scale-95 shadow-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="h-4 w-4 text-slate-600 transition-transform group-hover/btn:scale-110" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1 5h12m-9 0a1 1 0 102 0m4 0a1 1 0 102 0" />
+                            </svg>
+                        </button>
+
+
+            <button wire:click="buyNowClicked" type="button"
+                class="flex-1 flex items-center justify-center py-3 rounded-xl text-xs font-semibold transition-all active:scale-95"
+                style="
+                    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    letter-spacing: 0.08em;
+                    text-transform: uppercase;
+                    color: #ffffff;
+                    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #1e1b4b 100%);
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+                ">
+                Order Now
+            </button>
+                    </div>
         @else
             <button disabled
                 class="w-full bg-gray-100 text-gray-400 py-2.5 px-4 rounded-xl cursor-not-allowed font-medium text-xs uppercase tracking-wider">
@@ -132,11 +159,11 @@
                 {{-- Modal Main Core Content Area --}}
                 <div class="overflow-y-auto p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                     @php
-                        $currentVariant = $selectedVariant ? $product->variants->find($selectedVariant) : null;
-                        $displayImage = $currentVariant?->image_path ?: $product->primaryImage?->image_path;
-                        $displayPrice = $currentVariant?->price ?? $product->price;
-                        $displayCompare = $currentVariant?->compare_price ?? $product->compare_price;
-                        $variantTitle = $currentVariant?->display_label;
+    $currentVariant = $selectedVariant ? $product->variants->find($selectedVariant) : null;
+    $displayImage = $currentVariant?->image_path ?: $product->primaryImage?->image_path;
+    $displayPrice = $currentVariant?->price ?? $product->price;
+    $displayCompare = $currentVariant?->compare_price ?? $product->compare_price;
+    $variantTitle = $currentVariant?->display_label;
                     @endphp
 
                     {{-- Left View Column: Context Media Presentation --}}
@@ -182,11 +209,11 @@
                             <div class="grid grid-cols-2 gap-2 max-h-[140px] md:max-h-[180px] overflow-y-auto pr-1">
                                 @foreach($product->variants->where('is_active', true) as $item)
                                     @php
-                                        $variantTitle = collect([$item->color?->name, $item->size?->name])->filter()->implode(' • ') ?: $item->name;
+        $variantTitle = collect([$item->color?->name, $item->size?->name])->filter()->implode(' • ') ?: $item->name;
                                     @endphp
                                     <button type="button" wire:click="selectVariant({{ $item->id }})"
                                         class="p-2.5 border text-left rounded-xl transition-all text-xs flex items-center gap-2 min-w-0
-                                                                        {{ $selectedVariant == $item->id ? 'border-slate-900 bg-slate-950 text-white font-semibold ring-1 ring-slate-900' : 'border-slate-200 hover:border-slate-300 bg-white text-slate-800' }}">
+                                                                                {{ $selectedVariant == $item->id ? 'border-slate-900 bg-slate-950 text-white font-semibold ring-1 ring-slate-900' : 'border-slate-200 hover:border-slate-300 bg-white text-slate-800' }}">
                                         @if($item->color)
                                             <span
                                                 class="w-3 h-3 rounded-full shrink-0 border {{ $selectedVariant == $item->id ? 'border-white/20' : 'border-black/10' }}"
@@ -238,7 +265,7 @@
                                 </button>
                                 <button wire:click="confirmVariant" type="button" @disabled(!$selectedVariant)
                                     class="flex-1 py-3 text-xs font-bold rounded-xl transition text-center
-                                                    {{ $selectedVariant ? 'bg-slate-950 hover:bg-slate-800 text-white shadow-sm' : 'bg-slate-100 text-slate-400 cursor-not-allowed' }}">
+                                                        {{ $selectedVariant ? 'bg-slate-950 hover:bg-slate-800 text-white shadow-sm' : 'bg-slate-100 text-slate-400 cursor-not-allowed' }}">
                                     {{ $buyNowAction ? 'Proceed to Buy' : 'Add To Cart' }}
                                 </button>
                             </div>
