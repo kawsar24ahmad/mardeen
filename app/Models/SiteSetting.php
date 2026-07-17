@@ -15,6 +15,8 @@ class SiteSetting extends Model
         'admin_email',
         'site_description',
         'facebook_url',
+        'phone_number',
+        'messenger_link',
         'whats_up_number',
         'top_bar_text',
         'twitter_url',
