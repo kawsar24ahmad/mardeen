@@ -96,11 +96,16 @@
                                 <label
                                     class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Complete
                                     Delivery Address <span class="text-red-500">*</span></label>
-                                <textarea wire:model="address_line_1" rows="3"
-                                    placeholder="Apartment, suite, unit, building, street address details..."
+                                <textarea wire:model="address_line_1" rows="3" placeholder="আপনার সম্পূর্ণ ঠিকানা লিখুন..."
                                     class="w-full px-3.5 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors text-sm"></textarea>
                                 @error('address_line_1') <span
                                 class="text-red-500 text-xs mt-1 block font-medium">{{ $message }}</span> @enderror
+                            </div>
+                            <div class=" border-t border-slate-100">
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Order
+                                    Notes (Optional)</label>
+                                <textarea wire:model="customerNotes" rows="2" placeholder="বিশেষ কোনো নির্দেশনা থাকলে লিখুন"
+                                    class="w-full px-3.5 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors text-sm"></textarea>
                             </div>
                         </div>
 
@@ -205,13 +210,7 @@
                         </label>
                     </div>
 
-                    <div class="mt-5 pt-5 border-t border-slate-100">
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Order
-                            Notes (Optional)</label>
-                        <textarea wire:model="customerNotes" rows="2"
-                            placeholder="Notes for fulfillment handlers or delivery runners..."
-                            class="w-full px-3.5 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors text-sm"></textarea>
-                    </div>
+
                 </div>
             </div>
 
@@ -290,7 +289,7 @@
                                 <span class="text-base font-bold text-slate-900 block">Grand Total</span>
                                 <span class="text-xs text-slate-400">All local taxes included</span>
                             </div>
-                            <span class="text-3xl font-black text-blue-600 tracking-tight">
+                            <span class="text-xl font-black text-blue-600 tracking-tight">
                                 TK. {{ number_format($total, 2) }}
                             </span>
                         </div>
@@ -301,15 +300,17 @@
                         <span wire:loading.remove wire:target="placeOrder">
                             Confirm Order
                         </span>
-                        <span wire:loading wire:target="placeOrder" class="flex items-center gap-2">
-                            <svg class="animate-spin  h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                    stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                </path>
-                            </svg>
-                            <span>Processing Order Request...</span>
+                        <span wire:loading wire:target="placeOrder">
+                            <div class="flex items-center gap-2">
+                                <svg class="animate-spin  h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                        stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor"
+                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                    </path>
+                                </svg>
+                                <span>Processing Request...</span>
+                            </div>
                         </span>
                     </button>
                 </div>
