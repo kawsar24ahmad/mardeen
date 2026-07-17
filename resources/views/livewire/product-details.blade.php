@@ -43,15 +43,15 @@
                     </div>
 
                     @php
-                        $gallery = $product->images->sortBy('sort_order')->values();
-                        $variantImagePath = $selectedVariant ? $product->variants->find($selectedVariant)?->image_path : null;
+$gallery = $product->images->sortBy('sort_order')->values();
+$variantImagePath = $selectedVariant ? $product->variants->find($selectedVariant)?->image_path : null;
 
-                        if ($variantImagePath) {
-                            $gallery = $gallery->prepend((object) [
-                                'image_path' => $variantImagePath,
-                                'sort_order' => -1,
-                            ]);
-                        }
+if ($variantImagePath) {
+    $gallery = $gallery->prepend((object) [
+        'image_path' => $variantImagePath,
+        'sort_order' => -1,
+    ]);
+}
                     @endphp
 
                     @if($gallery->count() > 1)
@@ -128,8 +128,8 @@
                         @endif
 
                         @php
-                            $sizeGroups = $product->variants->where('is_active', true)->filter(fn($v) => $v->size_id)->groupBy('size_id');
-                            $offeredSizes = $sizeGroups->map(fn($g) => $g->first()->size);
+$sizeGroups = $product->variants->where('is_active', true)->filter(fn($v) => $v->size_id)->groupBy('size_id');
+$offeredSizes = $sizeGroups->map(fn($g) => $g->first()->size);
                         @endphp
                         @if($offeredSizes->whereNotNull('chest')->isNotEmpty() || $offeredSizes->whereNotNull('length')->isNotEmpty())
                             <div class="my-6 max-w-md">
@@ -169,8 +169,8 @@
                                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
                                     @foreach($product->variants->where('is_active', true) as $item)
                                         @php
-                                            $variantTitle = collect([$item->color?->name, $item->size?->name])->filter()->implode(' / ');
-                                            $variantTitle = $variantTitle ?: $item->name;
+        $variantTitle = collect([$item->color?->name, $item->size?->name])->filter()->implode(' / ');
+        $variantTitle = $variantTitle ?: $item->name;
                                         @endphp
 
                                         <button type="button" wire:click="selectVariant({{ $item->id }})"
@@ -262,17 +262,109 @@
                 <nav class="flex gap-6">
                     <button @click="activeTab = 'description'"
                         :class="activeTab === 'description' ? 'border-slate-900 text-slate-900 font-semibold' : 'border-transparent text-slate-400 hover:text-slate-600'"
-                        class="px-2 py-4 border-b-2 text-sm uppercase tracking-wider transition">Description</button>
+                        class="px-2 py-4 border-b-2 text-sm uppercase tracking-wider transition">DESCRIPTION</button>
+                    <button @click="activeTab = 'delevery'"
+                        :class="activeTab === 'delevery' ? 'border-slate-900 text-slate-900 font-semibold' : 'border-transparent text-slate-400 hover:text-slate-600'"
+                        class="px-2 py-4 border-b-2 text-sm uppercase tracking-wider transition">DELIVERY OPTIONS</button>
                     <button @click="activeTab = 'reviews'"
                         :class="activeTab === 'reviews' ? 'border-slate-900 text-slate-900 font-semibold' : 'border-transparent text-slate-400 hover:text-slate-600'"
                         class="px-2 py-4 border-b-2 text-sm uppercase tracking-wider transition">
-                        Reviews ({{ $product->reviews_count }})
+                        REVIEWS ({{ $product->reviews_count }})
                     </button>
                 </nav>
             </div>
             <div class="p-4 sm:p-8">
                 <div x-show="activeTab === 'description'" x-cloak>
                     <div class="prose prose-slate max-w-none prose-sm sm:prose-base">{!! $product->description !!}</div>
+                </div>
+                <div x-show="activeTab === 'delevery'" x-cloak>
+                <div class="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+
+                    <!-- Header -->
+                    <div class="bg-gradient-to-r from-indigo-600 to-blue-600 px-6 py-4">
+                        <h2 class="text-xl font-bold text-white">
+                             Delivery Information
+                        </h2>
+                        <p class="text-sm text-blue-100 mt-1">
+                            দ্রুত, নিরাপদ ও নির্ভরযোগ্য ডেলিভারি সারাদেশে।
+                        </p>
+                    </div>
+
+                    <div class="p-1 sm:p-6 space-y-6">
+
+                        <!-- Dhaka -->
+                        <div class="rounded-xl border border-green-200 bg-green-50 p-5">
+
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="text-lg font-bold text-green-700">
+                                    ঢাকা সিটি
+                                </h3>
+
+                                <span class="rounded-full bg-green-600 px-4 py-1 text-sm font-semibold text-white">
+                                    ৳ ৭০
+                                </span>
+                            </div>
+
+                            <ul class="space-y-2 text-gray-700 leading-7 list-disc pl-5">
+                                <li>ঢাকা সিটি কর্পোরেশনের সকল এলাকায় হোম ডেলিভারি।</li>
+                                <li>১০০% ক্যাশ অন ডেলিভারি সুবিধা।</li>
+                                <li>পণ্য হাতে পাওয়ার পর মূল্য পরিশোধ করতে পারবেন।</li>
+                            </ul>
+
+                        </div>
+
+                        <!-- Outside Dhaka -->
+                        <div class="rounded-xl border border-blue-200 bg-blue-50 p-5">
+
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="text-lg font-bold text-blue-700">
+                                    ঢাকার বাইরে (সারা বাংলাদেশ)
+                                </h3>
+
+                                <span class="rounded-full bg-blue-600 px-4 py-1 text-sm font-semibold text-white">
+                                    ৳১৫০
+                                </span>
+                            </div>
+
+                            <ul class="space-y-2 text-gray-700 leading-7 list-disc pl-5">
+                                <li>হোম ডেলিভারি অথবা কুরিয়ার সার্ভিসে ডেলিভারি।</li>
+                                <li>অর্ডার নিশ্চিত করতে শুধুমাত্র ডেলিভারি চার্জ অগ্রিম প্রদান করতে হবে।</li>
+                                <li>পণ্য গ্রহণের সময় শুধু পণ্যের মূল্য পরিশোধ করবেন।</li>
+                                <li>থানা সদর এলাকায় সাধারণত হোম ডেলিভারি পাওয়া যায়।</li>
+                                <li>ডেলিভারি সময়: <strong>৩–৫ কার্যদিবস</strong>।</li>
+                            </ul>
+
+                        </div>
+
+                        <!-- Notice -->
+                        <div class="rounded-xl border-l-4 border-amber-500 bg-amber-50 p-5">
+
+                            <div class="flex gap-3">
+
+                                <div class="text-2xl">
+                                    ⚠️
+                                </div>
+
+                                <div>
+
+                                    <h4 class="font-semibold text-amber-700 mb-2">
+                                        গুরুত্বপূর্ণ তথ্য
+                                    </h4>
+
+                                    <ul class="space-y-2 text-gray-700 leading-7 list-disc pl-5">
+                                        <li>ঢাকার বাইরে ডেলিভারির ক্ষেত্রে শুধুমাত্র ডেলিভারি চার্জ অগ্রিম প্রদান করতে হবে।</li>
+                                        <li>বাকি অর্থ পণ্য গ্রহণের সময় ক্যাশ অন ডেলিভারিতে পরিশোধ করবেন।</li>
+                                    </ul>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
                 </div>
                 <div x-show="activeTab === 'reviews'" x-cloak>
                     @if($product->approvedReviews->count() > 0)
