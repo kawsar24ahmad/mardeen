@@ -883,6 +883,7 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
+    {{--
     <script>
         // স্লাইডারগুলো ইনিশিয়ালাইজ করার জন্য একটি রিইউজেবল ফাংশন
         function initSwipers() {
@@ -947,6 +948,66 @@
         document.addEventListener('livewire:navigated', () => {
             initSwipers();
         });
+    </script> --}}
+    <script>
+        function initSwipers() {
+            if (document.querySelector('.heroSwiper')) {
+                new Swiper('.heroSwiper', {
+                    loop: true,
+                    autoplay: {
+                        delay: 3000,
+                        disableOnInteraction: false,
+                    },
+                    effect: 'fade',
+                    pagination: {
+                        el: '.swiper-pagination',
+                        clickable: true,
+                    },
+                    navigation: {
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
+                    },
+                });
+            }
+
+            if (document.querySelector('.categorySwiper')) {
+                new Swiper('.categorySwiper', {
+                    slidesPerView: 2.5,          // মোবাইল স্ক্রিনে আড়াইটি কার্ড
+                    spaceBetween: 16,            // কার্ডগুলোর মাঝের গ্যাপ ১৬ পিক্সেল
+                    loop: true,
+                    autoplay: {
+                        delay: 3000,
+                        disableOnInteraction: false,
+                    },
+                    navigation: {
+                        nextEl: '.category-next',
+                        prevEl: '.category-prev',
+                    },
+                    // ফিক্স ২: স্লাইডার ব্রেকপয়েন্ট এবং রেসপনসিভ ভিউ একদম নিখুঁত করা হয়েছে
+                    breakpoints: {
+                        480: {
+                            slidesPerView: 3.2,
+                            spaceBetween: 16,
+                        },
+                        640: {
+                            slidesPerView: 4.2,
+                            spaceBetween: 20,
+                        },
+                        768: {
+                            slidesPerView: 5,
+                            spaceBetween: 24,
+                        },
+                        1024: {
+                            slidesPerView: 6,    // বড় ডেস্কটপে একসাথে ৬টি ফুল কার্ড দেখাবে
+                            spaceBetween: 24,
+                        }
+                    }
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initSwipers);
+        document.addEventListener('livewire:navigated', initSwipers);
     </script>
     {{--
     <script>
