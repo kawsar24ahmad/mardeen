@@ -158,4 +158,14 @@ Route::get('/track-order', TrackOrder::class)->name('order.track');
 //     }
 // });
 
+Route::get('/admin/system/refresh', function () {
+    Artisan::call('optimize:clear');
+    Artisan::call('package:discover');
+
+    return response()->json([
+        'success' => true,
+        'optimize_clear' => Artisan::output(),
+        'message' => 'Application caches cleared and packages rediscovered.',
+    ]);
+});
 require __DIR__ . '/auth.php';
