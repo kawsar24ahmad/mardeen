@@ -824,7 +824,8 @@
 
 
     <!-- Floating Contact Button Container -->
-    <div class="fixed bottom-6 right-6 z-50" x-data="{ isOpen: false }">
+    <div class="fixed  bottom-16 sm:bottom-12 md:bottom-6 lg:bottom-6  right-2 md:right-4 z-50"
+        x-data="{ isOpen: false }">
 
         <!-- Child Communication Icons Panel -->
         <div x-show="isOpen" x-transition:enter="transition ease-out duration-200"
@@ -851,8 +852,8 @@
 
 
             <!-- Messenger Button -->
-            @if ($siteSetting->messanger_link)
-                <a href="{{ $siteSetting->messanger_link }}" target="_blank"
+            @if ($siteSetting->messenger_link)
+                <a href="{{ $siteSetting->messenger_link }}" target="_blank"
                     class="group flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tr from-blue-500 via-purple-500 to-pink-500 text-white shadow-lg transition transform hover:scale-110 relative"
                     title="Facebook Messenger">
                     <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
