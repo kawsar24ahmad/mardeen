@@ -5,7 +5,8 @@
 # /public/storage
 /storage/*.key
 /storage/pail
-/vendor
+# /vendor
+vendor/spatie/laravel-googletagmanager
 /vendor_local
 .DS_Store
 .env
