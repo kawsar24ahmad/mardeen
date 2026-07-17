@@ -25,8 +25,9 @@ use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ImageEntry;
 use pxlrbt\FilamentExcel\Exports\ExcelExport;
+use pxlrbt\FilamentExcel\Actions\ExportAction;
+
 use Filament\Infolists\Components\RepeatableEntry;
-use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
 use App\Filament\Resources\Customers\CustomerResource;
 
 class OrdersTable
