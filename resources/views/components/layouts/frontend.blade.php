@@ -212,6 +212,7 @@
             padding-bottom: env(safe-area-inset-bottom);
         }
     </style>
+    @stack('css')
     @livewireStyles
 
     <!-- Scripts -->
@@ -949,6 +950,7 @@
             initSwipers();
         });
     </script> --}}
+
     <script>
         function initSwipers() {
             if (document.querySelector('.heroSwiper')) {
@@ -972,37 +974,56 @@
 
             if (document.querySelector('.categorySwiper')) {
                 new Swiper('.categorySwiper', {
-                    slidesPerView: 2.5,          // মোবাইল স্ক্রিনে আড়াইটি কার্ড
-                    spaceBetween: 16,            // কার্ডগুলোর মাঝের গ্যাপ ১৬ পিক্সেল
+
+                    slidesPerView: 2.2,
+
+                    spaceBetween: 12,
+
                     loop: true,
+
+                    speed: 600,
+
                     autoplay: {
                         delay: 3000,
                         disableOnInteraction: false,
                     },
+
                     navigation: {
                         nextEl: '.category-next',
                         prevEl: '.category-prev',
                     },
-                    // ফিক্স ২: স্লাইডার ব্রেকপয়েন্ট এবং রেসপনসিভ ভিউ একদম নিখুঁত করা হয়েছে
+
                     breakpoints: {
+
                         480: {
-                            slidesPerView: 3.2,
+                            slidesPerView: 2.8,
+                            spaceBetween: 14,
+                        },
+
+                        640: {
+                            slidesPerView: 3.5,
                             spaceBetween: 16,
                         },
-                        640: {
-                            slidesPerView: 4.2,
+
+                        768: {
+                            slidesPerView: 4.5,
+                            spaceBetween: 18,
+                        },
+
+                        1024: {
+                            slidesPerView: 5.5,
                             spaceBetween: 20,
                         },
-                        768: {
-                            slidesPerView: 5,
-                            spaceBetween: 24,
-                        },
-                        1024: {
-                            slidesPerView: 6,    // বড় ডেস্কটপে একসাথে ৬টি ফুল কার্ড দেখাবে
+
+                        1280: {
+                            slidesPerView: 6,
                             spaceBetween: 24,
                         }
+
                     }
+
                 });
+
             }
         }
 

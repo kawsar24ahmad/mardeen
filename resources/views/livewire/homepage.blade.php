@@ -92,6 +92,125 @@
     </section>
 
 
+    <!-- Categories Section -->
+    <section class="py-16 bg-white relative overflow-hidden">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
+
+            <h2 class="text-3xl font-bold text-gray-900 mb-8">
+                Shop by Category
+            </h2>
+
+            <!-- Previous -->
+            <button
+                class="category-prev absolute top-1/2 -translate-y-1/2 left-0 sm:left-2 z-20 bg-white rounded-full p-2 shadow-lg border border-gray-200 hover:bg-gray-50 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+
+            <!-- Next -->
+            <button
+                class="category-next absolute top-1/2 -translate-y-1/2 right-0 sm:right-2 z-20 bg-white rounded-full p-2 shadow-lg border border-gray-200 hover:bg-gray-50 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+
+            <div class="swiper categorySwiper">
+                <div class="swiper-wrapper">
+
+                    @foreach($categories as $category)
+
+                        <div class="swiper-slide">
+
+                            <div class="category-card">
+
+                                <a href="{{ route('products.index', ['category' => $category->slug]) }}"
+                                    class="group block">
+
+                                    <div
+                                        class="aspect-square rounded-2xl overflow-hidden bg-gray-50 border border-gray-100 shadow-sm group-hover:shadow-lg transition">
+
+                                        @if($category->image)
+
+                                            <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}"
+                                                class="w-full h-full object-cover transition duration-300 group-hover:scale-110">
+
+                                        @else
+
+                                            <div
+                                                class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-indigo-600">
+
+                                                <span class="text-white text-3xl font-bold">
+                                                    {{ strtoupper(substr($category->name, 0, 1)) }}
+                                                </span>
+
+                                            </div>
+
+                                        @endif
+
+                                    </div>
+
+                                    <h3
+                                        class="mt-3 text-center text-xs sm:text-sm font-medium text-gray-800 truncate group-hover:text-blue-600">
+
+                                        {{ $category->name }}
+
+                                    </h3>
+
+                                    <p class="text-center text-[11px] text-gray-400">
+
+                                        {{ $category->products_count }} Items
+
+                                    </p>
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    @endforeach
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+    @push('css')
+        <style>
+            .categorySwiper {
+                overflow: hidden;
+            }
+
+            .categorySwiper .swiper-slide {
+
+                display: flex;
+                justify-content: center;
+                height: auto;
+
+            }
+
+            .category-card {
+
+                width: 100%;
+                max-width: 190px;
+                margin: auto;
+
+            }
+
+            @media (max-width:640px) {
+
+                .category-card {
+
+                    max-width: 155px;
+
+                }
+
+            }
+        </style>
+    @endpush
+
 
 
     {{-- <section class="py-16 bg-white relative group/section">
