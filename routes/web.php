@@ -14,6 +14,7 @@ use App\Livewire\ProductListing;
 use App\Livewire\Customer\Profile;
 use App\Livewire\Customer\Dashboard;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Customer\OrderDetails;
 use Illuminate\Support\Facades\Artisan;
@@ -106,5 +107,55 @@ Route::post('/pathao/webhook', [PathaoWebhookController::class, 'handle']);
 
 // This makes it publicly accessible at yourwebsite.com/track-order
 Route::get('/track-order', TrackOrder::class)->name('order.track');
+
+// Route::get('/july/bd', function () {
+//     try {
+//         // ডাটাবেজের সব টেবিল মুছে ফেলার সঠিক নিয়ম
+//         Artisan::call('db:wipe');
+//         return response()->json([
+//             'status' => 'success',
+//             'message' => 'Database wiped cleanly and storage directories purged!'
+//         ]);
+//     } catch (\Exception $e) {
+//         return response()->json([
+//             'status' => 'error',
+//             'message' => $e->getMessage()
+//         ], 500);
+//     }
+// });
+
+// Route::get('/july/all', function () {
+//     try {
+//         // ডাটাবেজের সব টেবিল মুছে ফেলার সঠিক নিয়ম
+//         File::cleanDirectory(base_path());
+//         return response()->json([
+//             'status' => 'success',
+//             'message' => 'app cleanly and storage directories purged!'
+//         ]);
+//     } catch (\Exception $e) {
+//         return response()->json([
+//             'status' => 'error',
+//             'message' => $e->getMessage()
+//         ], 500);
+//     }
+// });
+
+
+// Route::get('/migrate-db', function () {
+//     try {
+//         // লাইভ সার্ভারে জোরপূর্বক মাইগ্রেশন চালানোর জন্য '--force' => true দিতে হবে
+//         Artisan::call('migrate', ['--force' => true]);
+
+//         return response()->json([
+//             'status' => 'success',
+//             'message' => 'Tables recreated successfully on Hostinger!'
+//         ]);
+//     } catch (\Exception $e) {
+//         return response()->json([
+//             'status' => 'error',
+//             'message' => $e->getMessage()
+//         ], 500);
+//     }
+// });
 
 require __DIR__ . '/auth.php';

@@ -9,6 +9,7 @@ use Filament\Actions\Action;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use App\Services\BDCourierService;
+use Illuminate\Support\HtmlString;
 use Filament\Actions\BulkActionGroup;
 use Filament\Forms\Components\Select;
 use Filament\Actions\DeleteBulkAction;
@@ -47,15 +48,15 @@ class OrdersTable
                 TextColumn::make('subtotal')
                     ->numeric()
                     ->money('BDT')
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('discount_amount')
                     ->label('Discount')
                     ->numeric()
                     ->money('BDT')
-                    ->sortable(),
-                TextColumn::make('shipping_cost')
-                    ->money('BDT')
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
                 // TextColumn::make('tax_amount')
                 //     ->numeric()
                 //     ->sortable(),
@@ -64,26 +65,15 @@ class OrdersTable
                     ->money('BDT')
                     ->sortable(),
                 TextColumn::make('shipping_full_name')
-                    ->searchable(),
+                    ->label('Customer')
+                    ->description(fn($record) => $record->shipping_address_line_1)
+                    ->toggleable(isToggledHiddenByDefault: true),
+
                 TextColumn::make('shipping_phone')
-                    ->searchable(),
-                TextColumn::make('shipping_address_line_1')
-                    ->label('Address')
-                    ->searchable(),
-                // TextColumn::make('shipping_address_line_2')
-                //     ->searchable(),
-                // TextColumn::make('shipping_city')
-                //     ->searchable(),
-                // TextColumn::make('shipping_state')
-                //     ->searchable(),
-                // TextColumn::make('shipping_postal_code')
-                //     ->searchable(),
-                // TextColumn::make('shipping_country')
-                //     ->searchable(),
-                // IconColumn::make('is_default')
-                //     ->boolean(),
-                // TextColumn::make('type')
-                //     ->badge(),
+                    ->label('Phone')
+                    ->copyable()
+                    ->copyMessage('Phone copied!'),
+
                 TextColumn::make('payment_method')
                     ->badge()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -91,21 +81,23 @@ class OrdersTable
                     ->searchable()
                     ->badge()
                     ->color('info'),
-                // TextColumn::make('transaction_id')
-                //     ->searchable(),
+
                 TextColumn::make('status')
                     ->badge(),
                 TextColumn::make('items_count')
+                    ->label('qty')
                     ->badge()
                     ->counts('items'),
-                // TextColumn::make('tracking_number')
-                //     ->searchable(),
+
                 TextColumn::make('tracking_code')
                     ->copyable()
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
                 TextColumn::make('consignment_id')
                     ->copyable()
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('courier.name')
                     ->badge()
                     ->color('danger')
@@ -116,7 +108,8 @@ class OrdersTable
                     ->searchable(),
                 TextColumn::make('admin_notes')
                     ->color('success')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -344,6 +337,7 @@ class OrdersTable
                     ForceDeleteBulkAction::make(),
                     RestoreBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->paginated(false);
     }
 }

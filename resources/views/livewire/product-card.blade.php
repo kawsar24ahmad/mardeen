@@ -117,7 +117,7 @@
                 style="
                     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                     letter-spacing: 0.08em;
-                    text-transform: uppercase;
+
                     color: #ffffff;
                     background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #1e1b4b 100%);
                     border: 1px solid rgba(255, 255, 255, 0.05);
