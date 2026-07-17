@@ -834,9 +834,9 @@
             x-transition:leave-start="opacity-100 translate-y-0 scale-100"
             x-transition:leave-end="opacity-0 translate-y-4 scale-95" class="flex flex-col items-center gap-3 mb-4"
             x-cloak>
-            @if ($siteSetting->whats_up_number)
+            @if ($siteSetting->phone_number)
                 <!-- Phone Call Button -->
-                <a href="tel:{{ $siteSetting->whats_up_number }}"
+                <a href="tel:{{ $siteSetting->phone_number }}"
                     class="group flex items-center justify-center w-12 h-12 rounded-full bg-blue-600 text-white shadow-lg hover:bg-blue-700 transition transform hover:scale-110 relative"
                     title="Call Us">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -851,16 +851,19 @@
 
 
             <!-- Messenger Button -->
-            <a href="https://m.me/MaardeenBD" target="_blank"
-                class="group flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tr from-blue-500 via-purple-500 to-pink-500 text-white shadow-lg transition transform hover:scale-110 relative"
-                title="Facebook Messenger">
-                <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                    <path
-                        d="M12 2C6.48 2 2 6.17 2 11.3c0 2.98 1.48 5.62 3.8 7.31v3.83l3.58-1.97c.83.23 1.7.35 2.62.35 5.52 0 10-4.17 10-9.3S17.52 2 12 2zm1.09 12.33l-2.61-2.79-5.1 2.79 5.6-5.95 2.66 2.79 5.04-2.79-5.59 5.95z" />
-                </svg>
-                <span
-                    class="absolute right-14 bg-slate-900 text-white text-xs px-2 py-1 rounded shadow-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition pointer-events-none">Messenger</span>
-            </a>
+            @if ($siteSetting->messanger_link)
+                <a href="{{ $siteSetting->messanger_link }}" target="_blank"
+                    class="group flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tr from-blue-500 via-purple-500 to-pink-500 text-white shadow-lg transition transform hover:scale-110 relative"
+                    title="Facebook Messenger">
+                    <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                        <path
+                            d="M12 2C6.48 2 2 6.17 2 11.3c0 2.98 1.48 5.62 3.8 7.31v3.83l3.58-1.97c.83.23 1.7.35 2.62.35 5.52 0 10-4.17 10-9.3S17.52 2 12 2zm1.09 12.33l-2.61-2.79-5.1 2.79 5.6-5.95 2.66 2.79 5.04-2.79-5.59 5.95z" />
+                    </svg>
+                    <span
+                        class="absolute right-14 bg-slate-900 text-white text-xs px-2 py-1 rounded shadow-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition pointer-events-none">Messenger</span>
+                </a>
+            @endif
+
 
             <!-- WhatsApp Button -->
             @if ($siteSetting->whats_up_number)
@@ -878,7 +881,6 @@
 
         </div>
 
-        <!-- Main Trigger Button -->
         <!-- Main Trigger Button -->
         <button @click="isOpen = !isOpen"
             :class="isOpen ? 'bg-slate-800' : 'bg-indigo-600 shadow-indigo-200 shadow-xl hover:bg-indigo-700'"

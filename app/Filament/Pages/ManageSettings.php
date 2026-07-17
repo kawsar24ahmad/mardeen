@@ -64,7 +64,11 @@ class ManageSettings extends Page implements HasForms
                                         ->email(),
                                     TextInput::make('facebook_url')
                                         ->url(),
+                                    TextInput::make('messenger_link')
+                                        ->url(),
                                     TextInput::make('whats_up_number')
+                                        ->tel(),
+                                    TextInput::make('phone_number')
                                         ->tel(),
                                     TextInput::make('twitter_url')
                                         ->url(),
