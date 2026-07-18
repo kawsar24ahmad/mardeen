@@ -18,9 +18,9 @@ use UnitEnum;
 class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
-
+    protected static ?int $navigationSort = 0;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Tag;
-    protected static string | UnitEnum | null $navigationGroup = 'Catalog';
+    // protected static string | UnitEnum | null $navigationGroup = 'Catalog';
     protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Schema $schema): Schema

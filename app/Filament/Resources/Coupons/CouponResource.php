@@ -18,9 +18,9 @@ use UnitEnum;
 class CouponResource extends Resource
 {
     protected static ?string $model = Coupon::class;
-
+    protected static ?int $navigationSort = 3;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Ticket;
-    protected static string|UnitEnum|null $navigationGroup = "Sales";
+    // protected static string|UnitEnum|null $navigationGroup = "Sales";
 
     protected static ?string $recordTitleAttribute = 'code';
 

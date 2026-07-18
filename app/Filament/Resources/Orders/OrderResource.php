@@ -28,8 +28,9 @@ use App\Filament\Resources\Orders\Schemas\OrderInfolist;
 
 class OrderResource extends Resource
 {
+    protected static ?int $navigationSort = 2;
     protected static ?string $model = Order::class;
-    protected static string | UnitEnum| null $navigationGroup = 'Sales';
+    // protected static string | UnitEnum| null $navigationGroup = 'Sales';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::ShoppingCart;
 
     protected static ?string $recordTitleAttribute = 'order_number';
@@ -38,10 +39,10 @@ class OrderResource extends Resource
     {
         return OrderForm::configure($schema);
     }
-public static function infolist(Schema $schema): Schema
-{
-   return OrderInfolist::configure($schema);
-}
+    public static function infolist(Schema $schema): Schema
+    {
+        return OrderInfolist::configure($schema);
+    }
 
     public static function table(Table $table): Table
     {

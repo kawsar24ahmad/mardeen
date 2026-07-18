@@ -14,11 +14,12 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use UnitEnum;
+
 class CustomerResource extends Resource
 {
     protected static ?string $model = Customer::class;
-    protected static string | UnitEnum | null $navigationGroup = 'Customer Management';
-
+    // protected static string | UnitEnum | null $navigationGroup = 'Customer Management';
+    protected static ?int $navigationSort = 10;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Users;
 
     protected static ?string $recordTitleAttribute = 'name';

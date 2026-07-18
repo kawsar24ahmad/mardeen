@@ -17,8 +17,8 @@ use Filament\Tables\Table;
 class CourierResource extends Resource
 {
     protected static ?string $model = Courier::class;
-
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static ?int $navigationSort = 10;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::Truck;
 
     protected static ?string $recordTitleAttribute = 'name';
 

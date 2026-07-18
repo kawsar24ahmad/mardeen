@@ -20,9 +20,9 @@ use UnitEnum;
 class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
-
+    protected static ?int $navigationSort = 0;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::ShoppingBag;
-    protected static UnitEnum|string|null $navigationGroup = 'Catalog';
+    // protected static UnitEnum|string|null $navigationGroup = 'Catalog';
 
     protected static ?string $recordTitleAttribute = 'name';
 

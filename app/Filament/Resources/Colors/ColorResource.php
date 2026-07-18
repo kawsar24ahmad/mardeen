@@ -18,7 +18,8 @@ use UnitEnum;
 class ColorResource extends Resource
 {
     protected static ?string $model = Color::class;
-    protected static string| UnitEnum |null $navigationGroup = "Catalog";
+    // protected static string| UnitEnum |null $navigationGroup = "Catalog";
+    protected static ?int $navigationSort = 1;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'name';

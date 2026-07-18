@@ -18,9 +18,9 @@ use UnitEnum;
 class SizeResource extends Resource
 {
     protected static ?string $model = Size::class;
-
+    protected static ?int $navigationSort = 1;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedArrowsPointingOut;
-    protected static string | UnitEnum | null $navigationGroup = 'Catalog';
+    // protected static string | UnitEnum | null $navigationGroup = 'Catalog';
     protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Schema $schema): Schema
