@@ -182,7 +182,7 @@ class OrdersExport implements
 
                 // Column scaling widths definition layout
                 $widths = [
-                    'A' => 15,
+                    'A' => 25,
                     'B' => 20,
                     'C' => 25,
                     'D' => 18,
