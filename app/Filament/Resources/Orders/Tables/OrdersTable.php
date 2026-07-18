@@ -6,10 +6,13 @@ use App\Models\Order;
 use App\Models\Courier;
 use Filament\Tables\Table;
 use Filament\Actions\Action;
+use App\Exports\OrdersExport;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use App\Services\BDCourierService;
 use Illuminate\Support\HtmlString;
+use Filament\Forms\Components\Radio;
+use Maatwebsite\Excel\Facades\Excel;
 use Filament\Actions\BulkActionGroup;
 use Filament\Forms\Components\Select;
 use Filament\Actions\DeleteBulkAction;
@@ -19,14 +22,15 @@ use Filament\Tables\Columns\TextColumn;
 use App\Courier\Services\CourierService;
 use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Actions\ForceDeleteBulkAction;
+
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ImageEntry;
 use pxlrbt\FilamentExcel\Exports\ExcelExport;
 use pxlrbt\FilamentExcel\Actions\ExportAction;
-
 use Filament\Infolists\Components\RepeatableEntry;
 use App\Filament\Resources\Customers\CustomerResource;
 
@@ -336,14 +340,51 @@ class OrdersTable
             ])
             ->toolbarActions([
 
-                ExportAction::make()
+                // ExportAction::make()
+                //     ->label('Export Orders')
+                //     ->icon('heroicon-o-arrow-down-tray')
+                //     ->exports([
+                //         ExcelExport::make()
+                //             ->fromTable()
+                //             ->withFilename('orders-' . now()->format('Y-m-d-H-i')),
+                //     ]),
+
+                Action::make('export')
                     ->label('Export Orders')
                     ->icon('heroicon-o-arrow-down-tray')
-                    ->exports([
-                        ExcelExport::make()
-                            ->fromTable()
-                            ->withFilename('orders-' . now()->format('Y-m-d-H-i')),
-                    ]),
+                    ->schema([
+                        Radio::make('type')
+                            ->label('Export Type')
+                            ->options([
+                                'all' => 'All Orders',
+                                'date' => 'Date Range',
+                            ])
+                            ->default('all')
+                            ->live(),
+
+                        DatePicker::make('from')
+                            ->visible(fn($get) => $get('type') === 'date')
+                            ->required(fn($get) => $get('type') === 'date'),
+
+                        DatePicker::make('to')
+                            ->visible(fn($get) => $get('type') === 'date')
+                            ->required(fn($get) => $get('type') === 'date'),
+                    ])
+                    ->action(function (array $data) {
+
+                        $from = null;
+                        $to = null;
+
+                        if ($data['type'] === 'date') {
+                            $from = $data['from'];
+                            $to = $data['to'];
+                        }
+
+                        return Excel::download(
+                            new OrdersExport($from, $to),
+                            'orders-' . now()->format('Y-m-d-H-i') . '.xlsx'
+                        );
+                    }),
 
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
