@@ -12,10 +12,7 @@
             font-style: normal;
         }
 
-
-
         body {
-            /* font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; */
             font-family: 'SolaimanLipi', 'Helvetica', 'Arial', sans-serif;
             color: #334155;
             margin: 0;
@@ -38,7 +35,7 @@
         .invoice-items {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
+            margin-top: 0;
         }
 
         .invoice-items th {
@@ -54,6 +51,7 @@
         .invoice-items td {
             padding: 12px 15px;
             border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
         }
     </style>
 </head>
@@ -65,6 +63,7 @@
 
         <div style="height: 6px; background-color: #4f46e5;"></div>
 
+        <!-- Header Banner -->
         <div style="background-color: #0f172a; color: #ffffff; padding: 35px;">
             <table class="table-layout">
                 <tr>
@@ -86,8 +85,7 @@
                             style="display: inline-block; padding: 3px 10px; background-color: rgba(79, 70, 229, 0.2); color: #a5b4fc; border: 1px solid rgba(79, 70, 229, 0.3); border-radius: 50px; font-size: 11px; font-weight: 600; text-transform: uppercase; margin-bottom: 8px;">
                             Invoice
                         </span>
-                        <h1
-                            style="font-size: 20px; font-weight: bold; margin: 0 0 5px 0; color: #ffffff; tracking-tight">
+                        <h1 style="font-size: 20px; font-weight: bold; margin: 0 0 5px 0; color: #ffffff;">
                             Order #{{ $order->order_number }}
                         </h1>
                         <p style="font-size: 13px; color: #cbd5e1; margin: 0; font-weight: 500;">
@@ -102,6 +100,7 @@
 
         <div style="padding: 35px;">
 
+            <!-- Customer & Shipping Info -->
             <table class="table-layout" style="margin-bottom: 35px;">
                 <tr>
                     <td
@@ -111,9 +110,11 @@
                             • Billed To
                         </h3>
                         <p style="font-size: 14px; color: #0f172a; margin: 0 0 3px 0;">
-                            {{ $order->customer->name }}
+                            {{ $order->customer->name ?? 'N/A' }}
                         </p>
-                        <p style="font-size: 13px; color: #475569; margin: 0 0 3px 0;">{{ $order->customer->email }}</p>
+                        <p style="font-size: 13px; color: #475569; margin: 0 0 3px 0;">
+                            {{ $order->customer->email ?? '' }}
+                        </p>
                         <p style="font-size: 13px; color: #475569; margin: 0 0 12px 0;">{{ $order->shipping_phone }}</p>
 
                         <div>
@@ -141,10 +142,11 @@
             </table>
 
             <h3
-                style="font-size: 13px; font-weight: bold; color: #0f172a; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 10px 0; padding-bottom: 8px; border-b: 1px solid #e2e8f0;">
+                style="font-size: 13px; font-weight: bold; color: #0f172a; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 10px 0; padding-bottom: 8px; border-bottom: 1px solid #e2e8f0;">
                 Order Summary
             </h3>
 
+            <!-- Invoice Items Table -->
             <div style="border: 1px solid #f1f5f9; border-radius: 8px; overflow: hidden; margin-bottom: 30px;">
                 <table class="invoice-items">
                     <thead>
@@ -158,23 +160,41 @@
                     <tbody style="background-color: #ffffff;">
                         @foreach($order->items as $item)
                             <tr>
-                                <td>
-                                    <div style="font-weight: 600; color: #0f172a;">{{ $item->product->name }}</div>
-                                    @if($item->variant || $item->variant_name)
-                                        <span
-                                            style="display: inline-block; margin-top: 4px; padding: 1px 6px; border-radius: 50px; font-size: 10px; font-weight: 500; background-color: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe;">
-                                            {{ $item->variant?->display_label ?? $item->variant_name }}
-                                        </span>
-                                    @endif
+                                <!-- 1. Product Name & Badges -->
+                                <td style="text-align: left;">
+                                    <div style="font-size: 14px; font-weight: 600; color: #0f172a; margin-bottom: 4px;">
+                                        {{ $item->product_name }}
+                                    </div>
+                                    <div>
+                                        @if($item->variant_name)
+                                            <span
+                                                style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; background-color: #f1f5f9; color: #475569; margin-right: 4px;">
+                                                {{ $item->variant_name }}
+                                            </span>
+                                        @endif
+
+                                        @if($item->product_size)
+                                            <span
+                                                style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; background-color: #eff6ff; color: #1d4ed8; border: 1px solid #dbeafe;">
+                                                Size: {{ $item->product_size }}
+                                            </span>
+                                        @endif
+                                    </div>
                                 </td>
-                                <td style="text-align: center; font-weight: bold; color: #334155;">
+
+                                <!-- 2. Quantity -->
+                                <td style="text-align: center; font-weight: 600; color: #334155;">
                                     {{ $item->quantity }}
                                 </td>
+
+                                <!-- 3. Unit Price -->
                                 <td style="text-align: right; color: #475569;">
-                                    BDT {{ number_format($item->price, 2) }}
+                                    TK. {{ number_format($item->price, 2) }}
                                 </td>
-                                <td style="text-align: right; font-weight: bold; color: #0f172a;">
-                                    BDT {{ number_format($item->price * $item->quantity, 2) }}
+
+                                <!-- 4. Total -->
+                                <td style="text-align: right; font-weight: 700; color: #0f172a; white-space: nowrap;">
+                                    TK. {{ number_format($item->subtotal ?? ($item->price * $item->quantity), 2) }}
                                 </td>
                             </tr>
                         @endforeach
@@ -182,6 +202,7 @@
                 </table>
             </div>
 
+            <!-- Calculation Section -->
             <table class="table-layout">
                 <tr>
                     <td style="width: 50%; font-size: 11px; color: #64748b; line-height: 1.6; padding-right: 20px;">
@@ -238,10 +259,12 @@
                                     <tr>
                                         <td
                                             style="font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #c7d2fe; vertical-align: middle;">
-                                            Grand Total</td>
+                                            Grand Total
+                                        </td>
                                         <td
                                             style="text-align: right; font-size: 18px; font-weight: 800; color: #ffffff; vertical-align: middle;">
-                                            BDT {{ number_format($order->total, 2) }}</td>
+                                            BDT {{ number_format($order->total, 2) }}
+                                        </td>
                                     </tr>
                                 </table>
                             </div>
@@ -251,10 +274,12 @@
                 </tr>
             </table>
 
+            <!-- Footer -->
             <div
                 style="margin-top: 40px; padding-top: 25px; border-top: 1px solid #f1f5f9; text-align: center; color: #64748b; font-size: 12px;">
-                <p style="font-size: 14px; font-weight: bold; color: #0f172a; margin: 0 0 5px 0;">Thank you for your
-                    purchase!</p>
+                <p style="font-size: 14px; font-weight: bold; color: #0f172a; margin: 0 0 5px 0;">
+                    Thank you for your purchase!
+                </p>
                 <p style="margin: 0; font-weight: 500;">
                     <span>We appreciate your business</span>
                     <span style="color: #cbd5e1; margin: 0 6px;">•</span>

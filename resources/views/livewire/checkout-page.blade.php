@@ -101,12 +101,13 @@
                                 @error('address_line_1') <span
                                 class="text-red-500 text-xs mt-1 block font-medium">{{ $message }}</span> @enderror
                             </div>
-                            <div class="sm:col-span-2">
+                            <div class=" sm:col-span-2">
                                 <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">Order
                                     Notes (Optional)</label>
                                 <textarea wire:model="customerNotes" rows="3" placeholder="আপনার সম্পূর্ণ ঠিকানা লিখুন..."
                                     class="w-full px-3.5 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors text-sm"></textarea>
-
+                                <textarea wire:model="customerNotes" rows="2" placeholder="বিশেষ কোনো নির্দেশনা থাকলে লিখুন"
+                                    class="w-full px-3.5 py-2 border border-slate-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors text-sm"></textarea>
                             </div>
                         </div>
 

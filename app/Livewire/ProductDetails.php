@@ -69,15 +69,15 @@ class ProductDetails extends Component
             ?? $this->product->images->first()?->image_path;
 
         // Auto-select first available variant for the price/gallery
-        $first = $this->product->variants->where('is_active', true)->first();
-        if ($first) {
-            $this->selectVariant($first->id);
-        }
-        $pSize = $this->product->availableSizes->first();
-        if ($pSize) {
-            // dd($pSize);
-            $this->selectProductSize($pSize->id);
-        }
+        // $first = $this->product->variants->where('is_active', true)->first();
+        // if ($first) {
+        //     $this->selectVariant($first->id);
+        // }
+        // $pSize = $this->product->availableSizes->first();
+        // if ($pSize) {
+        //     // dd($pSize);
+        //     $this->selectProductSize($pSize->id);
+        // }
     }
 
     public function selectVariant(int $variantId): void
@@ -142,8 +142,12 @@ class ProductDetails extends Component
     }
     private function handleCartLogic(): bool
     {
-        if ($this->product->has_variants && ! $this->selectedVariant) {
-            session()->flash('error', 'Please select a color.');
+        // if ($this->product->has_variants && ! $this->selectedVariant) {
+        //     session()->flash('error', 'Please select a color.');
+        //     return false;
+        // }
+        if ($this->product->availableSizes && ! $this->selectedProductSize) {
+            session()->flash('error', 'Please select a Size.');
             return false;
         }
 

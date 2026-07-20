@@ -14,9 +14,12 @@ class ProductCard extends Component
     public bool $buyNowAction = false;
 
     public ?int $selectedVariant = null;
-    public ?int $selectedProductSize = null;
     public int $quantity = 1;
 
+    /**
+     * Ensure variants are loaded with their color/size relationships
+     * so the modal can render without N+1 queries.
+     */
     public function mount(): void
     {
         $this->product->loadMissing([
@@ -40,8 +43,7 @@ class ProductCard extends Component
     {
         $this->openModal(buyNow: true);
     }
-
-    public function updatedQuantity($value): void
+    public function updatedQuantity($value)
     {
         $this->quantity = max(1, (int) $value);
     }
@@ -52,13 +54,15 @@ class ProductCard extends Component
         $this->quantity = 1;
 
         /*
-        |--------------------------------------------------------------------------
-        | Simple Product (No variants & No available sizes)
-        |--------------------------------------------------------------------------
-        */
-        if (! $this->product->has_variants && $this->product->availableSizes->isEmpty()) {
+    |--------------------------------------------------------------------------
+    | Simple Product
+    |--------------------------------------------------------------------------
+    */
+
+        if (! $this->product->has_variants) {
 
             if ($this->handleCartLogic()) {
+
                 if ($buyNow) {
                     $this->redirect(route('cart.index'), navigate: true);
                 }
@@ -68,19 +72,17 @@ class ProductCard extends Component
         }
 
         /*
-        |--------------------------------------------------------------------------
-        | Variant or Size Product -> Open Modal
-        |--------------------------------------------------------------------------
-        */
-        // Auto select first variant if variants exist
-        // if ($this->product->has_variants) {
-        //     $first = $this->product->variants
-        //         ->where('is_active', true)
-        //         ->sortBy('sort_order')
-        //         ->first();
+    |--------------------------------------------------------------------------
+    | Variant Product
+    |--------------------------------------------------------------------------
+    */
 
-        //     $this->selectedVariant = $first?->id;
-        // }
+        $first = $this->product->variants
+            ->where('is_active', true)
+            ->sortBy('sort_order')
+            ->first();
+
+        $this->selectedVariant = $first?->id;
 
         $this->showVariantModal = true;
     }
@@ -91,11 +93,20 @@ class ProductCard extends Component
             'showVariantModal',
             'buyNowAction',
             'selectedVariant',
-            'selectedProductSize',
         ]);
 
         $this->quantity = 1;
     }
+    public function getCurrentVariantProperty()
+    {
+        return $this->product
+            ->variants
+            ->firstWhere('id', $this->selectedVariant);
+    }
+
+    /* -----------------------------------------------------------------
+     |  Variant + quantity state
+     | ----------------------------------------------------------------- */
 
     public function selectVariant(int $variantId): void
     {
@@ -103,16 +114,15 @@ class ProductCard extends Component
             ->variants
             ->firstWhere('id', $variantId);
 
-        if (! $variant || ! $variant->is_active) {
+        if (! $variant) {
+            return;
+        }
+
+        if (! $variant->is_active) {
             return;
         }
 
         $this->selectedVariant = $variant->id;
-    }
-
-    public function selectProductSize(int $sizeId): void
-    {
-        $this->selectedProductSize = $sizeId;
     }
 
     public function incrementQuantity(): void
@@ -135,25 +145,19 @@ class ProductCard extends Component
 
     public function confirmVariant(): void
     {
-        $rules = [
+        $this->validate([
             'quantity' => 'required|integer|min:1|max:99',
-        ];
-
-        if ($this->product->has_variants) {
-            $rules['selectedVariant'] = 'nullable|integer';
-        }
-
-        if ($this->product->availableSizes->isNotEmpty()) {
-            $rules['selectedProductSize'] = 'required|integer';
-        }
-
-        $this->validate($rules);
+            'selectedVariant' => 'required|integer',
+        ]);
 
         if ($this->handleCartLogic()) {
+            // 1. Cache the flag or check it before resetting state
             $shouldRedirect = $this->buyNowAction;
 
+            // 2. Clear out the modal state
             $this->closeModal();
 
+            // 3. Perform redirect based on the cached flag
             if ($shouldRedirect) {
                 $this->redirect(route('cart.index'), navigate: true);
             }
@@ -161,7 +165,7 @@ class ProductCard extends Component
     }
 
     /* -----------------------------------------------------------------
-     |  Cart persistence logic
+     |  Cart persistence (works for both simple and variant products)
      | ----------------------------------------------------------------- */
 
     private function handleCartLogic(): bool
@@ -171,55 +175,56 @@ class ProductCard extends Component
             return false;
         }
 
-        if ($this->product->availableSizes->isNotEmpty() && ! $this->selectedProductSize) {
-            session()->flash('error', 'Please select a Size.');
-            return false;
-        }
-
         $cart = session()->get('cart', []);
 
-        // Cart Key structure matching ProductDetails
-        $cartKey = $this->selectedVariant
-            ? 'variant_' . $this->selectedVariant . '_size_' . ($this->selectedProductSize ?? 0)
-            : 'product_' . $this->product->id . '_size_' . ($this->selectedProductSize ?? 0);
+        if ($this->product->has_variants) {
+            $variant = $this->product
+                ->variants
+                ->firstWhere('id', $this->selectedVariant);
 
-        if (isset($cart[$cartKey])) {
-            $cart[$cartKey]['quantity'] += $this->quantity;
-        } else {
-            $productSize = $this->selectedProductSize
-                ? $this->product->availableSizes->firstWhere('id', $this->selectedProductSize)
-                : null;
+            if (! $variant) {
+                session()->flash(
+                    'error',
+                    'Selected variant is unavailable.'
+                );
 
-            $currentVariant = $this->selectedVariant
-                ? $this->product->variants->firstWhere('id', $this->selectedVariant)
-                : null;
+                return false;
+            }
 
-            $selectedImage = $currentVariant?->image_path
-                ?: $this->product->primaryImage?->image_path;
+            $cartKey = 'variant_' . $variant->id;
 
-            $base = [
-                'product_id'      => $this->product->id,
-                'quantity'        => $this->quantity,
-                'image'           => $selectedImage,
-                'product_size_id' => $productSize?->id,
-                'product_size'    => $productSize?->name,
-            ];
-
-            if ($currentVariant) {
-                $cart[$cartKey] = $base + [
-                    'variant_id'   => $currentVariant->id,
-                    'name'         => $this->product->name,
-                    'variant_name' => $currentVariant->display_label,
-                    'color'        => $currentVariant->color?->name,
-                    'price'        => (float) $currentVariant->price,
-                ];
+            if (isset($cart[$cartKey])) {
+                $cart[$cartKey]['quantity'] += $this->quantity;
             } else {
-                $cart[$cartKey] = $base + [
+                $cart[$cartKey] = [
+                    'product_id'    => $this->product->id,
+                    'variant_id'    => $variant->id,
+                    'name'          => $this->product->name,
+                    'variant_name'  => $variant->display_label,
+                    'color'         => $variant->color?->name,
+                    'size'          => $variant->size?->name,
+                    'price'         => (float) $variant->price,
+                    'image'         => $variant->image_path
+                        ?: $this->product->primaryImage?->image_path,
+                    'quantity'      => $this->quantity,
+                ];
+            }
+        } else {
+            $cartKey = 'product_' . $this->product->id;
+
+            if (isset($cart[$cartKey])) {
+                $cart[$cartKey]['quantity'] += $this->quantity;
+            } else {
+                $cart[$cartKey] = [
+                    'product_id'   => $this->product->id,
                     'variant_id'   => null,
                     'name'         => $this->product->name,
                     'variant_name' => null,
                     'color'        => null,
+                    'size'         => null,
                     'price'        => (float) $this->product->price,
+                    'image'        => $this->product->primaryImage?->image_path,
+                    'quantity'     => $this->quantity,
                 ];
             }
         }
