@@ -1,15 +1,16 @@
 <div>
-
     @if($banners->count())
         <section class="relative overflow-hidden" wire:ignore>
             <div class="swiper heroSwiper">
                 <div class="swiper-wrapper">
 
-                    @foreach ($banners as $banner)
+                    @foreach ($banners as $index => $banner)
                         <div class="swiper-slide">
                             <div class="w-full h-[220px] sm:h-[350px] md:h-[500px] lg:h-[650px]">
-                                <img src="{{ asset('storage/' . $banner->banner_image) }}" alt="{{ $banner->banner_title }}"
-                                    class="w-full h-full object-cover">
+                                <img src="{{ asset('storage/' . $banner->banner_image) }}"
+                                    alt="{{ $banner->banner_title ?? 'Hero Banner' }}" class="w-full h-full object-cover"
+                                    @if($loop->first) fetchpriority="high" loading="eager" decoding="sync" @else loading="lazy"
+                                    decoding="async" @endif>
                             </div>
                         </div>
                     @endforeach
