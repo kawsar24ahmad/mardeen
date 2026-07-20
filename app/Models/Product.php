@@ -6,8 +6,10 @@ use App\Models\Size;
 use App\Models\Brand;
 use App\Models\Review;
 use App\Models\Category;
+use App\Models\SizeChart;
 use Illuminate\Support\Str;
 use App\Models\ProductImage;
+use App\Models\SizeChartSize;
 use App\Models\ProductVariant;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -167,5 +169,17 @@ class Product extends Model
                 $product->slug = Str::slug($product->name);
             }
         });
+    }
+
+    public function sizeChart()
+    {
+        return $this->belongsTo(SizeChart::class);
+    }
+    public function availableSizes()
+    {
+        return $this->belongsToMany(
+            SizeChartSize::class,
+            'product_size_chart_size'
+        )->withTimestamps();
     }
 }

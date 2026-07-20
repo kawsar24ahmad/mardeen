@@ -164,27 +164,57 @@ class CheckoutPage extends Component
             ] + $shippingData);
 
             // 5. Create Order Items (Optimized SKU fetching)
+            // foreach ($this->cart as $item) {
+            //     $sku = $item['sku'] ?? null;
+
+            //     if (!$sku) {
+            //         $sku = ($item['variant_id'] ?? null)
+            //             ? \App\Models\ProductVariant::where('id', $item['variant_id'])->value('sku')
+            //             : \App\Models\Product::where('id', $item['product_id'])->value('sku');
+            //     }
+
+            //     OrderItem::create([
+            //         'order_id' => $order->id,
+            //         'product_id' => $item['product_id'],
+            //         'product_variant_id' => $item['variant_id'] ?? null,
+            //         'product_name' => $item['name'],
+            //         'product_sku' => $sku,
+            //         'variant_name' => $item['variant_name'] ?? null,
+            //         'price' => $item['price'],
+            //         'quantity' => $item['quantity'],
+            //         'subtotal' => $item['price'] * $item['quantity'],
+            //     ]);
+            // }
+
             foreach ($this->cart as $item) {
+                // 1. Resolve SKU efficiently
                 $sku = $item['sku'] ?? null;
 
                 if (!$sku) {
-                    $sku = ($item['variant_id'] ?? null)
-                        ? \App\Models\ProductVariant::where('id', $item['variant_id'])->value('sku')
-                        : \App\Models\Product::where('id', $item['product_id'])->value('sku');
+                    if (!empty($item['variant_id'])) {
+                        $sku = \App\Models\ProductVariant::where('id', $item['variant_id'])->value('sku');
+                    } else {
+                        $sku = \App\Models\Product::where('id', $item['product_id'])->value('sku');
+                    }
                 }
 
+                // 2. Create Order Item with Size & Variant Attributes
                 OrderItem::create([
-                    'order_id' => $order->id,
-                    'product_id' => $item['product_id'],
+                    'order_id'          => $order->id,
+                    'product_id'        => $item['product_id'],
                     'product_variant_id' => $item['variant_id'] ?? null,
-                    'product_name' => $item['name'],
-                    'product_sku' => $sku,
-                    'variant_name' => $item['variant_name'] ?? null,
-                    'price' => $item['price'],
-                    'quantity' => $item['quantity'],
-                    'subtotal' => $item['price'] * $item['quantity'],
+                    'product_size_id'   => $item['product_size_id'] ?? null,
+                    'product_size'      => $item['product_size'] ?? null,
+                    'product_name'      => $item['name'],
+                    'product_sku'       => $sku,
+                    'variant_name'      => $item['variant_name'] ?? null,
+                    'price'             => $item['price'],
+                    'quantity'          => $item['quantity'],
+                    'subtotal'          => $item['price'] * $item['quantity'],
                 ]);
             }
+
+
 
             // 6. Apply Coupons (Only if registered user; optional based on business rules)
             if ($this->appliedCoupon && auth('customer')->check()) {

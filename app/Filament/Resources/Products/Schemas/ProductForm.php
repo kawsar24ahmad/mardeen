@@ -300,6 +300,35 @@ class ProductForm
                                     ]),
                             ]),
 
+                        Tab::make('Size')
+                            ->icon(Heroicon::RectangleGroup)
+                            ->schema([
+                                Section::make('Size Configuration')
+                                    ->schema([
+
+                                        Select::make('size_chart_id')
+                                            ->relationship('sizeChart', 'name')
+                                            ->searchable()
+                                            ->preload()
+                                            ->live()
+                                            ->afterStateUpdated(fn($set) => $set('availableSizes', [])),
+
+                                        Select::make('availableSizes')
+                                            ->relationship(
+                                                name: 'availableSizes',
+                                                titleAttribute: 'name',
+                                                modifyQueryUsing: fn($query, $get) => $query
+                                                    ->where('size_chart_id', $get('size_chart_id'))
+                                                    ->orderBy('sort_order')
+                                            )
+                                            ->multiple()
+                                            ->searchable()
+                                            ->preload(),
+
+                                    ]),
+
+
+                            ]),
                         Tab::make('Variants (Size & Color)')
                             ->icon(Heroicon::Squares2x2)
                             ->schema([
@@ -318,6 +347,7 @@ class ProductForm
                                                     ->searchable()->preload()->native(false)
                                                     ->native(false)
                                                     ->allowHtml()
+                                                    ->live()
                                                     ->getOptionLabelFromRecordUsing(function (Model $record) {
 
                                                         return '
@@ -339,6 +369,17 @@ class ProductForm
                                                             </div>
                                                         ';
                                                     })
+                                                    ->afterStateUpdated(function ($state, callable $set) {
+                                                        if (! $state) {
+                                                            return;
+                                                        }
+
+                                                        $color = \App\Models\Color::find($state);
+
+                                                        if ($color) {
+                                                            $set('name', $color->name);
+                                                        }
+                                                    })
                                                     ->createOptionForm([
                                                         TextInput::make('name')->required(),
                                                         ColorPicker::make('hex_code')
@@ -349,22 +390,20 @@ class ProductForm
                                                     ])
                                                     ->columnSpan(1),
 
-                                                Select::make('size_id')
-                                                    ->label('Size')
-                                                    ->relationship('size', 'name')
-                                                    ->searchable()->preload()->native(false)
-                                                    ->createOptionForm([
-                                                        TextInput::make('name')->required(),
-                                                        TextInput::make('chest')->numeric()->step(0.1),
-                                                        TextInput::make('length')->numeric()->step(0.1),
-                                                    ])
-                                                    ->columnSpan(1),
+                                                // Select::make('size_id')
+                                                //     ->label('Size')
+                                                //     ->relationship('size', 'name')
+                                                //     ->searchable()->preload()->native(false)
+                                                //     ->createOptionForm([
+                                                //         TextInput::make('name')->required(),
+                                                //         TextInput::make('chest')->numeric()->step(0.1),
+                                                //         TextInput::make('length')->numeric()->step(0.1),
+                                                //     ])
+                                                //     ->columnSpan(1),
 
                                                 TextInput::make('name')
                                                     ->label('Variant Label')
-                                                    ->helperText('Auto-generated, e.g. "Red - Large"')
-                                                    ->disabled()
-                                                    ->dehydrated(false)
+                                                    ->helperText('Red - Large')
                                                     ->columnSpan(1),
 
                                                 TextInput::make('sku')
@@ -401,7 +440,7 @@ class ProductForm
                                                     ->disk('public')
                                                     ->imageEditor()
                                                     ->helperText('Color-specific photo. Overrides product gallery when this variant is selected.')
-                                                    ->columnSpan(1),
+                                                    ->columnSpan(2),
 
                                                 Toggle::make('is_active')
                                                     ->default(true)

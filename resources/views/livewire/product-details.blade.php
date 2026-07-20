@@ -127,42 +127,129 @@ if ($variantImagePath) {
                             <p class="text-slate-600 text-sm md:text-base leading-relaxed mb-6">{{ $product->short_description }}</p>
                         @endif
 
-                        @php
-$sizeGroups = $product->variants->where('is_active', true)->filter(fn($v) => $v->size_id)->groupBy('size_id');
-$offeredSizes = $sizeGroups->map(fn($g) => $g->first()->size);
-                        @endphp
-                        @if($offeredSizes->whereNotNull('chest')->isNotEmpty() || $offeredSizes->whereNotNull('length')->isNotEmpty())
-                            <div class="my-6 max-w-md">
-                                <div class="rounded-xl border border-slate-200/80 overflow-hidden bg-white">
-                                    <div class="bg-slate-900 text-white text-xs tracking-wider uppercase text-center py-2.5 font-semibold">Size Reference Table</div>
-                                    <table class="w-full text-xs text-center border-collapse">
-                                        <thead class="bg-slate-50 text-slate-500 border-b border-slate-100">
-                                            <tr>
-                                                <th class="p-2.5 text-left font-medium text-slate-400 bg-slate-50/50 pl-4">SIZE</th>
-                                                @foreach($offeredSizes as $size)
-                                                    <th class="p-2.5 font-semibold text-slate-700">{{ $size->name }}</th>
-                                                @endforeach
-                                            </tr>
-                                        </thead>
-                                        <tbody class="divide-y divide-slate-100 text-slate-600">
-                                            <tr>
-                                                <th class="p-2.5 text-left font-medium text-slate-400 bg-slate-50/50 pl-4">CHEST</th>
-                                                @foreach($offeredSizes as $size)
-                                                    <td class="p-2.5">{{ $size->chest ?? '-' }}</td>
-                                                @endforeach
-                                            </tr>
-                                            <tr>
-                                                <th class="p-2.5 text-left font-medium text-slate-400 bg-slate-50/50 pl-4">LENGTH</th>
-                                                @foreach($offeredSizes as $size)
-                                                    <td class="p-2.5">{{ $size->length ?? '-' }}</td>
-                                                @endforeach
-                                            </tr>
-                                        </tbody>
-                                    </table>
+
+                @if($product->sizeChart)
+
+                                    @php
+                    $chart = $product->sizeChart->load([
+                        'measurements',
+                        'sizes.values.measurement',
+                    ]);
+
+
+                    // Product-এর Available Size IDs
+                    $availableSizeIds = $product->availableSizes->pluck('id')->toArray();
+
+                    // শুধু Product-এ Available Size গুলো
+                    $sizes = $chart->sizes->whereIn('id', $availableSizeIds);
+
+                    $measurements = $chart->measurements->sortBy('sort_order');
+                                    @endphp
+
+                                    @if($sizes->isNotEmpty())
+
+                                        <div class="my-6 overflow-hidden rounded-xl border border-slate-200 bg-white">
+
+                                            <div class="bg-slate-900 px-4 py-3 text-center text-sm font-semibold text-white">
+                                                Size Chart
+                                            </div>
+
+                                            <div class="overflow-x-auto">
+
+                                                <table class="min-w-full border-collapse text-center text-sm">
+
+                                                    <thead class="bg-slate-50">
+
+                                                        <tr>
+
+                                                            <th class="border px-4 py-3 text-left font-semibold">
+                                                                Size
+                                                            </th>
+
+                                                            @foreach($measurements as $measurement)
+
+                                                                <th class="border px-4 py-3">
+
+                                                                    <div class="font-semibold">
+                                                                        {{ $measurement->name }}
+                                                                    </div>
+
+                                                                    <div class="text-xs text-slate-400">
+                                                                        {{ strtoupper($measurement->unit) }}
+                                                                    </div>
+
+                                                                </th>
+
+                                                            @endforeach
+
+                                                        </tr>
+
+                                                    </thead>
+
+                                                    <tbody>
+
+                                                        @foreach($sizes as $size)
+
+                                                            <tr>
+
+                                                                <th class="border bg-slate-50 px-4 py-3 text-left font-semibold">
+                                                                    {{ $size->name }}
+                                                                </th>
+
+                                                                @foreach($measurements as $measurement)
+
+                                                                    @php
+                                                                        $value = $size->values
+                                                                            ->firstWhere('size_chart_measurement_id', $measurement->id);
+                                                                    @endphp
+
+                                                                    <td class="border px-4 py-3">
+                                                                        {{ $value?->value ?? '-' }}
+                                                                    </td>
+
+                                                                @endforeach
+
+                                                            </tr>
+
+                                                        @endforeach
+
+                                                    </tbody>
+
+                                                </table>
+
+                                            </div>
+
+                                        </div>
+
+                                    @endif
+
+                @endif
+
+
+                        @if($product->availableSizes->isNotEmpty())
+                            <div class="mb-8">
+                                <h3 class="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-900">
+                                    Available Sizes
+                                </h3>
+
+                                <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+
+                                    @foreach($product->availableSizes as $size)
+
+                                                            <button type="button" wire:click="selectProductSize({{ $size->id }})" class="rounded-xl border px-4 py-3 text-center transition-all duration-200
+                                                                        {{ $selectedProductSize == $size->id
+            ? 'border-slate-900 bg-slate-900 text-white'
+            : 'border-slate-300 bg-white hover:border-slate-900 hover:bg-slate-50' }}">
+
+                                                                {{ $size->name }}
+
+                                                            </button>
+
+                                    @endforeach
+
                                 </div>
                             </div>
                         @endif
-
                         @if($product->has_variants && $product->variants->where('is_active', true)->count())
                             <div class="mb-8">
                                 <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-3">Available Variants</h3>

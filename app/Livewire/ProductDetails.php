@@ -14,6 +14,7 @@ class ProductDetails extends Component
     public ?string $selectedImage = null;
     public ?int $selectedVariant = null;
     public ?int $selectedSize = null;
+    public ?int $selectedProductSize = null;
     public int $quantity = 1;
 
     // public function mount($slug): void
@@ -54,8 +55,11 @@ class ProductDetails extends Component
                 'approvedReviews.customer',
                 'variants.color',
                 'variants.size',
+                'sizeChart',
+                'availableSizes',
             ])
             ->firstOrFail();
+
 
         $this->product->increment('views_count');
         // dd($this->product->primaryImage?->image_path);
@@ -68,6 +72,11 @@ class ProductDetails extends Component
         $first = $this->product->variants->where('is_active', true)->first();
         if ($first) {
             $this->selectVariant($first->id);
+        }
+        $pSize = $this->product->availableSizes->first();
+        if ($pSize) {
+            // dd($pSize);
+            $this->selectProductSize($pSize->id);
         }
     }
 
@@ -102,6 +111,18 @@ class ProductDetails extends Component
             $this->selectVariant($variant->id);
         }
     }
+    public function selectProductSize(int $sizeId): void
+    {
+        $this->selectedProductSize = $sizeId;
+        // Find a matching variant for this size
+        $size = $this->product->availableSizes
+            ->where('id', $sizeId)
+            ->first();
+        if ($size) {
+            $this->selectedSize = $size->id;
+            // dd($size);
+        }
+    }
 
     public function selectImage(string $imagePath): void
     {
@@ -119,54 +140,117 @@ class ProductDetails extends Component
             $this->quantity--;
         }
     }
-
     private function handleCartLogic(): bool
     {
         if ($this->product->has_variants && ! $this->selectedVariant) {
-            session()->flash('error', 'Please select a size and color.');
+            session()->flash('error', 'Please select a color.');
             return false;
         }
 
         $cart = session()->get('cart', []);
+
         $cartKey = $this->selectedVariant
-            ? 'variant_' . $this->selectedVariant
-            : 'product_' . $this->product->id;
+            ? 'variant_' . $this->selectedVariant . '_size_' . ($this->selectedProductSize ?? 0)
+            : 'product_' . $this->product->id . '_size_' . ($this->selectedProductSize ?? 0);
 
         if (isset($cart[$cartKey])) {
+
             $cart[$cartKey]['quantity'] += $this->quantity;
         } else {
+
+            $productSize = $this->selectedProductSize
+                ? $this->product->availableSizes->firstWhere('id', $this->selectedProductSize)
+                : null;
+
             $base = [
-                'product_id' => $this->product->id,
-                'quantity' => $this->quantity,
-                'image' => $this->selectedImage,
+                'product_id'      => $this->product->id,
+                'quantity'        => $this->quantity,
+                'image'           => $this->selectedImage,
+                'product_size_id' => $productSize?->id,
+                'product_size'    => $productSize?->name,
             ];
 
             if ($this->selectedVariant) {
-                $variant = ProductVariant::with(['color', 'size'])->find($this->selectedVariant);
+
+                $variant = ProductVariant::with('color')->findOrFail($this->selectedVariant);
+
                 $cart[$cartKey] = $base + [
-                    'variant_id' => $variant->id,
-                    'name' => $this->product->name,
+                    'variant_id'   => $variant->id,
+                    'name'         => $this->product->name,
                     'variant_name' => $variant->display_label,
-                    'color' => $variant->color?->name,
-                    'size' => $variant->size?->name,
-                    'price' => (float) $variant->price,
+                    'color'        => $variant->color?->name,
+                    'price'        => (float) $variant->price,
                 ];
             } else {
+
                 $cart[$cartKey] = $base + [
-                    'variant_id' => null,
-                    'name' => $this->product->name,
+                    'variant_id'   => null,
+                    'name'         => $this->product->name,
                     'variant_name' => null,
-                    'color' => null,
-                    'size' => $this->product->sizes->firstWhere('id', $this->selectedSize)?->name,
-                    'price' => (float) $this->product->price,
+                    'color'        => null,
+                    'price'        => (float) $this->product->price,
                 ];
             }
         }
 
         session()->put('cart', $cart);
+
         $this->dispatch('cart-updated');
+
         return true;
     }
+
+    // private function handleCartLogic(): bool
+    // {
+    //     if ($this->product->has_variants && ! $this->selectedVariant) {
+    //         session()->flash('error', 'Please select a size and color.');
+    //         return false;
+    //     }
+
+    //     $cart = session()->get('cart', []);
+    //     $cartKey = $this->selectedVariant
+    //         ? 'variant_' . $this->selectedVariant
+    //         : 'product_' . $this->product->id;
+
+    //     if (isset($cart[$cartKey])) {
+    //         $cart[$cartKey]['quantity'] += $this->quantity;
+    //     } else {
+    //         $base = [
+    //             'product_id' => $this->product->id,
+    //             'quantity' => $this->quantity,
+    //             'image' => $this->selectedImage,
+    //         ];
+
+    //         if ($this->selectedVariant) {
+    //             $variant = ProductVariant::with(['color', 'size'])->find($this->selectedVariant);
+    //             $cart[$cartKey] = $base + [
+    //                 'variant_id' => $variant->id,
+    //                 'name' => $this->product->name,
+    //                 'variant_name' => $variant->display_label,
+    //                 'color' => $variant->color?->name,
+    //                 'price' => (float) $variant->price,
+    //             ];
+    //         } else {
+    //             $cart[$cartKey] = $base + [
+    //                 'variant_id' => null,
+    //                 'name' => $this->product->name,
+    //                 'variant_name' => null,
+    //                 'color' => null,
+    //                 'price' => (float) $this->product->price,
+    //             ];
+    //         }
+    //         if ($this->selectedProductSize) {
+    //             $cart[$cartKey]['product_size'] = $this->product
+    //                 ->availableSizes()
+    //                 ->find($this->selectedProductSize)
+    //                 ?->name;
+    //         }
+    //     }
+
+    //     session()->put('cart', $cart);
+    //     $this->dispatch('cart-updated');
+    //     return true;
+    // }
 
     public function addToCart(): void
     {

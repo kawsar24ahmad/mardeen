@@ -80,8 +80,9 @@ class ProductVariant extends Model
 
     public function getDisplayLabelAttribute(): string
     {
-        $parts = array_filter([$this->color?->name, $this->size?->name]);
-        return $parts ? implode(' / ', $parts) : ($this->name ?? 'Variant');
+        return $this->name;
+        // $parts = array_filter([$this->color?->name, $this->size?->name]);
+        // return $parts ? implode(' / ', $parts) : ($this->name ?? 'Variant');
     }
 
     public function getDiscountPercentageAttribute(): int
@@ -105,9 +106,9 @@ class ProductVariant extends Model
                 $variant->sku = 'VAR-' . Str::random(8);
             }
         });
-        static::saving(function ($variant) {
-            // Auto-generate a human-friendly name from color + size
-            $variant->name = $variant->display_label;
-        });
+        // static::saving(function ($variant) {
+        //     // Auto-generate a human-friendly name from color + size
+        //     // $variant->name = $variant->display_label;
+        // });
     }
 }
