@@ -6,7 +6,9 @@ use App\Livewire\Orders;
 use App\Livewire\CartPage;
 use App\Livewire\Homepage;
 use App\Livewire\ThankYou;
+use App\Livewire\AboutPage;
 use App\Livewire\TrackOrder;
+use App\Livewire\ContactPage;
 use App\Livewire\CheckoutPage;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Livewire\ProductDetails;
@@ -257,4 +259,9 @@ Route::get('/run-migration/{secret_key}', function ($secret_key) {
         return $e->getMessage();
     }
 });
+
+
+Route::get('/about', AboutPage::class)->name('about');
+Route::get('/contact', ContactPage::class)->name('contact');
+
 require __DIR__ . '/auth.php';

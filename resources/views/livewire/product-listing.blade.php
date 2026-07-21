@@ -94,7 +94,7 @@
                     </div>
 
                     <!-- Brands -->
-                    <div class="bg-white p-4 rounded-lg shadow-sm">
+                    {{-- <div class="bg-white p-4 rounded-lg shadow-sm">
                         <h3 class="font-semibold text-gray-900 mb-3">Brands</h3>
                         <ul class="space-y-2 max-h-64 overflow-y-auto">
                             <li>
@@ -104,16 +104,16 @@
                                 </button>
                             </li>
                             @foreach($brands as $br)
-                                <li>
-                                    <button wire:click="$set('brand', '{{ $br->slug }}')"
-                                        class="w-full text-left px-3 py-2 rounded {{ $brand === $br->slug ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700 hover:bg-gray-50' }}">
-                                        {{ $br->name }}
-                                        <span class="text-sm text-gray-500">({{ $br->products_count }})</span>
-                                    </button>
-                                </li>
+                            <li>
+                                <button wire:click="$set('brand', '{{ $br->slug }}')"
+                                    class="w-full text-left px-3 py-2 rounded {{ $brand === $br->slug ? 'bg-indigo-50 text-indigo-700' : 'text-gray-700 hover:bg-gray-50' }}">
+                                    {{ $br->name }}
+                                    <span class="text-sm text-gray-500">({{ $br->products_count }})</span>
+                                </button>
+                            </li>
                             @endforeach
                         </ul>
-                    </div>
+                    </div> --}}
 
                     <!-- Price Range -->
                     <div class="bg-white p-4 rounded-lg shadow-sm">
