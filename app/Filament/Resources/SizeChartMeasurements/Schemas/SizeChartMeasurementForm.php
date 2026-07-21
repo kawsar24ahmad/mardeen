@@ -13,7 +13,13 @@ class SizeChartMeasurementForm
             ->components([
                 TextInput::make('name')
                     ->placeholder('e.g., Chest, Length, Shoulder')
-                    ->required(),
+                    ->required()
+                    ->maxLength(255)
+                    // ⬇️ 'measurements' টেবিলের 'name' কলাম ইউনিক হতে হবে
+                    ->unique(table: 'measurements', column: 'name', ignoreRecord: true)
+                    ->validationMessages([
+                        'unique' => 'এই Measurement নামটি ইতোমধ্যে ডাটাবেজে রয়েছে!',
+                    ]),
                 TextInput::make('unit')
                     ->required()
                     ->default('inch'),

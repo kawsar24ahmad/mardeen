@@ -63,54 +63,67 @@
 
                     @foreach($categories as $category)
 
-                        <div class="swiper-slide">
+                                            <div class="swiper-slide">
 
-                            <div class="category-card">
+                                                <div class="category-card">
 
-                                <a href="{{ route('products.index', ['category' => $category->slug]) }}"
-                                    class="group block">
+                                                    <a href="{{ route('products.index', ['category' => $category->slug]) }}"
+                                                        class="group block">
 
-                                    <div
-                                        class="aspect-square rounded-2xl overflow-hidden bg-gray-50 border border-gray-100 shadow-sm group-hover:shadow-lg transition">
+                                                        <div
+                                                            class="aspect-square rounded-2xl overflow-hidden bg-gray-50 border border-gray-100 shadow-sm group-hover:shadow-lg transition">
 
-                                        @if($category->image)
 
-                                            <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}"
-                                                class="w-full h-full object-cover transition duration-300 group-hover:scale-110">
+                                                            @php
+                        // ১. Spatie-এর 'thumb' WebP কনভার্সন ইউআরএল খুঁজবে
+                        $categoryImage = $category->getFirstMediaUrl('categories', 'thumb')
+                            ?: $category->getFirstMediaUrl('categories');
 
-                                        @else
 
-                                            <div
-                                                class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-indigo-600">
 
-                                                <span class="text-white text-3xl font-bold">
-                                                    {{ strtoupper(substr($category->name, 0, 1)) }}
-                                                </span>
+
+
+                                                            @endphp
+                                                                @if ($categoryImage)
+                                                                    <img src="{{ $categoryImage }}" alt="{{ $category->name }}" width="402" height="268" loading="lazy" decoding="async"
+                                                                        class="w-full h-full object-cover transition duration-300 group-hover:scale-110">
+                                                                @endif
+
+
+
+
+
+                                                                <div
+                                                                    class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-indigo-600">
+
+                                                                    <span class="text-white text-3xl font-bold">
+                                                                        {{ strtoupper(substr($category->name, 0, 1)) }}
+                                                                    </span>
+
+                                                                </div>
+
+
+
+                                                        </div>
+
+                                                        <h3
+                                                            class="mt-3 text-center text-xs sm:text-sm font-medium text-gray-800 truncate group-hover:text-blue-600">
+
+                                                            {{ $category->name }}
+
+                                                        </h3>
+
+                                                        <p class="text-center text-[11px] text-gray-400">
+
+                                                            {{ $category->products_count }} Items
+
+                                                        </p>
+
+                                                    </a>
+
+                                                </div>
 
                                             </div>
-
-                                        @endif
-
-                                    </div>
-
-                                    <h3
-                                        class="mt-3 text-center text-xs sm:text-sm font-medium text-gray-800 truncate group-hover:text-blue-600">
-
-                                        {{ $category->name }}
-
-                                    </h3>
-
-                                    <p class="text-center text-[11px] text-gray-400">
-
-                                        {{ $category->products_count }} Items
-
-                                    </p>
-
-                                </a>
-
-                            </div>
-
-                        </div>
 
                     @endforeach
 

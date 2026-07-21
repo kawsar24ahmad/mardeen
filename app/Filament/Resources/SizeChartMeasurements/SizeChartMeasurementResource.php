@@ -13,11 +13,12 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class SizeChartMeasurementResource extends Resource
 {
     protected static ?string $model = SizeChartMeasurement::class;
-
+    protected static UnitEnum|string|null $navigationGroup = 'Size Chart';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'name';

@@ -14,11 +14,12 @@ use App\Filament\Resources\SizeCharts\Pages\CreateSizeChart;
 use App\Filament\Resources\SizeCharts\Schemas\SizeChartForm;
 use App\Filament\Resources\SizeCharts\Tables\SizeChartsTable;
 use App\Filament\Resources\SizeCharts\RelationManagers\SizesRelationManager;
+use UnitEnum;
 
 class SizeChartResource extends Resource
 {
     protected static ?string $model = SizeChart::class;
-
+    protected static UnitEnum|string|null $navigationGroup = 'Size Chart';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'name';

@@ -22,7 +22,7 @@ class BannersTable
 
                 // ২. Spatie Media Library-এর মাধ্যমে আপলোড হওয়া ছবি
                 SpatieMediaLibraryImageColumn::make('spatie_banner') // কাস্টম নাম দেওয়া হলো
-                    ->label('Spatie Media Image')
+                    ->label('Image')
                     ->collection('banners')
                     ->conversion('optimized')
                     ->height(80)

@@ -2,13 +2,14 @@
 
 namespace App\Filament\Resources\Categories\Tables;
 
+use Filament\Tables\Table;
+use Filament\Actions\EditAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 
 class CategoriesTable
 {
@@ -20,7 +21,14 @@ class CategoriesTable
                     ->searchable(),
                 TextColumn::make('slug')
                     ->searchable(),
-                ImageColumn::make('image'),
+                SpatieMediaLibraryImageColumn::make('image') // কাস্টম নাম দেওয়া হলো
+                    ->label(' Image')
+                    ->collection('categories')
+                    ->conversion('thumb')
+                    ->extraImgAttributes([
+                        'class' => 'object-cover rounded-lg',
+                    ])
+                    ->alignCenter(),
                 IconColumn::make('is_active')
                     ->boolean(),
                 TextColumn::make('sort_order')
