@@ -113,7 +113,7 @@ class ProductCard extends Component
         ];
 
         if ($this->product->has_variants) {
-            $rules['selectedVariant'] = 'required|integer'; // Variant বাছাই করা বাধ্যতামূলক করতে চাইলে
+            $rules['selectedVariant'] = 'nullable|integer'; // Variant বাছাই করা বাধ্যতামূলক করতে চাইলে
         }
 
         if ($this->product->availableSizes->isNotEmpty()) {
