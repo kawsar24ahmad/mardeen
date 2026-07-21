@@ -960,8 +960,11 @@
             }
         });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
+    {{--
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> --}}
+    <!-- cdnjs (jsDelivr-এর অল্টারনেটিভ) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js"></script>
     {{--
     <script>
         // স্লাইডারগুলো ইনিশিয়ালাইজ করার জন্য একটি রিইউজেবল ফাংশন
