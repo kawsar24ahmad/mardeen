@@ -168,4 +168,45 @@ Route::get('/admin/system/refresh', function () {
         'message' => 'Application caches cleared and packages rediscovered.',
     ]);
 });
+
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Clear Application Cache via Browser Route
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/clear-cache/{secret_key}', function ($secret_key) {
+    // অনাকাঙ্ক্ষিত ক্যাশ ক্লিয়ার রিকোয়েস্ট রোধ করতে সিকিউরিটি কি
+    $expectedKey = 'kawsarwebs';
+
+    if ($secret_key !== $expectedKey) {
+        abort(403, 'Unauthorized action.');
+    }
+
+    try {
+        Artisan::call('optimize:clear');
+        Artisan::call('config:clear');
+        Artisan::call('route:clear');
+        Artisan::call('view:clear');
+        Artisan::call('cache:clear');
+
+        // স্টোরেজ লিংক না থাকলে সেটিও অটো তৈরি করে নেবে
+        if (! file_exists(public_path('storage'))) {
+            Artisan::call('storage:link');
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'All caches cleared successfully and storage link checked!',
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage(),
+        ], 500);
+    }
+});
 require __DIR__ . '/auth.php';

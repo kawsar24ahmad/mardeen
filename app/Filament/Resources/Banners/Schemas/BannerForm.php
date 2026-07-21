@@ -7,6 +7,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 
 class BannerForm
 {
@@ -23,15 +24,22 @@ class BannerForm
                             ->maxLength(255)
                             ->columnSpanFull(),
 
-                        FileUpload::make('banner_image')
-                            ->label('Banner Image')
-                            ->image()
-                            ->imageEditor()
-                            ->directory('hero-banners')
-                            ->disk('public')
-                            ->visibility('public')
-                            ->required()
-                            ->columnSpanFull(),
+                        // SpatieMediaLibraryFileUpload::make('banner_image')
+                        //     ->collection('banners')
+                        //     ->conversion('optimized') // আপনার মডেলে তৈরি করা কনভার্সন নাম
+                        //     ->image()
+                        //     ->maxSize(2048) // আপলোড লিমিট ২ মেগাবাইট (বড় ছবি দিলেও অটো ছোট হবে)
+                        //     ->required(),
+
+                        // FileUpload::make('banner_image')
+                        //     ->label('Banner Image')
+                        //     ->image()
+                        //     ->imageEditor()
+                        //     ->directory('hero-banners')
+                        //     ->disk('public')
+                        //     ->visibility('public')
+                        //     ->required()
+                        //     ->columnSpanFull(),
 
                         TextInput::make('serial_number')
                             ->label('Serial Number')
