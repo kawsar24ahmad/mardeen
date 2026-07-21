@@ -2,16 +2,17 @@
 
 namespace App\Filament\Resources\Products\Tables;
 
+use Filament\Tables\Table;
+use Filament\Actions\EditAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
-use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Filters\TrashedFilter;
-use Filament\Tables\Table;
+use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 
 class ProductsTable
 {
@@ -19,9 +20,12 @@ class ProductsTable
     {
         return $table
             ->columns([
-                ImageColumn::make('primaryImage.image_path')
+                SpatieMediaLibraryImageColumn::make('media')
+                    ->label('Image')
+                    ->collection('products')
+                    ->conversion('thumb')
                     ->circular()
-                    ->defaultImageUrl(url('/images/placeholder.png')),
+                    ->defaultImageUrl(asset('images/placeholder.png')),
 
 
                 TextColumn::make('name')
@@ -94,6 +98,7 @@ class ProductsTable
                     ForceDeleteBulkAction::make(),
                     RestoreBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->paginated(false);
     }
 }

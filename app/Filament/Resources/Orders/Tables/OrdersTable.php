@@ -46,8 +46,8 @@ class OrdersTable
                     ->copyable(),
                 TextColumn::make('customer.name')
                     ->searchable()
-                    ->sortable()
-                    ->url(fn($record) => $record->customer ? CustomerResource::getUrl('edit', [$record->customer]) : null),
+                    ->sortable(),
+                // ->url(fn($record) => $record->customer ? CustomerResource::getUrl('edit', [$record->customer]) : null),
                 TextColumn::make('coupon.name')
                     ->numeric()
                     ->sortable()

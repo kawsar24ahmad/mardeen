@@ -55,11 +55,11 @@
                     <div class="flex items-center gap-4">
                         <!-- Thumbnail -->
                         <div class="h-14 w-14 flex-shrink-0 overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
-                            @if($item->variant && $item->variant->image_path)
-                                <img src="{{ asset('storage/' . $item->variant->image_path) }}" alt="{{ $item->product_name }}"
+                            @if($item->variant && $item->variant->getFirstMediaUrl('variant_images'))
+                                <img src="{{ $item->variant->getFirstMediaUrl('variant_images')}}" alt="{{ $item->product_name }}"
                                     class="h-full w-full object-cover object-center">
-                            @elseif($item->product && $item->product->primaryImage)
-                                <img src="{{ asset('storage/' . $item->product->primaryImage->image_path) }}"
+                            @elseif($item->product && $item->product->getFirstMediaUrl('products'))
+                                <img src="{{ $item->product->getFirstMediaUrl('products') }}"
                                     alt="{{ $item->product_name }}" class="h-full w-full object-cover object-center">
                             @else
                                 <div
@@ -97,7 +97,7 @@
 
                     <!-- Item Subtotal -->
                     <div class="text-right font-bold text-gray-900 text-sm sm:text-base">
-                        TK. {{ number_format($item->subtotal, 2) }}
+                        <span class="text-xs md:text-sm font-semibold text-blue-600 uppercase tracking-wide">TK.</span>{{ number_format($item->subtotal, 2) }}
                     </div>
                 </li>
             @endforeach
@@ -107,24 +107,24 @@
             <div class="border-t border-gray-100 bg-gray-50/50 px-6 py-5 space-y-2.5">
                 <div class="flex justify-between text-sm text-gray-600">
                     <span>Subtotal</span>
-                    <span class="font-medium text-gray-900">TK. {{ number_format($order->subtotal, 2) }}</span>
+                    <span class="font-medium text-gray-900"><span class="text-xs md:text-sm font-semibold text-blue-600 uppercase tracking-wide">TK.</span>{{ number_format($order->subtotal, 2) }}</span>
                 </div>
 
                 @if($order->discount_amount > 0)
                     <div class="flex justify-between text-sm text-green-600">
                         <span>Discount Savings</span>
-                        <span class="font-semibold">-TK. {{ number_format($order->discount_amount, 2) }}</span>
+                        <span class="font-semibold">-<span class="text-xs md:text-sm font-semibold text-blue-600 uppercase tracking-wide">TK.</span>{{ number_format($order->discount_amount, 2) }}</span>
                     </div>
                 @endif
 
                 <div class="flex justify-between text-sm text-gray-600">
                     <span>Shipping Fee</span>
-                    <span class="font-medium text-gray-900">TK. {{ number_format($order->shipping_cost, 2) }}</span>
+                    <span class="font-medium text-gray-900"><span class="text-xs md:text-sm font-semibold text-blue-600 uppercase tracking-wide">TK.</span>{{ number_format($order->shipping_cost, 2) }}</span>
                 </div>
 
                 <div class="flex justify-between border-t border-gray-200 pt-3 text-base font-bold text-gray-900">
                     <span>Total Amount Paid</span>
-                    <span class="text-lg text-blue-600">TK. {{ number_format($order->total, 2) }}</span>
+                    <span class="text-lg text-blue-600"><span class="text-xs md:text-sm font-semibold text-blue-600 uppercase tracking-wide">TK.</span>{{ number_format($order->total, 2) }}</span>
                 </div>
             </div>
         </div>

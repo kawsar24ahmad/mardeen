@@ -18,6 +18,7 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 
 class ProductForm
 {
@@ -134,152 +135,158 @@ class ProductForm
                                             ->helperText('Used for shipping calculation')->default(null),
                                     ]),
                             ]),
-                        // Tab::make('Images')
-                        //     ->icon(Heroicon::Photo)
-                        //     ->schema([
-                        //         Section::make('Product Images')
-                        //             ->description('Default product gallery. The first image will be the primary image. Use the Variants tab to add color-specific images.')
-                        //             ->schema([
-                        //                 FileUpload::make('images')
-                        //                     ->label('Product Images')
-                        //                     ->multiple()
-                        //                     ->image()
-                        //                     ->directory('products')
-                        //                     ->disk('public')
-                        //                     ->imageEditor()
-                        //                     ->maxSize(2048)
-                        //                     ->reorderable()
-                        //                     ->columnSpanFull()
-                        //                     ->helperText('You can drag and drop to reorder images.')
-                        //                     ->saveRelationshipsUsing(function ($component, $state, $record) {
-                        //                         $record->images()->delete();
-                        //                         if (is_array($state)) {
-                        //                             foreach ($state as $index => $imagePath) {
-                        //                                 $record->images()->create([
-                        //                                     'image_path' => $imagePath,
-                        //                                     'is_primary' => $index === 0,
-                        //                                     'sort_order' => $index,
-                        //                                 ]);
-                        //                             }
-                        //                         }
-                        //                     }),
-                        //             ]),
-                        //     ]),
+
                         Tab::make('Images')
                             ->icon(Heroicon::Photo)
                             ->schema([
                                 Section::make('Product Images')
-                                    ->description('Upload multiple images. The first image will be the primary image.')
+                                    ->description('Upload multiple images. The first image will be used as the primary image.')
                                     ->schema([
-                                        FileUpload::make('images')
+                                        SpatieMediaLibraryFileUpload::make('images')
                                             ->label('Product Images')
+                                            ->collection('products')  // 👈 Spatie Collection Name
+                                            ->conversion('thumb')     // 👈 Admin Preview Conversions
                                             ->multiple()
-                                            ->image()
+                                            ->reorderable()          // 👈 Drag & drop order Spatie নিজেই হ্যান্ডেল করে
                                             ->disk('public')
-                                            ->directory('products')
+                                            ->image()
                                             ->imageEditor()
-                                            ->maxSize(2048)
-                                            ->reorderable()
+                                            ->maxSize(5120)
                                             ->columnSpanFull()
-                                            ->helperText('You can drag and drop to reorder images.')
-
-                                            // Load existing images when editing
-                                            ->afterStateHydrated(function ($component, $state, $record) {
-                                                if ($record && blank($state)) {
-                                                    $component->state(
-                                                        $record->images()
-                                                            ->orderBy('sort_order')
-                                                            ->pluck('image_path')
-                                                            ->toArray()
-                                                    );
-                                                }
-                                            })
-
-                                            ->saveRelationshipsUsing(function ($component, $state, $record) {
-
-                                                if (! $record) {
-                                                    return;
-                                                }
-
-                                                /**
-                                                 * IMPORTANT
-                                                 * If this field wasn't changed while editing,
-                                                 * don't touch existing images.
-                                                 */
-                                                if ($state === null) {
-                                                    return;
-                                                }
-
-                                                $state = collect($state)
-                                                    ->filter()
-                                                    ->values()
-                                                    ->toArray();
-
-                                                /**
-                                                 * If editing another field (like title),
-                                                 * Filament may send an empty state.
-                                                 * Keep existing images.
-                                                 */
-                                                if (empty($state) && $record->images()->exists()) {
-                                                    return;
-                                                }
-
-                                                $existingImages = $record->images()
-                                                    ->get()
-                                                    ->keyBy('image_path');
-
-                                                /*
-                        |--------------------------------------------------------------------------
-                        | Delete Removed Images
-                        |--------------------------------------------------------------------------
-                        */
-
-                                                $incomingPaths = collect($state);
-
-                                                $imagesToDelete = $existingImages->reject(function ($image) use ($incomingPaths) {
-                                                    return $incomingPaths->contains($image->image_path);
-                                                });
-
-                                                foreach ($imagesToDelete as $image) {
-
-                                                    if (\Illuminate\Support\Facades\Storage::disk('public')->exists($image->image_path)) {
-                                                        \Illuminate\Support\Facades\Storage::disk('public')->delete($image->image_path);
-                                                    }
-
-                                                    $image->delete();
-                                                }
-
-                                                /*
-                        |--------------------------------------------------------------------------
-                        | Reset Primary Image
-                        |--------------------------------------------------------------------------
-                        */
-
-                                                $record->images()->update([
-                                                    'is_primary' => false,
-                                                ]);
-
-                                                /*
-                        |--------------------------------------------------------------------------
-                        | Insert / Update Images
-                        |--------------------------------------------------------------------------
-                        */
-
-                                                foreach ($state as $index => $imagePath) {
-
-                                                    $record->images()->updateOrCreate(
-                                                        [
-                                                            'image_path' => $imagePath,
-                                                        ],
-                                                        [
-                                                            'sort_order' => $index,
-                                                            'is_primary' => $index === 0,
-                                                        ]
-                                                    );
-                                                }
-                                            }),
+                                            ->helperText('You can drag and drop to reorder images.'),
                                     ]),
                             ]),
+                        // Tab::make('Images')
+                        //     ->icon(Heroicon::Photo)
+                        //     ->schema([
+                        //         Section::make('Product Images')
+                        //             ->description('Upload multiple images. The first image will be the primary image.')
+                        //             ->schema([
+
+                        //                 SpatieMediaLibraryFileUpload::make('images')
+                        //                     ->label('Product Images')
+                        //                     ->collection('products')          // 👈 Spatie collection name
+                        //                     ->conversion('thumb')             // 👈 Admin panel-এ হালকা প্রভিউ দেখাবে
+                        //                     ->multiple()
+                        //                     ->reorderable()                   // 👈 Drag & drop sorting সাপোর্ট করে
+                        //                     ->disk('public')
+                        //                     ->image()
+                        //                     ->imageEditor()
+                        //                     ->maxSize(5120)
+                        //                     ->columnSpanFull()
+                        //                     ->helperText('You can drag and drop to reorder images.')
+
+
+
+                        //                     // FileUpload::make('images')
+                        //                     //     ->label('Product Images')
+                        //                     //     ->multiple()
+                        //                     //     ->image()
+                        //                     //     ->disk('public')
+                        //                     //     ->directory('products')
+                        //                     //     ->imageEditor()
+                        //                     //     ->maxSize(2048)
+                        //                     //     ->reorderable()
+                        //                     //     ->columnSpanFull()
+                        //                     //     ->helperText('You can drag and drop to reorder images.')
+
+                        //                     // Load existing images when editing
+                        //                     ->afterStateHydrated(function ($component, $state, $record) {
+                        //                         if ($record && blank($state)) {
+                        //                             $component->state(
+                        //                                 $record->images()
+                        //                                     ->orderBy('sort_order')
+                        //                                     ->pluck('image_path')
+                        //                                     ->toArray()
+                        //                             );
+                        //                         }
+                        //                     })
+
+                        //                     ->saveRelationshipsUsing(function ($component, $state, $record) {
+
+                        //                         if (! $record) {
+                        //                             return;
+                        //                         }
+
+                        //                         /**
+                        //                          * IMPORTANT
+                        //                          * If this field wasn't changed while editing,
+                        //                          * don't touch existing images.
+                        //                          */
+                        //                         if ($state === null) {
+                        //                             return;
+                        //                         }
+
+                        //                         $state = collect($state)
+                        //                             ->filter()
+                        //                             ->values()
+                        //                             ->toArray();
+
+                        //                         /**
+                        //                          * If editing another field (like title),
+                        //                          * Filament may send an empty state.
+                        //                          * Keep existing images.
+                        //                          */
+                        //                         if (empty($state) && $record->images()->exists()) {
+                        //                             return;
+                        //                         }
+
+                        //                         $existingImages = $record->images()
+                        //                             ->get()
+                        //                             ->keyBy('image_path');
+
+                        //                         /*
+                        // |--------------------------------------------------------------------------
+                        // | Delete Removed Images
+                        // |--------------------------------------------------------------------------
+                        // */
+
+                        //                         $incomingPaths = collect($state);
+
+                        //                         $imagesToDelete = $existingImages->reject(function ($image) use ($incomingPaths) {
+                        //                             return $incomingPaths->contains($image->image_path);
+                        //                         });
+
+                        //                         foreach ($imagesToDelete as $image) {
+
+                        //                             if (\Illuminate\Support\Facades\Storage::disk('public')->exists($image->image_path)) {
+                        //                                 \Illuminate\Support\Facades\Storage::disk('public')->delete($image->image_path);
+                        //                             }
+
+                        //                             $image->delete();
+                        //                         }
+
+                        //                         /*
+                        // |--------------------------------------------------------------------------
+                        // | Reset Primary Image
+                        // |--------------------------------------------------------------------------
+                        // */
+
+                        //                         $record->images()->update([
+                        //                             'is_primary' => false,
+                        //                         ]);
+
+                        //                         /*
+                        // |--------------------------------------------------------------------------
+                        // | Insert / Update Images
+                        // |--------------------------------------------------------------------------
+                        // */
+
+                        //                         foreach ($state as $index => $imagePath) {
+
+                        //                             $record->images()->updateOrCreate(
+                        //                                 [
+                        //                                     'image_path' => $imagePath,
+                        //                                 ],
+                        //                                 [
+                        //                                     'sort_order' => $index,
+                        //                                     'is_primary' => $index === 0,
+                        //                                 ]
+                        //                             );
+                        //                         }
+                        //                     }),
+                        //             ]),
+                        //     ]),
                         Tab::make('Settings')
                             ->icon(Heroicon::Cog6Tooth)
                             ->schema([
@@ -433,14 +440,25 @@ class ProductForm
                                                     ->native(false)->default('in_stock')->required()
                                                     ->columnSpan(1),
 
-                                                FileUpload::make('image_path')
-                                                    ->label('Variant Image')
-                                                    ->image()
-                                                    ->directory('variants')
+                                                // FileUpload::make('image_path')
+                                                //     ->label('Variant Image')
+                                                //     ->image()
+                                                //     ->directory('variants')
+                                                //     ->disk('public')
+                                                //     ->imageEditor()
+                                                //     ->helperText('Color-specific photo. Overrides product gallery when this variant is selected.')
+                                                //     ->columnSpan(2),
+
+                                                SpatieMediaLibraryFileUpload::make('variant_image')
+                                                    ->label('Variant Images')
+                                                    ->collection('variant_images')  // 👈 Spatie Collection Name
+                                                    ->conversion('thumb')     // 👈 Admin Preview Conversions
                                                     ->disk('public')
+                                                    ->image()
                                                     ->imageEditor()
-                                                    ->helperText('Color-specific photo. Overrides product gallery when this variant is selected.')
-                                                    ->columnSpan(2),
+                                                    ->maxSize(5120)
+                                                    ->columnSpan(2)
+                                                    ->helperText('Color-specific photo. Overrides product gallery when this variant is selected.'),
 
                                                 Toggle::make('is_active')
                                                     ->default(true)

@@ -147,7 +147,7 @@ class ProductCard extends Component
     {
         $this->validate([
             'quantity' => 'required|integer|min:1|max:99',
-            'selectedVariant' => 'required|integer',
+            'selectedVariant' => 'nullable|integer',
         ]);
 
         if ($this->handleCartLogic()) {

@@ -222,13 +222,15 @@
                     <div class="space-y-3">
                         <div class="flex justify-between text-sm">
                             <span class="text-slate-500 font-medium">Items Subtotal</span>
-                            <span class="font-semibold text-slate-800">TK. {{ number_format($subtotal, 2) }}</span>
+                            <span class="font-semibold text-slate-800"><span
+                                    class="text-xs md:text-sm font-semibold text-blue-600 uppercase tracking-wide">TK.</span>{{ number_format($subtotal, 2) }}</span>
                         </div>
                         <div class="flex justify-between text-sm">
                             <span class="text-slate-500 font-medium">Shipping Fee</span>
                             <span class="font-semibold text-slate-800">
                                 @if($shippingCost > 0)
-                                    TK. {{ number_format($shippingCost, 2) }}
+                                    <span
+                                        class="text-xs md:text-sm font-semibold text-blue-600 uppercase tracking-wide">TK.</span>{{ number_format($shippingCost, 2) }}
                                 @else
                                     <span class="text-emerald-600 font-bold uppercase tracking-wider text-xs">Free
                                         Shipping</span>
@@ -239,7 +241,8 @@
                             <div
                                 class="flex justify-between text-sm bg-emerald-50/50 rounded-lg p-2 border border-emerald-100">
                                 <span class="text-emerald-700 font-medium">Coupon Savings</span>
-                                <span class="font-bold text-emerald-700">-TK. {{ number_format($discountAmount, 2) }}</span>
+                                <span class="font-bold text-emerald-700">-<span
+                                        class="text-xs md:text-sm font-semibold text-blue-600 uppercase tracking-wide">TK.</span>{{ number_format($discountAmount, 2) }}</span>
                             </div>
                         @endif
                     </div>
@@ -291,7 +294,8 @@
                                 <span class="text-xs text-slate-400">All local taxes included</span>
                             </div>
                             <span class="text-xl font-black text-blue-600 tracking-tight">
-                                TK. {{ number_format($total, 2) }}
+                                <span
+                                    class="text-xs md:text-sm font-semibold text-blue-600 uppercase tracking-wide">TK.</span>{{ number_format($total, 2) }}
                             </span>
                         </div>
                     </div>

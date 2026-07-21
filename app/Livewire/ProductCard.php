@@ -3,8 +3,8 @@
 namespace App\Livewire;
 
 use App\Models\Product;
-use Livewire\Component;
 use App\Models\ProductVariant;
+use Livewire\Component;
 
 class ProductCard extends Component
 {
@@ -20,16 +20,16 @@ class ProductCard extends Component
     public function mount(): void
     {
         $this->product->loadMissing([
-            'primaryImage',
+            'category',
+            'brand',
+            'media',
+            'approvedReviews.customer',
             'variants.color',
-            'variants.size',
+            'variants.media',
+            'sizeChart',
             'availableSizes',
         ]);
     }
-
-    /* -----------------------------------------------------------------
-     |  Entry points invoked from the card buttons
-     | ----------------------------------------------------------------- */
 
     public function addToCartClicked(): void
     {
@@ -51,36 +51,15 @@ class ProductCard extends Component
         $this->buyNowAction = $buyNow;
         $this->quantity = 1;
 
-        /*
-        |--------------------------------------------------------------------------
-        | Simple Product (No variants & No available sizes)
-        |--------------------------------------------------------------------------
-        */
+        // Simple Product (No variants & No available sizes) -> Direct Add to Cart
         if (! $this->product->has_variants && $this->product->availableSizes->isEmpty()) {
-
             if ($this->handleCartLogic()) {
                 if ($buyNow) {
                     $this->redirect(route('cart.index'), navigate: true);
                 }
             }
-
             return;
         }
-
-        /*
-        |--------------------------------------------------------------------------
-        | Variant or Size Product -> Open Modal
-        |--------------------------------------------------------------------------
-        */
-        // Auto select first variant if variants exist
-        // if ($this->product->has_variants) {
-        //     $first = $this->product->variants
-        //         ->where('is_active', true)
-        //         ->sortBy('sort_order')
-        //         ->first();
-
-        //     $this->selectedVariant = $first?->id;
-        // }
 
         $this->showVariantModal = true;
     }
@@ -99,9 +78,7 @@ class ProductCard extends Component
 
     public function selectVariant(int $variantId): void
     {
-        $variant = $this->product
-            ->variants
-            ->firstWhere('id', $variantId);
+        $variant = $this->product->variants->firstWhere('id', $variantId);
 
         if (! $variant || ! $variant->is_active) {
             return;
@@ -129,10 +106,6 @@ class ProductCard extends Component
         }
     }
 
-    /* -----------------------------------------------------------------
-     |  Confirm action from inside the modal
-     | ----------------------------------------------------------------- */
-
     public function confirmVariant(): void
     {
         $rules = [
@@ -140,7 +113,7 @@ class ProductCard extends Component
         ];
 
         if ($this->product->has_variants) {
-            $rules['selectedVariant'] = 'nullable|integer';
+            $rules['selectedVariant'] = 'required|integer'; // Variant বাছাই করা বাধ্যতামূলক করতে চাইলে
         }
 
         if ($this->product->availableSizes->isNotEmpty()) {
@@ -160,10 +133,6 @@ class ProductCard extends Component
         }
     }
 
-    /* -----------------------------------------------------------------
-     |  Cart persistence logic
-     | ----------------------------------------------------------------- */
-
     private function handleCartLogic(): bool
     {
         if ($this->product->stock_status !== 'in_stock') {
@@ -178,7 +147,6 @@ class ProductCard extends Component
 
         $cart = session()->get('cart', []);
 
-        // Cart Key structure matching ProductDetails
         $cartKey = $this->selectedVariant
             ? 'variant_' . $this->selectedVariant . '_size_' . ($this->selectedProductSize ?? 0)
             : 'product_' . $this->product->id . '_size_' . ($this->selectedProductSize ?? 0);
@@ -194,8 +162,17 @@ class ProductCard extends Component
                 ? $this->product->variants->firstWhere('id', $this->selectedVariant)
                 : null;
 
-            $selectedImage = $currentVariant?->image_path
-                ?: $this->product->primaryImage?->image_path;
+            // Spatie Media URL Selection
+            $selectedImage = null;
+            if ($currentVariant) {
+                $selectedImage = $currentVariant->getFirstMediaUrl('variant_images')
+                    ?: $currentVariant->getFirstMediaUrl();
+            }
+
+            if (! $selectedImage) {
+                $selectedImage = $this->product->getFirstMediaUrl('products')
+                    ?: $this->product->getFirstMediaUrl();
+            }
 
             $base = [
                 'product_id'      => $this->product->id,
@@ -209,7 +186,7 @@ class ProductCard extends Component
                 $cart[$cartKey] = $base + [
                     'variant_id'   => $currentVariant->id,
                     'name'         => $this->product->name,
-                    'variant_name' => $currentVariant->display_label,
+                    'variant_name' => $currentVariant->display_label ?? $currentVariant->name,
                     'color'        => $currentVariant->color?->name,
                     'price'        => (float) $currentVariant->price,
                 ];
@@ -227,6 +204,7 @@ class ProductCard extends Component
         session()->put('cart', $cart);
         $this->dispatch('cart-updated');
         session()->flash('success', $this->product->name . ' added to cart.');
+
         return true;
     }
 

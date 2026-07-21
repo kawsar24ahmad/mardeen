@@ -4,14 +4,19 @@ namespace App\Models;
 
 use App\Models\Product;
 use App\Models\ProductVariant;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+
 use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 
 class ProductImage extends Model
 {
     use HasFactory;
+
+
     protected $fillable = [
         'product_id',
         'product_variant_id',
@@ -20,25 +25,28 @@ class ProductImage extends Model
         'is_primary',
         'sort_order',
     ];
-    protected function casts(){
+    protected function casts()
+    {
         return [
             'is_primary' => 'boolean',
-             'sort_order' => 'integer',
+            'sort_order' => 'integer',
         ];
     }
     #[Scope]
-    protected function primary(Builder $builder){
+    protected function primary(Builder $builder)
+    {
         $builder->where('is_primary', true);
     }
-    public function product(){
+    public function product()
+    {
         return $this->belongsTo(Product::class);
     }
-    public function variant(){
+    public function variant()
+    {
         return $this->belongsTo(ProductVariant::class, 'product_variant_id');
     }
-    public function getUrlAttribute(){
-        return asset('storage/'. $this->image_path);
+    public function getUrlAttribute()
+    {
+        return asset('storage/' . $this->image_path);
     }
-
-
 }

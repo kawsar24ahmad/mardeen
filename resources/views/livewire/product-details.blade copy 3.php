@@ -26,55 +26,46 @@
         <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden mb-12">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 p-4 sm:p-6 lg:p-10">
 
-                <!-- Left Column: Image Gallery & Zoom -->
                 <div class="space-y-4">
-                    <!-- Big Main Image -->
-                    <div x-data="{ hover: false, x: 50, y: 50 }"
-                        @mouseenter="hover = true"
-                        @mouseleave="hover = false"
-                        @mousemove="
+                    <div x-data="{ hover:false, x:50, y:50 }"
+                         @mouseenter="hover = true"
+                         @mouseleave="hover = false"
+                         @mousemove="
                             const rect = $el.getBoundingClientRect();
                             x = (($event.clientX - rect.left) / rect.width) * 100;
                             y = (($event.clientY - rect.top) / rect.height) * 100;
-                        "
-                        class="aspect-square overflow-hidden rounded-2xl cursor-zoom-in bg-slate-50 border border-slate-100 relative group">
-
-                        <img src="{{ $selectedImage ?: 'https://via.placeholder.com/600' }}"
+                         "
+                         class="aspect-square overflow-hidden rounded-2xl cursor-zoom-in bg-slate-50 border border-slate-100 relative group">
+                        <img src="{{ $selectedImage ? asset('storage/' . $selectedImage) : 'https://via.placeholder.com/600' }}"
                             alt="{{ $product->name }}"
                             class="w-full h-full object-cover transition-transform duration-300 ease-out"
                             :style="hover ? `transform: scale(2.2); transform-origin: ${x}% ${y}%` : 'transform: scale(1)'">
                     </div>
 
-                    <!-- Spatie Media Gallery Thumbnails -->
                     @php
-                        // Spatie Media থেকে সব ছবি সংগ্রহ করা
-                        $images = $product->getMedia('products');
-                        if ($images->isEmpty()) {
-                            $images = $product->getMedia(); // fallback: কালেকশনের নাম না মিললে ডিফল্টগুলো নিবে
-                        }
+$gallery = $product->images->sortBy('sort_order')->values();
+$variantImagePath = $selectedVariant ? $product->variants->find($selectedVariant)?->image_path : null;
+
+if ($variantImagePath) {
+    $gallery = $gallery->prepend((object) [
+        'image_path' => $variantImagePath,
+        'sort_order' => -1,
+    ]);
+}
                     @endphp
 
-                    @if($images->count() > 1)
+                    @if($gallery->count() > 1)
                         <div class="grid grid-cols-5 gap-3">
-                            @foreach($images as $media)
-                                @php
-                                    $imageUrl = $media->getUrl();
-                                @endphp
-
-                                <button type="button"
-                                        wire:click="selectImage('{{ $imageUrl }}')"
-                                        class="aspect-square rounded-xl overflow-hidden border-2 transition-all relative
-                                        {{ $selectedImage === $imageUrl ? 'border-slate-900 ring-2 ring-slate-900/10' : 'border-slate-100 hover:border-slate-300' }}">
-                                    <img src="{{ $imageUrl }}"
-                                        alt="{{ $product->name }}"
-                                        class="w-full h-full object-cover">
+                            @foreach($gallery as $image)
+                                <button wire:click="selectImage('{{ $image->image_path }}')"
+                                    class="aspect-square rounded-xl overflow-hidden border-2 transition-all relative
+                                    {{ $selectedImage === $image->image_path ? 'border-slate-900 ring-2 ring-slate-900/10' : 'border-slate-100 hover:border-slate-300' }}">
+                                    <img src="{{ asset('storage/' . $image->image_path) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
                                 </button>
                             @endforeach
                         </div>
                     @endif
                 </div>
-
-
 
                 <div class="flex flex-col justify-between">
                     <div>
@@ -111,9 +102,9 @@
                             @php $variant = $selectedVariant ? $product->variants->find($selectedVariant) : null; @endphp
                             @if($variant)
                                 <div class="flex items-baseline gap-3">
-                                    <span class="text-2xl md:text-3xl font-extbbold text-slate-900 tracking-tight"><span class="text-xs md:text-sm font-semibold text-blue-600 uppercase tracking-wide">TK.</span>{{ number_format($variant->price, 2) }}</span>
+                                    <span class="text-2xl md:text-3xl font-extbbold text-slate-900 tracking-tight">TK. {{ number_format($variant->price, 2) }}</span>
                                     @if($variant->compare_price)
-                                        <span class="text-sm md:text-base text-slate-400 line-through"><span class="text-xs md:text-sm font-semibold text-blue-600 uppercase tracking-wide">TK.</span>{{ number_format($variant->compare_price, 2) }}</span>
+                                        <span class="text-sm md:text-base text-slate-400 line-through">TK. {{ number_format($variant->compare_price, 2) }}</span>
                                         <span class="bg-rose-500 text-white px-2 py-0.5 rounded-md text-xs font-bold tracking-wider">
                                             -{{ $variant->discount_percentage }}%
                                         </span>
@@ -121,9 +112,9 @@
                                 </div>
                             @else
                                 <div class="flex items-baseline gap-3">
-                                    <span class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight"><span class="text-xs md:text-sm font-semibold text-blue-600 uppercase tracking-wide">TK.</span>{{ number_format($product->price, 2) }}</span>
+                                    <span class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">TK. {{ number_format($product->price, 2) }}</span>
                                     @if($product->compare_price)
-                                        <span class="text-sm md:text-base text-slate-400 line-through"><span class="text-xs md:text-sm font-semibold text-blue-600 uppercase tracking-wide">TK.</span>{{ number_format($product->compare_price, 2) }}</span>
+                                        <span class="text-sm md:text-base text-slate-400 line-through">TK. {{ number_format($product->compare_price, 2) }}</span>
                                         <span class="bg-rose-500 text-white px-2 py-0.5 rounded-md text-xs font-bold tracking-wider">
                                             -{{ $product->discount_percentage }}%
                                         </span>
@@ -265,17 +256,17 @@
                                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
                                     @foreach($product->variants->where('is_active', true) as $item)
                                         @php
-                                            $variant_image_url = $item->getFirstMediaUrl('variant_images')
-                                            ?: $item->getFirstMediaUrl();
+        $variantTitle = collect([$item->color?->name, $item->size?->name])->filter()->implode(' / ');
+        $variantTitle = $variantTitle ?: $item->name;
                                         @endphp
 
                                         <button type="button" wire:click="selectVariant({{ $item->id }})"
                                             class="group relative border rounded-xl overflow-hidden bg-white text-left transition-all duration-200 hover:shadow-md
                                             {{ $selectedVariant == $item->id ? 'border-slate-900 ring-1 ring-slate-900 shadow-sm' : 'border-slate-200 hover:border-slate-400' }}">
 
-                                            @if($variant_image_url)
+                                            @if($item->image_path)
                                                 <div class="aspect-[4/3] bg-slate-50 overflow-hidden border-b border-slate-100">
-                                                    <img src="{{ $variant_image_url }}" alt="{{ $item->title }}"
+                                                    <img src="{{ asset('storage/' . $item->image_path) }}" alt="{{ $variantTitle }}"
                                                          class="w-full h-full object-cover transition duration-300 group-hover:scale-105">
                                                 </div>
                                             @endif
@@ -285,7 +276,7 @@
                                                     @if($item->color)
                                                         <span class="w-3.5 h-3.5 rounded-full border border-slate-200 shrink-0" style="background-color: {{ $item->color->hex_code ?? '#ddd' }}"></span>
                                                     @endif
-                                                    <span class="font-medium text-slate-900 text-xs truncate">{{ $item->name }}</span>
+                                                    <span class="font-medium text-slate-900 text-xs truncate">{{ $variantTitle }}</span>
                                                 </div>
                                             </div>
                                         </button>

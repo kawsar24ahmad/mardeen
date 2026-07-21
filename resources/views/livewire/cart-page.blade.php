@@ -41,7 +41,7 @@
                                 <!-- Product Image Thumbnail -->
                                 <div class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
                                     @if($item['image'])
-                                        <img src="{{ asset('storage/' . $item['image']) }}" alt="{{ $item['name'] }}" class="w-full h-full object-cover object-center">
+                                        <img src="{{  $item['image']}}" alt="{{ $item['name'] }}" class="w-full h-full object-cover object-center">
                                     @else
                                         <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300">
                                             <span class="text-2xl font-bold text-gray-400 uppercase">{{ substr($item['name'], 0, 1) }}</span>
@@ -80,7 +80,7 @@
 
                                     <!-- Unit Price Display -->
                                     <div class="mt-2 text-sm text-gray-500 font-medium">
-                                        TK. {{ number_format($item['price'], 2) }} <span class="text-xs font-normal text-gray-400">/ each</span>
+                                        <span class="text-xs md:text-sm font-semibold text-blue-600 uppercase tracking-wide">TK.</span>{{ number_format($item['price'], 2) }} <span class="text-xs font-normal text-gray-400">/ each</span>
                                     </div>
                                 </div>
                             </div>
@@ -119,7 +119,7 @@
                                 <div class="text-right">
                                     <span class="text-xs font-medium text-gray-400 block sm:inline">Subtotal:</span>
                                     <span class="text-base sm:text-lg font-bold text-gray-900 tracking-tight ml-1">
-                                        TK. {{ number_format($item['price'] * $item['quantity'], 2) }}
+                                        <span class="text-xs md:text-sm font-semibold text-blue-600 uppercase tracking-wide">TK.</span>{{ number_format($item['price'] * $item['quantity'], 2) }}
                                     </span>
                                 </div>
                             </div>
@@ -146,7 +146,7 @@
                         <div class="space-y-4 mb-6 text-sm">
                             <div class="flex justify-between items-center text-gray-600">
                                 <span>Subtotal ({{ count($cart) }} {{ count($cart) === 1 ? 'item' : 'items' }})</span>
-                                <span class="font-semibold text-gray-900">TK. {{ number_format($this->subtotal, 2) }}</span>
+                                <span class="font-semibold text-gray-900"><span class="text-xs md:text-sm font-semibold text-blue-600 uppercase tracking-wide">TK.</span>{{ number_format($this->subtotal, 2) }}</span>
                             </div>
                             <div class="flex justify-between items-center text-gray-600">
                                 <span>Estimated Shipping</span>
@@ -160,7 +160,7 @@
                                 <span class="text-base font-bold text-gray-900">Total Estimated</span>
                                 <div class="text-right">
                                     <span class="text-2xl font-black text-blue-600 tracking-tight">
-                                        TK. {{ number_format($this->subtotal, 2) }}
+                                        <span class="text-xs md:text-sm font-semibold text-blue-600 uppercase tracking-wide">TK.</span>{{ number_format($this->subtotal, 2) }}
                                     </span>
                                 </div>
                             </div>

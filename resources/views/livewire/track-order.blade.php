@@ -114,49 +114,49 @@
                             <h3 class="mb-6 text-xs font-bold uppercase tracking-wider text-gray-400">Ordered Items Summary</h3>
                             <ul class="divide-y divide-gray-100">
                                @foreach($order->items as $item)
-    <li class="flex items-center justify-between gap-4 py-4 first:pt-0 last:pb-0">
-        <div class="flex items-center gap-4">
-            <div class="h-14 w-14 flex-shrink-0 overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
-                @if ($item->variant && $item->variant->image_path)
-                    <img src="{{ asset('storage/' . $item->variant->image_path) }}" alt="{{ $item->product_name }}" class="h-full w-full object-cover object-center">
-                @elseif ($item->product && $item->product->primaryImage)
-                    <img src="{{ asset('storage/' . $item->product->primaryImage->image_path) }}" alt="{{ $item->product_name }}" class="h-full w-full object-cover object-center">
-                @else
-                    <div class="flex h-full w-full items-center justify-center bg-gray-100 text-xs font-bold uppercase text-gray-400">
-                        {{ substr($item->product_name, 0, 1) }}
-                    </div>
-                @endif
-            </div>
-            <div>
-                <h4 class="text-sm font-semibold text-gray-900">{{ $item->product_name }}</h4>
+                                <li class="flex items-center justify-between gap-4 py-4 first:pt-0 last:pb-0">
+                                    <div class="flex items-center gap-4">
+                                        <div class="h-14 w-14 flex-shrink-0 overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
+                                            @if ($item->variant && $item->variant->getFirstMediaUrl('variant_images'))
+                                                <img src="{{  $item->variant->getFirstMediaUrl('variant_images') }}" alt="{{ $item->product_name }}" class="h-full w-full object-cover object-center">
+                                            @elseif ($item->product && $item->product->getFirstMediaUrl('products'))
+                                                <img src="{{ $item->product->getFirstMediaUrl('products') }}" alt="{{ $item->product_name }}" class="h-full w-full object-cover object-center">
+                                            @else
+                                                <div class="flex h-full w-full items-center justify-center bg-gray-100 text-xs font-bold uppercase text-gray-400">
+                                                    {{ substr($item->product_name, 0, 1) }}
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div>
+                                            <h4 class="text-sm font-semibold text-gray-900">{{ $item->product_name }}</h4>
 
-                <!-- Variant and Size Badges -->
-                <div class="mt-1 flex flex-wrap items-center gap-1.5">
-                    @if($item->variant_name)
-                        <span class="inline-block rounded bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600">
-                           Variant: {{ $item->variant_name }}
-                        </span>
-                    @endif
+                                            <!-- Variant and Size Badges -->
+                                            <div class="mt-1 flex flex-wrap items-center gap-1.5">
+                                                @if($item->variant_name)
+                                                    <span class="inline-block rounded bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600">
+                                                       Variant: {{ $item->variant_name }}
+                                                    </span>
+                                                @endif
 
-                    @if($item->product_size)
-                        <span class="inline-block rounded bg-blue-50 px-2 py-0.5 text-xs font-semibold text-blue-700 ring-1 ring-inset ring-blue-700/10">
-                            Size: {{ $item->product_size }}
-                        </span>
-                    @endif
-                </div>
+                                                @if($item->product_size)
+                                                    <span class="inline-block rounded bg-blue-50 px-2 py-0.5 text-xs font-semibold text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                                                        Size: {{ $item->product_size }}
+                                                    </span>
+                                                @endif
+                                            </div>
 
-                <div class="mt-1 flex items-center gap-2 text-xs text-gray-500">
-                    <span>SKU: <span class="font-mono text-gray-700">{{ $item->product_sku }}</span></span>
-                    <span>•</span>
-                    <span>Qty: <span class="font-medium text-gray-700">{{ $item->quantity }}</span></span>
-                </div>
-            </div>
-        </div>
-        <div class="text-right text-sm font-bold text-gray-900">
-            TK. {{ number_format($item->subtotal, 2) }}
-        </div>
-    </li>
-@endforeach
+                                            <div class="mt-1 flex items-center gap-2 text-xs text-gray-500">
+                                                <span>SKU: <span class="font-mono text-gray-700">{{ $item->product_sku }}</span></span>
+                                                <span>•</span>
+                                                <span>Qty: <span class="font-medium text-gray-700">{{ $item->quantity }}</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-right text-sm font-bold text-gray-900">
+                                        TK. {{ number_format($item->subtotal, 2) }}
+                                    </div>
+                                </li>
+                            @endforeach
                             </ul>
                         </div>
 

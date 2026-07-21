@@ -4,16 +4,38 @@ namespace App\Models;
 
 use App\Models\Product;
 use App\Models\OrderItem;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class ProductVariant extends Model
+class ProductVariant extends Model implements HasMedia
 {
     use HasFactory;
+    use InteractsWithMedia;
 
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        // ১. কার্ড/গ্রিড ভিউয়ের জন্য (326x419px এর জন্য ৫০০x৬০০ WebP যথেষ্ট)
+        $this->addMediaConversion('thumb')
+            ->width(500)
+            ->height(600)
+            ->format('webp')
+            ->quality(80)
+            ->nonQueued();
+
+        // ২. প্রোডাক্ট ডিটেইলস পেজ (Zoom/Large View)-এর জন্য
+        $this->addMediaConversion('medium')
+            ->width(1000)
+            ->height(1200)
+            ->format('webp')
+            ->quality(85)
+            ->nonQueued();
+    }
     protected $fillable = [
         'product_id',
         'color_id',
