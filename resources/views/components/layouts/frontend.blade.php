@@ -960,77 +960,8 @@
             }
         });
     </script>
-    {{--
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> --}}
-    <!-- cdnjs (jsDelivr-এর অল্টারনেটিভ) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js"></script>
-    {{--
-    <script>
-        // স্লাইডারগুলো ইনিশিয়ালাইজ করার জন্য একটি রিইউজেবল ফাংশন
-        function initSwipers() {
-            // ১. হিরো ব্যানার স্লাইডার
-            if (document.querySelector('.heroSwiper')) {
-                new Swiper('.heroSwiper', {
-                    loop: true,
-                    autoplay: {
-                        delay: 3000,
-                        disableOnInteraction: false,
-                    },
-                    effect: 'fade',
-                    pagination: {
-                        el: '.swiper-pagination',
-                        clickable: true,
-                    },
-                    navigation: {
-                        nextEl: '.swiper-button-next',
-                        prevEl: '.swiper-button-prev',
-                    },
-                });
-            }
 
-            // ২. ক্যাটাগরি স্লাইডার
-            if (document.querySelector('.categorySwiper')) {
-                new Swiper('.categorySwiper', {
-                    slidesPerView: 2.5,          // মোবাইলে একসাথে আড়াইটি ক্যাটাগরি দেখাবে
-                    spaceBetween: 16,            // স্লাইডগুলোর মাঝখানের দূরত্ব
-                    loop: true,                  // অনবরত ঘুরতে থাকবে
-                    autoplay: {
-                        delay: 3000,             // প্রতি ৩ সেকেন্ড পর পর পরিবর্তন হবে
-                        disableOnInteraction: false,
-                    },
-                    navigation: {
-                        nextEl: '.category-next',
-                        prevEl: '.category-prev',
-                    },
-                    breakpoints: {
-                        640: {
-                            slidesPerView: 3.5,
-                            spaceBetween: 20,
-                        },
-                        768: {
-                            slidesPerView: 4,
-                            spaceBetween: 24,
-                        },
-                        1024: {
-                            slidesPerView: 6,    // ডেস্কটপে একসাথে ৬টি ক্যাটাগরি
-                            spaceBetween: 24,
-                        }
-                    }
-                });
-            }
-        }
 
-        // প্রথমবার পেজ লোড হওয়ার পর রান হবে
-        document.addEventListener('DOMContentLoaded', () => {
-            initSwipers();
-        });
-
-        // লাইভওয়্যার কোনো নেভিগেশন বা রেন্ডার করলে স্লাইডারগুলোকে পুনরায় সচল করার জন্য
-        document.addEventListener('livewire:navigated', () => {
-            initSwipers();
-        });
-    </script> --}}
 
     <script>
         function initSwipers() {
@@ -1111,58 +1042,7 @@
         document.addEventListener('DOMContentLoaded', initSwipers);
         document.addEventListener('livewire:navigated', initSwipers);
     </script>
-    {{--
-    <script>
-        new Swiper('.heroSwiper', {
-            loop: true,
 
-            autoplay: {
-                delay: 3000,
-                disableOnInteraction: false,
-            },
-
-            effect: 'fade',
-
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-            },
-
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-        });
-
-        const categorySwiper = new Swiper('.categorySwiper', {
-            slidesPerView: 2.5,          // মোবাইলে একসাথে আড়াইটি ক্যাটাগরি দেখাবে (যাতে বোঝা যায় পাশে আরও আছে)
-            spaceBetween: 16,            // স্লাইডগুলোর মাঝখানের দূরত্ব (16px)
-            loop: true,                  // অনবরত ঘুরতে থাকবে (Infinite Loop)
-            autoplay: {
-                delay: 3000,             // প্রতি ৩ সেকেন্ড পর পর স্লাইড পরিবর্তন হবে
-                disableOnInteraction: false, // ইউজার ক্লিক বা টাচ করলেও অটো-প্লে বন্ধ হবে না
-            },
-            navigation: {
-                nextEl: '.category-next', // ডানের অ্যারো বাটন ক্লাস
-                prevEl: '.category-prev', // বামের অ্যারো বাটন ক্লাস
-            },
-            // রেসপনসিভ ব্রেকপয়েন্ট (বিভিন্ন স্ক্রিন সাইজের জন্য সেটআপ)
-            breakpoints: {
-                640: {
-                    slidesPerView: 3.5,
-                    spaceBetween: 20,
-                },
-                768: {
-                    slidesPerView: 4,
-                    spaceBetween: 24,
-                },
-                1024: {
-                    slidesPerView: 6,    // বড় স্ক্রিনে বা ডেস্কটপে একসাথে ৬টি ক্যাটাগরি দেখাবে
-                    spaceBetween: 24,
-                }
-            }
-        });
-    </script> --}}
     @stack('scripts')
 </body>
 
