@@ -1,28 +1,38 @@
 <div>
     @if($banners->count())
+
         <section class="relative overflow-hidden" wire:ignore>
             <div class="swiper heroSwiper">
                 <div class="swiper-wrapper">
+                    @foreach ($banners as $banner)
+                        @php
+        // ১. কনভার্সন ইউআরএল খোঁজা
+        $imageUrl = $banner->getFirstMediaUrl('banners', 'optimized');
 
-                    @foreach ($banners as $index => $banner)
-                        <div class="swiper-slide">
-                            <div class="w-full h-[220px] sm:h-[350px] md:h-[500px] lg:h-[650px]">
-                                <img src="{{ asset('storage/' . $banner->banner_image) }}"
-                                    alt="{{ $banner->banner_title ?? 'Hero Banner' }}" class="w-full h-full object-cover"
-                                    @if($loop->first) fetchpriority="high" loading="eager" decoding="sync" @else loading="lazy"
-                                    decoding="async" @endif>
+        // ২. না পেলে অরিজিনাল ইউআরএল
+        if (empty($imageUrl)) {
+            $imageUrl = $banner->getFirstMediaUrl('banners');
+        }
+
+
+                        @endphp
+
+                        {{-- ইউআরএল না থাকলে স্লাইড রেন্ডার হবে না, ফলে স্লাইডার ব্রেক করবে না --}}
+                        @if(!empty($imageUrl))
+                            <div class="swiper-slide">
+                                <div class="w-full h-[220px] sm:h-[350px] md:h-[500px] lg:h-[650px]">
+                                    <img src="{{ $imageUrl }}" alt="{{ $banner->banner_title ?? 'Hero Banner' }}"
+                                        class="w-full h-full object-cover" @if($loop->first) fetchpriority="high" loading="eager"
+                                        decoding="sync" @else loading="lazy" decoding="async" @endif>
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     @endforeach
 
                 </div>
 
                 <!-- Pagination -->
                 <div class="swiper-pagination"></div>
-
-                <!-- Navigation -->
-                {{-- <div class="swiper-button-prev hidden md:flex"></div>
-                <div class="swiper-button-next hidden md:flex"></div> --}}
             </div>
         </section>
     @endif

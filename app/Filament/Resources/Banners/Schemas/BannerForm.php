@@ -24,12 +24,15 @@ class BannerForm
                             ->maxLength(255)
                             ->columnSpanFull(),
 
-                        // SpatieMediaLibraryFileUpload::make('banner_image')
-                        //     ->collection('banners')
-                        //     ->conversion('optimized') // আপনার মডেলে তৈরি করা কনভার্সন নাম
-                        //     ->image()
-                        //     ->maxSize(2048) // আপলোড লিমিট ২ মেগাবাইট (বড় ছবি দিলেও অটো ছোট হবে)
-                        //     ->required(),
+                        SpatieMediaLibraryFileUpload::make('banner_image')
+                            ->label('Banner Image')
+                            ->collection('banners')
+                            ->conversion('optimized') // কনভার্সন নেম
+                            ->image()
+                            ->imageEditor() // ছবির অংশ ক্রপ করার ফিচার চালু করবে
+                            ->maxSize(10240) // ১০ MB পর্যন্ত আপলোডের পারমিশন (অটো ছোট হয়ে WebP হবে)
+                            ->required()
+                            ->columnSpanFull(),
 
                         // FileUpload::make('banner_image')
                         //     ->label('Banner Image')

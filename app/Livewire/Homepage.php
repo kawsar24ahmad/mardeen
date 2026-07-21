@@ -39,7 +39,7 @@ class Homepage extends Component
             ->withCount('products')
             ->get();
 
-        $banners = Banner::where('is_active', true)
+        $banners = Banner::with('media')->where('is_active', true)
             ->orderBy('serial_number')
             ->get();
 

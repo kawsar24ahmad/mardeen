@@ -209,4 +209,50 @@ Route::get('/clear-cache/{secret_key}', function ($secret_key) {
         ], 500);
     }
 });
+
+Route::get('/optimize-app/{secret_key}', function ($secret_key) {
+    $expectedKey = 'kawsarwebs';
+
+    if ($secret_key !== $expectedKey) {
+        abort(403, 'Unauthorized action.');
+    }
+
+    try {
+        // আগের ক্যাশ পরিষ্কার করে নতুন প্রোডাকশন ক্যাশ তৈরি করা
+        Artisan::call('config:cache');
+        Artisan::call('route:cache');
+        Artisan::call('view:cache');
+        Artisan::call('event:cache');
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Application optimized successfully! Routes, Configs, Views & Events are cached.',
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage(),
+        ], 500);
+    }
+});
+
+Route::get('/run-migration/{secret_key}', function ($secret_key) {
+    if ($secret_key !== 'kawsarwebs') {
+        abort(403);
+    }
+
+    try {
+        // Artisan::call('vendor:publish', [
+        //     '--provider' => 'Spatie\MediaLibrary\MediaLibraryServiceProvider',
+        //     '--tag' => 'medialibrary-migrations',
+        //     '--force' => true,
+        // ]);
+
+        Artisan::call('migrate');
+
+        return 'Migration successfully executed! `media` table created.';
+    } catch (\Exception $e) {
+        return $e->getMessage();
+    }
+});
 require __DIR__ . '/auth.php';
