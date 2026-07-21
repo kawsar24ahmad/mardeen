@@ -248,9 +248,11 @@ Route::get('/run-migration/{secret_key}', function ($secret_key) {
         //     '--force' => true,
         // ]);
 
-        Artisan::call('migrate');
+        Artisan::call('migrate', [
+            '--force' => true,
+        ]);
 
-        return 'Migration successfully executed! `media` table created.';
+        return 'Migration successfully executed!';
     } catch (\Exception $e) {
         return $e->getMessage();
     }
