@@ -17,10 +17,12 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Schemas\Components\Section;
+use UnitEnum;
 
 class ManageSettings extends Page implements HasForms
 {
     use InteractsWithForms;
+    protected static UnitEnum|string|null $navigationGroup = 'Settings';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCog6Tooth;
     protected static ?string $navigationLabel = 'Site Settings';

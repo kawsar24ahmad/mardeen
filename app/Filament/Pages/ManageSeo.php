@@ -15,10 +15,12 @@ use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use BackedEnum;
+use UnitEnum;
 
 class ManageSeo extends Page
 {
     protected static BackedEnum|string|null  $navigationIcon = 'heroicon-o-magnifying-glass';
+    protected static UnitEnum|string|null $navigationGroup = 'Settings';
 
     protected static ?string $navigationLabel = 'SEO & Tracking';
 
