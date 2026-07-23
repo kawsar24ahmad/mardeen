@@ -75,7 +75,7 @@ class OrderInfolist
                                                             ->height(80)
                                                             ->getStateUsing(
                                                                 fn($record) => $record->variant?->getFirstMediaUrl('variant_images', 'thumb')
-                                                                    ?? $record->product?->getFirstMediaUrl('products', 'thumb')
+                                                                    ?: $record->product?->getFirstMediaUrl('products', 'thumb')
                                                             )
                                                             ->extraImgAttributes([
                                                                 'class' => 'object-cover rounded-lg',
@@ -93,7 +93,7 @@ class OrderInfolist
                                                                         fn($record) =>
                                                                         $record->product->name .
                                                                             ($record->variant
-                                                                                ? ' - ' . $record->variant->display_label
+                                                                                ? ' - ' . $record->variant->name
                                                                                 : '')
                                                                     )
                                                                     ->weight(FontWeight::Bold)
