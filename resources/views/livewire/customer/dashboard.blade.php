@@ -147,13 +147,16 @@
                                                         <p class="text-sm text-gray-600">{{ $order->created_at->format('M d, Y') }}</p>
                                                     </div>
                                                     <div class="text-right">
-                                                        <p class="font-bold text-gray-900">tk.{{ number_format($order->total, 2) }}</p>
+                                                        <p class="font-bold text-slate-900 tabular-nums">
+                                                            <span class="text-xs text-slate-500 uppercase tracking-wide mr-0.5">Tk</span>
+                                                            <span>{{ number_format($order->total, 2) }}</span>
+                                                        </p>
                                                         <span
                                                             class="inline-block px-2 py-1 text-xs rounded {{
                                 $order->status === 'delivered' ? 'bg-green-100 text-green-800' :
                                 ($order->status === 'cancelled' ? 'bg-red-100 text-red-800' :
                                     'bg-yellow-100 text-yellow-800')
-                                                                                                                                                                                                                                                                                                                                                                                                                                        }}">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }}">
                                                             {{ ucfirst($order->status) }}
                                                         </span>
                                                     </div>
