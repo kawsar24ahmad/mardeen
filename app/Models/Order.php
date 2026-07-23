@@ -140,14 +140,14 @@ class Order extends Model
             ]);
             // order confirmation email
         });
-        static::updated(function ($order) {
-            $order->orderStatuses()->create([
-                'status' => $order->status,
-                'notes' => 'Order Updated',
-                // 'user_id' => $order->customer_id
-            ]);
-            // order confirmation email
-        });
+        // static::updated(function ($order) {
+        //     $order->orderStatuses()->create([
+        //         'status' => $order->status,
+        //         'notes' => 'Order Updated',
+        //         // 'user_id' => $order->customer_id
+        //     ]);
+        //     // order confirmation email
+        // });
     }
     public function courier()
     {

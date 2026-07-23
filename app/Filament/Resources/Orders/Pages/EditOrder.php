@@ -20,4 +20,13 @@ class EditOrder extends EditRecord
             RestoreAction::make(),
         ];
     }
+    protected function afterSave(): void
+    {
+        if ($this->record->wasChanged('status')) {
+            $this->record->orderStatuses()->create([
+                'status'  => $this->record->status,
+                'notes'   => 'Status updated',
+            ]);
+        }
+    }
 }
