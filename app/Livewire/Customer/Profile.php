@@ -31,18 +31,21 @@ class Profile extends Component
     public $address_is_default = false;
     public $address_country = 'US';
 
-    public function addAddress(){
+    public function addAddress()
+    {
         $this->showAddressForm = true;
     }
-    public function deleteAddress($addressId){
-       $address = Address::where('id', $addressId)
-            ->where('customer_id',auth("customer")->user()->id)
-            ->delete();
-         session()->flash('address_success', 'Address deleted successfully!');
-    }
-    public function editAddress($addressId){
+    public function deleteAddress($addressId)
+    {
         $address = Address::where('id', $addressId)
-            ->where('customer_id',auth("customer")->user()->id)
+            ->where('customer_id', auth("customer")->user()->id)
+            ->delete();
+        session()->flash('address_success', 'Address deleted successfully!');
+    }
+    public function editAddress($addressId)
+    {
+        $address = Address::where('id', $addressId)
+            ->where('customer_id', auth("customer")->user()->id)
             ->firstOrFail();
         $this->editingAddressId = $address->id;
         $this->address_full_name = $address->full_name;
@@ -56,17 +59,19 @@ class Profile extends Component
         $this->address_is_default = $address->is_default;
         $this->showAddressForm = true;
     }
-    public function cancelAddressForm(){
+    public function cancelAddressForm()
+    {
         $this->showAddressForm = false;
     }
-    public function saveAddress(){
+    public function saveAddress()
+    {
         $this->validate([
             'address_full_name' => 'required|string|max:255',
             'address_phone' => 'required|string|max:255',
             'address_line_1' => 'required|string|max:255',
-            'address_city' => 'required|string|max:255',
-            'address_postal_code' => 'required|string|max:20',
-            'address_country' => 'required|string|max:2',
+            'address_city' => 'nullable|string|max:255',
+            'address_postal_code' => 'nullable|string|max:20',
+            'address_country' => 'nullable|string|max:2',
         ]);
 
         $data = [
@@ -85,7 +90,7 @@ class Profile extends Component
         if ($this->editingAddressId) {
             Address::where('id', $this->editingAddressId)
                 ->where('customer_id', auth("customer")->user()->id)->update($data);
-        }else{
+        } else {
             Address::create($data);
         }
 
@@ -136,15 +141,15 @@ class Profile extends Component
         auth("customer")->user()->update([
             'password' => Hash::make($this->new_password),
         ]);
-        $this->reset(['current_password','new_password','new_password_confirmation']);
+        $this->reset(['current_password', 'new_password', 'new_password_confirmation']);
         session()->flash('password_success', "Password updated successfully");
     }
     public function render()
     {
         $addresses = auth("customer")->user()->addresses;
         // dd($addresses);
-        return view('livewire.customer.profile',[
-            'addresses' =>$addresses
+        return view('livewire.customer.profile', [
+            'addresses' => $addresses
         ])->layout('components.layouts.frontend');
     }
 }
