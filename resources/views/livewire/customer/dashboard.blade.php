@@ -153,7 +153,7 @@
                                 $order->status === 'delivered' ? 'bg-green-100 text-green-800' :
                                 ($order->status === 'cancelled' ? 'bg-red-100 text-red-800' :
                                     'bg-yellow-100 text-yellow-800')
-                                                                                                                                                                                                                                                                                            }}">
+                                                                                                                                                                                                                                                                                                                                                                                                }}">
                                                             {{ ucfirst($order->status) }}
                                                         </span>
                                                     </div>
@@ -161,17 +161,18 @@
                                                 <div class="flex items-center gap-2">
                                                     @foreach($order->items->take(3) as $item)
                                                         @php
+                                                            // Get image URL using Spatie Media Library (Variant -> Product -> Fallback)
                                                             $imageUrl = $item->variant?->getFirstMediaUrl('variant_images')
                                                                 ?: $item->product?->getFirstMediaUrl('products');
                                                         @endphp
 
                                                         <div
                                                             class="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100 ring-1 ring-black/5">
-                                                            @if($imagePath)
-                                                                <img src="{{ asset('storage/' . $imagePath) }}" alt="{{ $item->product_name }}"
+                                                            @if($imageUrl)
+                                                                <img src="{{ $imageUrl }}" alt="{{ $item->product_name }}"
                                                                     class="h-full w-full object-cover">
                                                             @else
-                                                                <!-- Optional Placeholder Icon if no image exists -->
+                                                                <!-- Optional Placeholder Icon if no media exists -->
                                                                 <div class="flex h-full w-full items-center justify-center text-gray-400">
                                                                     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
