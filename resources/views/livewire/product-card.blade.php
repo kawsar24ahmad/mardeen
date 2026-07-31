@@ -4,7 +4,7 @@
         {{-- Product Image Container --}}
         <div class="relative aspect-square rounded-lg overflow-hidden bg-gray-50">
             @php
-                $imageUrl = $product->getFirstMediaUrl('products') ?: $product->getFirstMediaUrl();
+$imageUrl = $product->getFirstMediaUrl('products') ?: $product->getFirstMediaUrl();
             @endphp
 
             @if($imageUrl)
@@ -96,7 +96,7 @@
                 </button>
 
                 <button wire:click="buyNowClicked" type="button"
-                    class="flex-1 flex items-center justify-center py-3 rounded-xl text-xs font-semibold transition-all active:scale-95 text-white bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-900 shadow-sm">
+                    class="flex-1 flex items-center justify-center py-3 rounded-xl text-xs font-semibold transition-all active:scale-95 text-white bg-blue-600 hover:bg-indigo-700 shadow-sm">
                     Order Now
                 </button>
             </div>
@@ -131,15 +131,15 @@
                 {{-- Modal Body --}}
                 <div class="overflow-y-auto p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                     @php
-                        $currentVariant = $selectedVariant ? $product->variants->firstWhere('id', $selectedVariant) : null;
+    $currentVariant = $selectedVariant ? $product->variants->firstWhere('id', $selectedVariant) : null;
 
-                        // Fix for Spatie Media Library URL in Modal
-                        $displayImage = $currentVariant?->getFirstMediaUrl('variant_images')
-                            ?: ($currentVariant?->getFirstMediaUrl()
-                                ?: ($product->getFirstMediaUrl('products') ?: $product->getFirstMediaUrl()));
+    // Fix for Spatie Media Library URL in Modal
+    $displayImage = $currentVariant?->getFirstMediaUrl('variant_images')
+        ?: ($currentVariant?->getFirstMediaUrl()
+            ?: ($product->getFirstMediaUrl('products') ?: $product->getFirstMediaUrl()));
 
-                        $displayPrice = $currentVariant?->price ?? $product->price;
-                        $displayCompare = $currentVariant?->compare_price ?? $product->compare_price;
+    $displayPrice = $currentVariant?->price ?? $product->price;
+    $displayCompare = $currentVariant?->compare_price ?? $product->compare_price;
                     @endphp
 
                     {{-- Product Preview --}}
@@ -190,7 +190,7 @@
                                     <div class="grid grid-cols-2 gap-2 max-h-[120px] overflow-y-auto pr-1">
                                         @foreach($product->variants->where('is_active', true) as $item)
                                             @php
-                                                $variantTitle = collect([$item->color?->name, $item->size?->name])->filter()->implode(' • ') ?: $item->name;
+            $variantTitle = collect([$item->color?->name, $item->size?->name])->filter()->implode(' • ') ?: $item->name;
                                             @endphp
                                             <button type="button" wire:click="selectVariant({{ $item->id }})"
                                                 class="p-2 border text-left rounded-xl transition-all text-xs flex items-center gap-2 min-w-0 {{ $selectedVariant == $item->id ? 'border-slate-900 bg-slate-950 text-white font-semibold' : 'border-slate-200 bg-white text-slate-800' }}">
