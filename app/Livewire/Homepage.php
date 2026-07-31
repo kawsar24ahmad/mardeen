@@ -31,7 +31,7 @@ class Homepage extends Component
             ->with([
                 'products' => function ($query) {
                     $query->where('is_active', true)
-                        ->latest()
+                        ->orderBy('sort_order', 'asc')
                         ->take(4);
                 }
             ])

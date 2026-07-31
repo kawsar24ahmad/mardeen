@@ -10,6 +10,7 @@ use Filament\Actions\RestoreBulkAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
@@ -19,6 +20,13 @@ class ProductsTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(function ($query) {
+                $query
+                    ->join('categories', 'products.category_id', '=', 'categories.id')
+                    ->orderBy('categories.sort_order')
+                    ->orderBy('products.sort_order')
+                    ->select('products.*');
+            })
             ->columns([
                 SpatieMediaLibraryImageColumn::make('media')
                     ->label('Image')
@@ -88,7 +96,10 @@ class ProductsTable
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
-                TrashedFilter::make(),
+                // TrashedFilter::make(),
+                SelectFilter::make('category_id') // <-- Must match 'category_id' in tableFilters array
+                    ->label('Category')
+                    ->relationship('category', 'name'),
             ])
             ->recordActions([
                 EditAction::make(),
