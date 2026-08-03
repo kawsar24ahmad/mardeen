@@ -135,7 +135,7 @@
                 </div>
             </aside>
 
-            <div class="lg:col-span-3 ms-2">
+            <div class="lg:col-span-3 lg:ms-4">
                 {{-- toolbar --}}
                 <div class="bg-white p-4 rounded-lg shadow-sm mb-6 flex items-center justify-between flex-wrap gap-4">
                     <div class="flex items-center gap-4">
